@@ -10,7 +10,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace UnitTestProject1.Pages
 {
-    public class UnitHomePage : SiterraComponent
+    public class UnitHomePage : UiComponent
     {
 
         public void PleaseWait()
