@@ -10,7 +10,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace UnitTestProject1.Pages
 {
-    class UserComp : UiComponent
+    class UserComp : SiterraComponent
     {
         public static String handle;
 

@@ -10,7 +10,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace UnitTestProject1.Pages
 {
-    public class UnitComp : UiComponent
+    public class UnitComp : SiterraComponent
     {
         public string unitName
         { 
