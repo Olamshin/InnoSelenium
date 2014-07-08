@@ -88,12 +88,16 @@
   <ItemGroup>
     <Compile Include="Goto\Goto.cs" />
     <Compile Include="Host.cs" />
+    <Compile Include="Pages\AdminComp.cs" />
     <Compile Include="Pages\DownloadsPage.cs" />
     <Compile Include="Pages\ImagesPage.cs" />
     <Compile Include="Pages\LandingPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\MyHomePage.cs" />
+    <Compile Include="Pages\NewUserPage.cs" />
+    <Compile Include="Pages\UnitComp.cs" />
+    <Compile Include="Pages\UserComp.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
