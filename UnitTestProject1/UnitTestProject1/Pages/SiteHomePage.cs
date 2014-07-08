@@ -20,5 +20,12 @@ namespace UnitTestProject1.Pages
                 //return !d.FindElement(By.Id("NavContainer")).ToString().Contains("indicator_gray.gif");
             });
         }
+
+        public SiteHomePage click_edit()
+        {
+            Find.Element(By.PartialLinkText("Edit")).Click();
+            return this;
+        }
     }
+
 }

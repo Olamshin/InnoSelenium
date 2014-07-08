@@ -116,7 +116,7 @@ namespace UnitTestProject1.Tests
         {
             MainPage m = Helper.GotoMainPage()
                 .clickBrowseLeftNav();
-                m.ClickNavTree("Amcknight;Site;New Site (SiteNumber)");
+                m.ClickNavTree<SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
             //System.Threading.Thread.Sleep(3000);
             //m.Innerpage.
         }
@@ -172,6 +172,14 @@ namespace UnitTestProject1.Tests
         {
             Helper.GotoMainPage()
                 .Click_ToDoList_Link();
+        }
+
+        [TestMethod]
+        public void T006_Update_Site()
+        {
+            SiteHomePage s = Helper.GotoSiteHomePage().Innerpage as SiteHomePage;
+            s.click_edit();
+            System.Threading.Thread.Sleep(3000);
         }
 
     }
