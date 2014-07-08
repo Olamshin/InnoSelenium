@@ -40,6 +40,7 @@ namespace UnitTestProject1.Pages
         public SearchRingPopup Create_Search_Ring()
         {
             PleaseWait();
+            Browser.SwitchTo().Frame("MainFrame");
             return Navigate.To<SearchRingPopup>(By.PartialLinkText("Add"));
         }
     }
