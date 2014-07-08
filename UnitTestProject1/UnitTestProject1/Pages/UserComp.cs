@@ -12,15 +12,26 @@ namespace UnitTestProject1.Pages
 {
     class UserComp : SiterraComponent
     {
-        public static String handle;
+        
 
         public override void PleaseWait()
         {
-
+            Browser.SwitchTo().Frame("MainFrame");
             Host.Wait.Until<Boolean>((d) =>
             {
                 return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/add.gif");
             });
+            Browser.SwitchTo().DefaultContent();
+        }
+        public void PleaseWaitForSearch() 
+        {
+            Browser.SwitchTo().DefaultContent();
+            Browser.SwitchTo().Frame("MainFrame");
+            Host.Wait.Until<IWebElement>((d) =>
+            {
+                return d.FindElement(By.Id("CHK_MATCH_WHOLE_754040200"));
+            });
+            Browser.SwitchTo().DefaultContent();
         }
         public NewUserPage addUser()
         {
@@ -29,8 +40,31 @@ namespace UnitTestProject1.Pages
             //System.Threading.Thread.Sleep(5000);
 
             PleaseWait();
-            handle = Browser.CurrentWindowHandle;
+            Browser.SwitchTo().DefaultContent();
+            Browser.SwitchTo().Frame("MainFrame");
             return Navigate.To<NewUserPage>(By.LinkText("Add"));
+        }
+        public UserComp findUser(String userName)
+        {
+            PleaseWait();
+            Browser.SwitchTo().Frame("MainFrame");
+            //Open up search
+            //Find.Element(By.Id("IMG_SEARCH_754040200")).Click();
+
+            PleaseWaitForSearch();
+            //Enter search Parameters
+            Execute.ActionOnLocator(By.Id("TXT_SEARCH_FOR_754040200"), e => { e.Clear(); e.SendKeys(userName); });
+
+            IWebElement dropDownListBox = Find.Element(By.Id("CBO_SEARCH_754040200"));
+            SelectElement clickThis = new SelectElement(dropDownListBox);
+            clickThis.SelectByText("User Name");
+
+            /*//Click Search
+            Find.Element(By.LinkText("Search")).Click();*/
+
+            System.Threading.Thread.Sleep(2000);
+
+            return this;
         }
     }
 }

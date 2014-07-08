@@ -10,14 +10,37 @@ using OpenQA.Selenium.Support.UI;
 
 namespace UnitTestProject1.Pages
 {
-    class NewUserPage : Page
+    public class NewUserPage : Page
     {
-        public void addValues() 
+        public static String handle;
+
+        public NewUserPage()
+        {
+            foreach (string a in Host.Instance.Application.Browser.WindowHandles)
+            {
+                if (!a.Equals(LandingPage.handle))
+                {
+
+                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=754030300&ClassID=754000000&ObjectID=-1"))
+                        handle = a;
+                }
+            }
+            Host.Instance.Application.Browser.SwitchTo().Window(handle);
+        }
+        public void PleaseWait()
+        {
+          
+            Host.Wait.Until<Boolean>((d) =>
+            {
+                return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/disk.gif");
+            });
+        }
+        public string addValues() 
         {
             String firstName = "Sanity";
-            String lastName = "User";
+            String lastName = "Test User";
             String email = "noreply@siterra.com";
-            String userName = "Sanity " + DateTime.Now.Date;
+            String userName = "Sanity_" + DateTime.Now.Ticks.ToString();
             String password = "q1w2e3r4t5y6";
             Boolean isSSOUser = false;
             Boolean isAdmin = true;
@@ -36,9 +59,11 @@ namespace UnitTestProject1.Pages
             Execute.ActionOnLocator(By.Id("1190257"), e => { e.Clear(); e.SendKeys(userName); });
             Execute.ActionOnLocator(By.Id("1190258"), e => { e.Clear(); e.SendKeys(password); });
             Execute.ActionOnLocator(By.Id("1190261"), e => { e.Clear(); e.SendKeys(password); });
-            //isSSOUser
+            //isSSOUser -- Don't click
             //isAdmin
-            //showInContactsList
+            Find.Element(By.Id("1190264")).Click();
+            //*don't* showInContactsList
+            //Find.Element(By.Id("1190259")).Click();
 
             Execute.ActionOnLocator(By.Id("1190263"), e => { e.Clear(); e.SendKeys(notes); });
             Execute.ActionOnLocator(By.Id("1190252"), e => { e.Clear(); e.SendKeys(title); });
@@ -47,7 +72,13 @@ namespace UnitTestProject1.Pages
             Execute.ActionOnLocator(By.Id("1190247"), e => { e.Clear(); e.SendKeys(city); });
 
             //State
+            IWebElement dropDownListBox = Find.Element(By.Id("1190249"));
+            SelectElement clickThis = new SelectElement(dropDownListBox);
+            clickThis.SelectByText(state);
+
             Execute.ActionOnLocator(By.Id("1190240"), e => { e.Clear(); e.SendKeys(businessPhone); });
+
+            return userName;
 
         }
         public NewUserPage save()
@@ -55,9 +86,12 @@ namespace UnitTestProject1.Pages
             Find.Element(By.LinkText("Save")).Click();
             return this;
         }
-        public NewUserPage createUser() {
-            addValues();
-            return this;
+        public string createUser() {
+            PleaseWait();
+            String userName = addValues();
+            save();
+            //System.Threading.Thread.Sleep(2000);
+            return userName;
         }
     }
 }

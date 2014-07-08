@@ -26,11 +26,14 @@ namespace UnitTestProject1.Pages
                // return d.PageSource.Contains("skins/common/images/icons/gif/folder_bug.gif");
                 return d.PageSource.Contains("skins/common/images/icons/gif/group_key.gif");
             });
+            Browser.SwitchTo().DefaultContent();
         }
         public AdminComp clickLink(String anchorText)
         {
             PleaseWait();
+            Browser.SwitchTo().Frame("MainFrame");
             Find.Element(By.LinkText(anchorText)).Click();
+            Browser.SwitchTo().DefaultContent();
             return this;
             
         }

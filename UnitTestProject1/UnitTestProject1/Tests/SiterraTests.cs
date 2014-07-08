@@ -160,12 +160,15 @@ namespace UnitTestProject1.Tests
             unit.clickAddOrgUnit("Site");
         }
         [TestMethod]
-        public void createUser()
+        public void createUser_35()
         {
             UserComp user = (UserComp)Helper.GotoUserComp()
                                             .Innerpage;
-            NewUserPage newUser =  user.addUser();
-            //newUser.createUser();
+            /*NewUserPage newUser =  user.addUser();
+            String userName = newUser.createUser();*/
+            String userName = "Sanity";
+            user.findUser(userName);
+
         }
 		[TestMethod]
         public void gotoToDoList()
