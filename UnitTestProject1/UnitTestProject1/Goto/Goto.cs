@@ -26,10 +26,6 @@ namespace UnitTestProject1
         {
             return Host.Instance.NavigateToInitialPage<LandingPage>();
         }
-        public static MainPage GotoMainPage()
-        {
-            return Host.Instance.NavigateToInitialPage<MainPage>("/gisapi.dll?do=output&pageid=1032000&classid=1000000&objectid=1");
-        }
 
         public static MainPage GotoAdminPage()
         {
