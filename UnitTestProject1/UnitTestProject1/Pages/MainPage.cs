@@ -33,7 +33,7 @@ namespace UnitTestProject1.Pages
 
         private TreeSelection tree;
 
-        public MainPage ClickNavTree<T>(string node_path) where T : SiterraComponent
+        public MainPage ClickNavTree(string node_path)
         {
             tree.Click_Node(node_path);
             Innerpage = this.GetComponent<SiterraComponent>();
