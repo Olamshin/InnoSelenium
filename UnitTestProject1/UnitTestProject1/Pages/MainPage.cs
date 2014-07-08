@@ -117,6 +117,13 @@ namespace UnitTestProject1.Pages
             this.Innerpage = this.GetComponent<UnitHomePage>();
             return this;
         }
+        public MainPage clickAdmin()
+        {
+            PleaseWait();
+            Find.Element(By.LinkText("Admin")).Click();
+            this.Innerpage = this.GetComponent<AdminComp>();
+            return this;
+        }
     }
     public class TreeSelection : UiComponent
     {
