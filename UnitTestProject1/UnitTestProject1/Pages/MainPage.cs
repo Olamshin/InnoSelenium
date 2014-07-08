@@ -77,10 +77,27 @@ namespace UnitTestProject1.Pages
             Find.Element(By.Id("imgSetGlobalNavSites")).Click();
             return this;
         }
+
+        public MainPage leftNavBrowse()
+        {
+            PleaseWait();
+            Find.Element(By.Id("tdSetGlobalNavBrowse")).Click();
+            return this;
+        }
+
+
         public MainPage Click_Filter_Button()
         {
             PleaseWait();
             Find.Element(By.Id("BtnGlobalNavFilter")).Click();
+            return this;
+        }
+        public MainPage Click_ToDoList_Link()
+        {
+            Browser.SwitchTo().Frame("MainFrame");
+            Find.Element(By.LinkText("To-Dos / Activity")).Click();
+            Browser.SwitchTo().DefaultContent();
+            this.Innerpage = this.GetComponent<ToDoListPage>();
             return this;
         }
         public TreeSelection Click_TreeSelection()
@@ -90,6 +107,15 @@ namespace UnitTestProject1.Pages
             //builder.MoveToElement(Find.Element(By.Id("TreeSelection"))).Build().Perform();
             Find.Element(By.Id("TreeSelection")).Click();
             return this.GetComponent<TreeSelection>();
+        }
+        public MainPage Click_Search_Ring_Unit()
+        {
+            var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
+            Browser.SwitchTo().Frame("frameGlobalNavBrowse");
+            Find.Element(By.PartialLinkText("0Notify First Round")).Click();
+            Browser.SwitchTo().DefaultContent();
+            this.Innerpage = this.GetComponent<UnitHomePage>();
+            return this;
         }
     }
     public class TreeSelection : UiComponent
