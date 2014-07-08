@@ -196,7 +196,10 @@ namespace UnitTestProject1.Tests
         public void T007_AssignVendor2Site()
         {
             MainPage m = Helper.GotoSiteHomePage();
+            m.PleaseWait();
+
             SiteHomePage s = m.Innerpage as SiteHomePage;
+            s.PleaseWait();
             s.add_vendor();
         }
 
