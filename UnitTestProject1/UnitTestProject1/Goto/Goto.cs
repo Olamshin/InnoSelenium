@@ -26,6 +26,16 @@ namespace UnitTestProject1
         {
             return Host.Instance.NavigateToInitialPage<LandingPage>();
         }
+        public static MainPage GotoMainPage()
+        {
+            return Host.Instance.NavigateToInitialPage<MainPage>("/gisapi.dll?do=output&pageid=1032000&classid=1000000&objectid=1");
+        }
+
+        public static MainPage GotoAdminPage()
+        {
+            return GotoMainPage().clickAdmin();
+
+        }
         public static LandingPage GotoLandingPage(string domain)
         {
             return Host.Instance.NavigateToInitialPage<LandingPage>("/" + domain);
@@ -34,6 +44,29 @@ namespace UnitTestProject1
         public static MainPage GotoMainPage()
         {
             return Host.Instance.NavigateToInitialPage<MainPage>("/gisapi.dll?do=output&pageid=1032000&classid=1000000&objectid=1");
+        }
+		
+		public static MainPage GotoUnitComp()
+        {
+            MainPage mainpage = GotoAdminPage(); 
+
+            AdminComp a = (AdminComp)mainpage.Innerpage;
+            a.clickUnit();
+
+            mainpage.Innerpage = mainpage.GetComponent<UnitComp>();
+
+            return mainpage;
+        }
+        public static MainPage GotoUserComp()
+        {
+            MainPage mainpage = GotoAdminPage();
+
+            AdminComp a = (AdminComp)mainpage.Innerpage;
+            a.clickLink("Users");
+
+            mainpage.Innerpage = mainpage.GetComponent<UserComp>();
+
+            return mainpage;
         }
 
     }
