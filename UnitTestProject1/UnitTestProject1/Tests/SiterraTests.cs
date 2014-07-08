@@ -8,6 +8,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using System.Net.Http;
 using System.Threading.Tasks;
+using UnitTestProject1.Pages;
 
 namespace UnitTestProject1.Tests
 {
@@ -94,15 +95,13 @@ namespace UnitTestProject1.Tests
         }
 
         [TestMethod]
-        public void gotonode()
+        public void gotobrowse()
         {
-            Helper.GotoMainPage()
-                .clickLeaseLeftNav()
-                .Click_Filter_Button()
-                .Click_TreeSelection()
-                .Click_Node("Athena WS Top Unit 1")
-                .Click_Node("Athena WS Unit for Sites");
-            System.Threading.Thread.Sleep(1000);
+            MainPage m = Helper.GotoMainPage()
+                .clickBrowseLeftNav();
+                m.ClickNavTree<Pages.SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
+            //System.Threading.Thread.Sleep(3000);
+            //m.Innerpage.
         }
     }
 }
