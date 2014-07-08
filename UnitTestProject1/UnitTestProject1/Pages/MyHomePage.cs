@@ -10,7 +10,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace UnitTestProject1.Pages
 {
-    public class MyHomePage : UiComponent
+    public class MyHomePage : SiterraComponent
     {
 
     }

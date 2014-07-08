@@ -13,7 +13,7 @@ using OpenQA.Selenium.Support.UI;
 /// </summary>
 namespace UnitTestProject1.Pages
 {
-    public class AdminComp : UiComponent
+    public class AdminComp : SiterraComponent
     {
         public void PleaseWait()
         {

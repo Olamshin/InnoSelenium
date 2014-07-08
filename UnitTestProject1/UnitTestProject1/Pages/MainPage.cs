@@ -12,9 +12,9 @@ namespace UnitTestProject1.Pages
 {
     public class MainPage : Page
     {
-        private UiComponent _Innerpage;
+        private SiterraComponent _Innerpage;
 
-        public UiComponent Innerpage
+        public SiterraComponent Innerpage
         {
             get
             {
@@ -33,11 +33,11 @@ namespace UnitTestProject1.Pages
 
         private TreeSelection tree;
 
-        public MainPage ClickNavTree<T>(string node_path) where T : SiterraComponent
+        public MainPage ClickNavTree(string node_path)
         {
             tree.Click_Node(node_path);
             Innerpage = this.GetComponent<SiterraComponent>();
-            ((T)(Innerpage)).PleaseWait();
+            Innerpage.PleaseWait();
             return this;
         }
 

@@ -116,7 +116,7 @@ namespace UnitTestProject1.Tests
         {
             MainPage m = Helper.GotoMainPage()
                 .clickBrowseLeftNav();
-                m.ClickNavTree<Pages.SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
+                m.ClickNavTree("Amcknight;Site;New Site (SiteNumber)");
             //System.Threading.Thread.Sleep(3000);
             //m.Innerpage.
         }

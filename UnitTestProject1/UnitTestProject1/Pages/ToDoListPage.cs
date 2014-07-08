@@ -10,7 +10,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace UnitTestProject1.Pages
 {
-    public class ToDoListPage : UiComponent
+    public class ToDoListPage : SiterraComponent
     {
         private UiComponent _Innerpage;
 
