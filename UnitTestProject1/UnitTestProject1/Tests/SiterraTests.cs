@@ -168,10 +168,19 @@ namespace UnitTestProject1.Tests
             String userName = newUser.createUser();
             //String userName = "Sanity";
             System.Threading.Thread.Sleep(2000);
+            //Currently cannot switch back after focus has switch to pop-up
             user.findUser(userName);
 
         }
-
+        
+		[TestMethod]
+        public void updateUser_36()
+        {
+            UserComp user = (UserComp)Helper.GotoUserComp()
+                                            .Innerpage;
+            user.findUser("test.user2");
+            user.selectFirstUser();
+        }
 		[TestMethod]
         public void gotoToDoList()
         {
