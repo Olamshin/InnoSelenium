@@ -14,7 +14,7 @@ namespace UnitTestProject1.Pages
     {
         
 
-        public void PleaseWait()
+        public override void PleaseWait()
         {
             Browser.SwitchTo().Frame("MainFrame");
             Host.Wait.Until<Boolean>((d) =>

@@ -31,7 +31,7 @@ namespace UnitTestProject1.Pages
                 clickThis.SelectByText(value);
             }
         }
-        public void PleaseWait()
+        public override void PleaseWait()
         {
             
             Host.Wait.Until<Boolean>((d) =>
