@@ -164,9 +164,10 @@ namespace UnitTestProject1.Tests
         {
             UserComp user = (UserComp)Helper.GotoUserComp()
                                             .Innerpage;
-            /*NewUserPage newUser =  user.addUser();
-            String userName = newUser.createUser();*/
-            String userName = "Sanity";
+            NewUserPage newUser =  user.addUser();
+            String userName = newUser.createUser();
+            //String userName = "Sanity";
+            System.Threading.Thread.Sleep(2000);
             user.findUser(userName);
 
         }
