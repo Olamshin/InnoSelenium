@@ -26,6 +26,7 @@ namespace UnitTestProject1.Tests
             Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
             Helper.GotoLandingPage().InnerLoginPage.Login().PleaseWait();
             Host.InitialCookies = Host.Instance.Application.Browser.Manage().Cookies.AllCookies;
+
         }
 
         [TestInitialize]
@@ -122,7 +123,7 @@ namespace UnitTestProject1.Tests
             System.Threading.Thread.Sleep(1000);
         }
 
-        [TestMethod]
+		[TestMethod]
         public void createSearchRing()
         {
             MainPage m = Helper.GotoMainPage()
@@ -135,6 +136,40 @@ namespace UnitTestProject1.Tests
         }
 
         [TestMethod]
+        public void testAdminPage() 
+        {
+            AdminComp admin = (AdminComp)Helper.GotoAdminPage()
+                .Innerpage;
+                admin.clickLink("Library Templates");
+             /*   admin.Find.Element(By.Id("SectionHeader100")).Should().NotBeNull();*/
+            
+
+        }
+        /*[TestMethod]
+        public void createUser()
+        {
+            AdminPage admin = (AdminPage)Helper.GotoAdminPage()
+                                                .Innerpage;
+            admin.clickUsers();
+            admin.clickAddUser();
+
+        }*/
+        [TestMethod]
+        public void createOrgUnit()
+        {
+            UnitComp unit = (UnitComp)Helper.GotoUnitComp()
+                                            .Innerpage;
+            unit.clickAddOrgUnit("Site");
+        }
+        [TestMethod]
+        public void createUser()
+        {
+            UserComp user = (UserComp)Helper.GotoUserComp()
+                                            .Innerpage;
+            NewUserPage newUser =  user.addUser();
+            //newUser.createUser();
+        }
+		[TestMethod]
         public void gotoToDoList()
         {
             Helper.GotoMainPage()
