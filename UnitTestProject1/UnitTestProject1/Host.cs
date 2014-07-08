@@ -20,8 +20,14 @@ namespace UnitTestProject1
         public static WebDriverWait Wait;
         public static System.Collections.ObjectModel.ReadOnlyCollection<Cookie> InitialCookies;
     }
-    public abstract class SiterraPage : Page
+    public class SiterraComponent : UiComponent
     {
-        public abstract void PleaseWait();
+        public virtual void PleaseWait(){}
     }
+
+   /* public class SiterraComponent<T> : UiComponent where T : SiterraComponent
+    {
+       //private T _object;
+       // public override void PleaseWait() { _object.PleaseWait(); }
+    }*/
 }

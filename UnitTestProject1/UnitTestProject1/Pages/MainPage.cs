@@ -31,6 +31,16 @@ namespace UnitTestProject1.Pages
             }
         }
 
+        private TreeSelection tree;
+
+        public MainPage ClickNavTree<T>(string node_path) where T : SiterraComponent
+        {
+            tree.Click_Node(node_path);
+            Innerpage = this.GetComponent<SiterraComponent>();
+            ((T)(Innerpage)).PleaseWait();
+            return this;
+        }
+
         public void PleaseWait()
         {
             var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
@@ -50,6 +60,14 @@ namespace UnitTestProject1.Pages
         {
             PleaseWait();
             Find.Element(By.Id("imgSetGlobalNavLeases")).Click();
+            return this;
+        }
+
+        public MainPage clickBrowseLeftNav()
+        {
+            PleaseWait();
+            Find.Element(By.Id("tdSetGlobalNavBrowse")).Click();
+            this.tree = GetComponent<TreeSelection>();
             return this;
         }
 
@@ -85,6 +103,8 @@ namespace UnitTestProject1.Pages
         public TreeSelection Click_TreeSelection()
         {
             PleaseWait();
+            //Actions builder = new Actions(Browser);
+            //builder.MoveToElement(Find.Element(By.Id("TreeSelection"))).Build().Perform();
             Find.Element(By.Id("TreeSelection")).Click();
             return this.GetComponent<TreeSelection>();
         }
@@ -102,10 +122,13 @@ namespace UnitTestProject1.Pages
     {
         public void PleaseWait()
         {
-            Host.Wait.Until<Boolean>((d) =>
+            Browser.SwitchTo().DefaultContent();
+            Browser.SwitchTo().Frame("MainFrame");
+            Host.Wait.Until<IWebElement>((d) =>
             {
-                return !d.FindElement(By.Id("ifrmTree")).GetCssValue("display").Equals("none");
+                return d.FindElement(By.Id("tabsContainer"));
             });
+            Browser.SwitchTo().DefaultContent();
         }
         private void NodeWait()
         {
@@ -116,19 +139,50 @@ namespace UnitTestProject1.Pages
             });
         }
 
-        public TreeSelection Click_Node(string org_name)
+        public TreeSelection Click_Node(string node_path)
         {
-            var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
-            Browser.SwitchTo().Frame(Find.Element(By.Id("divTreeContainer")).FindElement(By.Id("ifrmTree")));
+            IWebElement node;
+            string[] s = node_path.Split(';');
+            if (s.Length == 1)
+            {
+                var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
+               // Browser.SwitchTo().Frame(Find.Element(By.Id("divGlobalNavBrowse")).FindElement(By.Id("frameGlobalNavBrowse")));
+                Browser.SwitchTo().Frame(Find.Element(By.Id("frameGlobalNavBrowse")));
 
-            executor.ExecuteScript(Find.Element(By.Id("TableNode1000056"))
-                .FindElement(By.XPath("//table[@title = '"+org_name+"']//a[@class ='TreeLink']"))
-                .GetAttribute("onclick")+";");
+                node = Find.Element(By.PartialLinkText(" " + s[0] + " "));
+                node.Click();
 
-            Browser.SwitchTo().DefaultContent();
-            NodeWait();
+                Browser.SwitchTo().DefaultContent();
+                NodeWait();
+            }
+            else
+            {
+                Browser.SwitchTo().Frame(Find.Element(By.Id("frameGlobalNavBrowse")));
+                foreach (string node_name in s)
+                {
+                    node = Find.Element(By.PartialLinkText(" " + node_name + " "));
+                    var dynamicnodeid=node.GetAttribute("id");
+                    System.Threading.Thread.Sleep(3000);
+                    if (s.Last().Equals(node_name))
+                    {
+                        Find.Element(By.Id(dynamicnodeid)).Click();
+                    }
+                    else
+                    {
+                        Find.Element(By.Id("ImageNode" + dynamicnodeid)).Click();
+                    }
+
+                    Host.Wait.Until<Boolean>((d) =>
+                    {
+                        return !d.PageSource.Contains("loadingSM.gif");
+                        //return !d.FindElement(By.Id("NavContainer")).ToString().Contains("indicator_gray.gif");
+                    });
+                }
+                Browser.SwitchTo().DefaultContent();
+            }
+            //System.Threading.Thread.Sleep(2000);
             return this;
-           // System.Threading.Thread.Sleep(1000);
+            // System.Threading.Thread.Sleep(1000);
 
         }
     }
