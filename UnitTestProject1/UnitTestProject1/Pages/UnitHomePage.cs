@@ -31,9 +31,11 @@ namespace UnitTestProject1.Pages
         public UnitHomePage Select_Search_Ring_Grid()
         {
             PleaseWait();
+            var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
             Browser.SwitchTo().Frame("MainFrame");
-            Find.Element(By.Id("btnContentSelector")).Click();
+            executor.ExecuteScript("showTabMenu('list');");
             Find.Element(By.PartialLinkText("Search Ring")).Click();
+            Browser.SwitchTo().DefaultContent();
             return this;
         }
 
