@@ -14,7 +14,7 @@ namespace UnitTestProject1.Pages
     {
         public static String handle;
 
-        public void PleaseWait()
+        public override void PleaseWait()
         {
 
             Host.Wait.Until<Boolean>((d) =>

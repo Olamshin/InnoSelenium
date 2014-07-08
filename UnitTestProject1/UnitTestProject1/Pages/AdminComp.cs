@@ -15,7 +15,7 @@ namespace UnitTestProject1.Pages
 {
     public class AdminComp : SiterraComponent
     {
-        public void PleaseWait()
+        public override void PleaseWait()
         {
             
             Browser.SwitchTo().Frame("MainFrame");
