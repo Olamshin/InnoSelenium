@@ -40,6 +40,7 @@ namespace UnitTestProject1
         {
             return Host.Instance.NavigateToInitialPage<LandingPage>("/" + domain);
         }
+
 		
 		public static MainPage GotoUnitComp()
         {
