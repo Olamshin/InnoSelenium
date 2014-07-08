@@ -8,6 +8,8 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using System.Net.Http;
 using System.Threading.Tasks;
+using UnitTestProject1.Pages;
+
 
 namespace UnitTestProject1.Tests
 {
@@ -24,7 +26,6 @@ namespace UnitTestProject1.Tests
             Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
             Helper.GotoLandingPage().InnerLoginPage.Login().PleaseWait();
             Host.InitialCookies = Host.Instance.Application.Browser.Manage().Cookies.AllCookies;
-
         }
 
         [TestInitialize]
@@ -51,6 +52,22 @@ namespace UnitTestProject1.Tests
                 page.InnerLoginPage.Click_Login();
 
                 page.Title.Should().Contain("SMS");
+
+        }
+
+        [TestMethod]
+        public void loginProfileURL()
+        {
+            var page = Helper.GotoLandingPage("Samsonite");
+
+            page.PleaseWait();
+
+            page.InnerLoginPage.username = "admin_user";
+            page.InnerLoginPage.password = "Potato3$";
+
+            page.InnerLoginPage.Click_Login();
+
+            page.Title.Should().Contain("Samsonite");
 
         }
 
@@ -101,8 +118,28 @@ namespace UnitTestProject1.Tests
                 .Click_Filter_Button()
                 .Click_TreeSelection()
                 .Click_Node("Athena WS Top Unit 1")
-                .Click_Node("Athena WS Unit for Sites");
+				.Click_Node("Athena WS Unit for Sites");
             System.Threading.Thread.Sleep(1000);
         }
+
+        [TestMethod]
+        public void createSearchRing()
+        {
+            MainPage m = Helper.GotoMainPage()
+                .leftNavBrowse()
+                .Click_Search_Ring_Unit();
+
+            UnitHomePage u = (UnitHomePage)m.Innerpage;
+                u.Select_Search_Ring_Grid()
+                .Create_Search_Ring();
+        }
+
+        [TestMethod]
+        public void gotoToDoList()
+        {
+            Helper.GotoMainPage()
+                .Click_ToDoList_Link();
+        }
+
     }
 }
