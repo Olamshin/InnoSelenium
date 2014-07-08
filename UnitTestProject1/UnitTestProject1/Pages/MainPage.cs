@@ -73,6 +73,15 @@ namespace UnitTestProject1.Pages
             });
         }
 
+        public String InnerPageFindText(By findExpression)
+        {
+            Browser.SwitchTo().Frame("MainFrame");
+            String e = Find.Element(findExpression).Text.Trim();
+            Browser.SwitchTo().DefaultContent();
+            return e;
+
+        }
+
         public MainPage clickLeaseLeftNav()
         {
             PleaseWait();

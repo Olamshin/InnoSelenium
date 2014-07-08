@@ -115,8 +115,9 @@
   <ItemGroup>
     <Compile Include="Goto\Goto.cs" />
     <Compile Include="Host.cs" />
-	<Compile Include="Pages\AdminComp.cs" />
+    <Compile Include="Pages\AdminComp.cs" />
     <Compile Include="Pages\SearchRingPopup.cs" />
+    <Compile Include="Pages\SitePopup.cs" />
     <Compile Include="Pages\UnitHomePage.cs" />
     <Compile Include="Pages\ToDoListPage.cs" />
     <Compile Include="Pages\DownloadsPage.cs" />
