@@ -116,7 +116,7 @@ namespace UnitTestProject1.Tests
         {
             MainPage m = Helper.GotoMainPage()
                 .clickBrowseLeftNav();
-                m.ClickNavTree("Amcknight;Site;New Site (SiteNumber)");
+                m.ClickNavTree<SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
             //System.Threading.Thread.Sleep(3000);
             //m.Innerpage.
         }
@@ -171,11 +171,34 @@ namespace UnitTestProject1.Tests
             user.findUser(userName);
 
         }
+
 		[TestMethod]
         public void gotoToDoList()
         {
             Helper.GotoMainPage()
                 .Click_ToDoList_Link();
+        }
+
+        [TestMethod]
+        public void T006_Update_Site()
+        {
+            MainPage m = Helper.GotoSiteHomePage();
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            SitePopup sp =s.click_edit();
+            sp.address = "fail yeah";
+            sp.Save();
+            m.PleaseWait();
+            m.Innerpage.PleaseWait();
+            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be("fail yeah");
+            //System.Threading.Thread.Sleep(5000);
+        }
+
+        [TestMethod]
+        public void T007_AssignVendor2Site()
+        {
+            MainPage m = Helper.GotoSiteHomePage();
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            s.add_vendor();
         }
 
     }

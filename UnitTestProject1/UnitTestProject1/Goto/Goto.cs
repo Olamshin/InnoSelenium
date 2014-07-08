@@ -65,5 +65,18 @@ namespace UnitTestProject1
             return mainpage;
         }
 
+       /* public static MainPage GotoSearchHomePage()
+        {
+            MainPage main = GotoMainPage();
+            return main.ClickNavTree("AD PRM Test Unit;MSTR_Test");
+        }*/
+
+        public static MainPage GotoSiteHomePage()
+        {
+            MainPage main = GotoMainPage();
+            main.Innerpage=main.ClickNavTree<SiteHomePage>("AD PRM Test Unit;MSTR_Test (9057);MSTR_Test (1246)");
+            return main;
+        }
+
     }
 }
