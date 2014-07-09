@@ -31,7 +31,6 @@ namespace UnitTestProject1.Pages
         public UnitHomePage Select_Search_Ring_Grid()
         {
             PleaseWait();
-            var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
             Browser.SwitchTo().Frame("MainFrame");
             Actions builder = new Actions(Browser);
             builder.MoveToElement(Find
@@ -47,8 +46,10 @@ namespace UnitTestProject1.Pages
         {
             PleaseWait();
             Browser.SwitchTo().Frame("MainFrame");
+            Actions builder = new Actions(Browser);
+            builder.Click(
             //System.Threading.Thread.Sleep(2000);
-            Find.Element(By.XPath("//div[@id='spanBtnAddChildren']/a[@onclick='addChildren();return false;']")).Click();
+            Find.Element(By.XPath("//div[@id=\"spanBtnAddChildren\"]/a[@onclick=\"addChildren();return false;\"]")));
             Browser.SwitchTo().DefaultContent();
             return this;
         }
