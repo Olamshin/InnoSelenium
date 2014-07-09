@@ -229,9 +229,10 @@ namespace UnitTestProject1.Tests
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
             s.add_vendor()
-                .select_vendor()
-                .Select_Object<SiteHomePage>(s)
-                .Save_Vendor();
+                .Select_Button()
+                .Select_Object<SiteHomePage>("646730", s)
+                .Submit_Vendor();
+            s.ExistsInVendorGrid("646730").Should().BeTrue();
            
         }
 

@@ -18,7 +18,7 @@ namespace UnitTestProject1.Pages
 
             foreach (string a in Host.Instance.Application.Browser.WindowHandles)
             {
-                if (!a.Equals(LandingPage.handle))
+                if (!a.Equals(Host.mainWindowHandle))
                 {
 
                     if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("/Infrastructures/BrowserCheck/HTML/Downloads.html"))

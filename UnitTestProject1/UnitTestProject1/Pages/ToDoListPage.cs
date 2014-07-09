@@ -31,5 +31,10 @@ namespace UnitTestProject1.Pages
             }
         }
 
+        public override void PleaseWait()
+        {
+
+        }
+
     }
 }
