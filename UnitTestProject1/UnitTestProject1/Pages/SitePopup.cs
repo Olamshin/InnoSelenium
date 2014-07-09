@@ -25,7 +25,14 @@ namespace UnitTestProject1.Pages
         {
             set
             {
-                Execute.ActionOnLocator(By.Name("1190170"), e => { e.Clear(); e.SendKeys(value); });
+                Execute.ActionOnLocator(By.Id("1190170"), e => { e.Clear(); e.SendKeys(value); });
+            }
+        }
+        public string siteNumber
+        {
+            set
+            {
+                Execute.ActionOnLocator(By.Id("1190164"), e => { e.Clear(); e.SendKeys(value); });
             }
         }
 
@@ -40,7 +47,6 @@ namespace UnitTestProject1.Pages
                 }
             }
             Host.Instance.Application.Browser.SwitchTo().Window(handle);
-            PleaseWait();
         }
 
         public void PleaseWait()
@@ -50,7 +56,7 @@ namespace UnitTestProject1.Pages
             {
                 return executor.ExecuteScript("return document.readyState").Equals("complete");
             });
-
+            
             Host.Wait.Until<IWebElement>((d) =>
             {
                 return d.FindElement(By.Id("editForm"));
@@ -65,8 +71,17 @@ namespace UnitTestProject1.Pages
         }
         public SitePopup select_type()
         {
-            PleaseWait();
+            var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
+            Host.Wait.Until<Boolean>((Browser) =>
+            {
+                return executor.ExecuteScript("return document.readyState").Equals("complete");
+            });
+            Host.Wait.Until<IWebElement>((d) =>
+            {
+                return d.FindElement(By.Id("popupHeaderLinks"));
+            });
             Find.Element(By.LinkText("Next")).Click();
+            System.Threading.Thread.Sleep(6000);
             return this;
         }
     }

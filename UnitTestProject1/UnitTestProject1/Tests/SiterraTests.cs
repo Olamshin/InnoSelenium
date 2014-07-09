@@ -197,12 +197,15 @@ namespace UnitTestProject1.Tests
             MainPage m = Helper.GotoSearchRingHomePage();
             SearchRingHomePage sr = m.Innerpage as SearchRingHomePage;
             SitePopup sp = sr.add_site();
-            sp.PleaseWait();
             sp.select_type();
+            sp.PleaseWait();
             sp.siteName = "Selenium Site";
+            sp.siteNumber = "WatirprufAutobots";
             sp.Save();
             m.PleaseWait();
             m.Innerpage.PleaseWait();
+            string actual = m.Find.Element(By.XPath("//table[@id=\"TABLE_SITES\"]/tbody/tr/td/a")).Text;
+            Assert.AreEqual(actual, "Selenium Site - WatirprufAutobots");
         }
         [TestMethod]
         public void T006_Update_Site()
@@ -211,11 +214,11 @@ namespace UnitTestProject1.Tests
             SiteHomePage s = m.Innerpage as SiteHomePage;
             SitePopup sp =s.click_edit();
             sp.PleaseWait();
-            sp.address = "fail yeah";
+            sp.address = "paul test";
             sp.Save();
             m.PleaseWait();
             m.Innerpage.PleaseWait();
-            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be("fail yeah");
+            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be("paul test");
             //System.Threading.Thread.Sleep(5000);
         }
 
