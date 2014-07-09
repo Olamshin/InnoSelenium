@@ -37,12 +37,20 @@ namespace UnitTestProject1.Pages
         }
         public void PleaseWaitForSearch() 
         {
-            Browser.SwitchTo().DefaultContent();
-            Browser.SwitchTo().Frame("MainFrame");
+            switchOut();
+            switchIn();
             Host.Wait.Until<IWebElement>((d) =>
             {
                 return d.FindElement(By.Id("CHK_MATCH_WHOLE_754040200"));
             });
+            switchOut();
+        }
+        public void switchIn() 
+        {
+            Browser.SwitchTo().Frame("MainFrame");
+        }
+        public void switchOut()
+        {
             Browser.SwitchTo().DefaultContent();
         }
         public NewUserPage addUser()
@@ -53,15 +61,15 @@ namespace UnitTestProject1.Pages
 
             PleaseWait();
             System.Threading.Thread.Sleep(3000);
-            Browser.SwitchTo().DefaultContent();
-            Browser.SwitchTo().Frame("MainFrame");
+            switchOut();
+            switchIn();
             return Navigate.To<NewUserPage>(By.LinkText("Add"));
         }
-        public UserComp findUser(String userName)
+        public UserComp findUser(String userName, String searchBy)
         {
             PleaseWait();
-            Browser.SwitchTo().DefaultContent();
-            Browser.SwitchTo().Frame("MainFrame");
+            switchOut();
+            switchIn();
             
             try
             {
@@ -75,29 +83,36 @@ namespace UnitTestProject1.Pages
 
                 PleaseWaitForSearch();
             }
+            
             //Enter search Parameters
             Execute.ActionOnLocator(By.Id("TXT_SEARCH_FOR_754040200"), e => { e.Clear(); e.SendKeys(userName); });
 
             IWebElement dropDownListBox = Find.Element(By.Id("CBO_SEARCH_754040200"));
             SelectElement clickThis = new SelectElement(dropDownListBox);
-            clickThis.SelectByText("User Name");
+            clickThis.SelectByText(searchBy);
 
             //Click Search
             Find.Element(By.LinkText("Search")).Click();
 
-            System.Threading.Thread.Sleep(2000);
-            Browser.SwitchTo().DefaultContent();
+            System.Threading.Thread.Sleep(4000);
+            PleaseWaitForSearch();
+            switchOut();
 
             return this;
         }
-        public void selectFirstUser() {
+        public NewUserPage selectFirstUser() {
             /*OpenQA.Selenium.
                 Click("//a[starts-with(@id, '754040200_')]");
             Find.Element(By.Id("754040200_%")).Click();*/
             PleaseWaitForSearch();
-            Find.Element(By.CssSelector("a[id$='_DISPLAY_NAME']")).Click();
+            Browser.SwitchTo().DefaultContent();
+            Browser.SwitchTo().Frame("MainFrame");
+            System.Threading.Thread.Sleep(2000);
+
+            return Navigate.To<NewUserPage>(By.CssSelector("a[id$='_DISPLAY_NAME']"));
                 
         }
+
         
     }
 }

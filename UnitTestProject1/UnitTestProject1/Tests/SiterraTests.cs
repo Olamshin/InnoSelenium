@@ -160,7 +160,7 @@ namespace UnitTestProject1.Tests
             unit.clickAddOrgUnit("Site");
         }
         [TestMethod]
-        public void T035_Create_User()
+        public void T035_createUser()
         {
             MainPage m = Helper.GotoUserComp();
             UserComp user = m.Innerpage as UserComp;
@@ -168,22 +168,48 @@ namespace UnitTestProject1.Tests
             String userName = newUser.createUser();
             //String userName = "Sanity";
             System.Threading.Thread.Sleep(2000);
-            
-            user.findUser(userName);
+
+            user.findUser(userName, "User Name");
 
             m.InnerPageFindText(By.CssSelector("a[id$='_DISPLAY_NAME']")).Should().Be("Sanity Test User");
         }
         
 		[TestMethod]
-        public void T036_Update_User()
+        public void T036_updateUser()
         {
+            //WARNING: NOT CURRENTLY WORKING 100% OF THE TIME//
             MainPage m = Helper.GotoUserComp();
             UserComp user = m.Innerpage as UserComp;
+            user.PleaseWait();
+
+            System.Threading.Thread.Sleep(4000);
+
+            user.findUser("Sanity", "User Name");
+            NewUserPage n= user.selectFirstUser();
+
+            String userName = n.updateUser();
 
             System.Threading.Thread.Sleep(2000);
 
-            user.findUser("Sanity");
-            user.selectFirstUser();
+            user.findUser(userName, "User Name");
+
+            m.InnerPageFindText(By.CssSelector("a[@id$='_DISPLAY_NAME']")).Should().NotBe("Sanity Test User");
+
+        }
+        [TestMethod]
+        public void T037_createUserSubscriptions() {
+            MainPage m = Helper.GotoUserComp();
+            UserComp user = m.Innerpage as UserComp;
+            user.PleaseWait();
+
+            System.Threading.Thread.Sleep(4000);
+
+            user.findUser("Sanity", "User Name");
+            NewUserPage n = user.selectFirstUser();
+            n.PleaseWait();
+            UserSubscriptionsPopUp uspu = n.addNotifications();
+            //uspu.addSubscription();
+
         }
 		[TestMethod]
         public void gotoToDoList()
@@ -191,7 +217,8 @@ namespace UnitTestProject1.Tests
             Helper.GotoMainPage()
                 .Click_ToDoList_Link();
         }
-        [TestMethod]
+        
+		[TestMethod]
         public void T005_Create_Site()
         {
             MainPage m = Helper.GotoSearchRingHomePage();
