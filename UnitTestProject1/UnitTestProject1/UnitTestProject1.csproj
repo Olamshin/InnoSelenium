@@ -44,7 +44,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Castle.Core.3.3.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="FluentAssertions">
+    <Reference Include="FluentAssertions, Version=3.0.107.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentAssertions.3.0.107\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions.Core, Version=3.0.107.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
@@ -115,8 +116,10 @@
   <ItemGroup>
     <Compile Include="Goto\Goto.cs" />
     <Compile Include="Host.cs" />
-	<Compile Include="Pages\AdminComp.cs" />
+    <Compile Include="Pages\AdminComp.cs" />
+    <Compile Include="Pages\ObjectBrowserPage.cs" />
     <Compile Include="Pages\SearchRingPopup.cs" />
+    <Compile Include="Pages\SitePopup.cs" />
     <Compile Include="Pages\UnitHomePage.cs" />
     <Compile Include="Pages\ToDoListPage.cs" />
     <Compile Include="Pages\DownloadsPage.cs" />

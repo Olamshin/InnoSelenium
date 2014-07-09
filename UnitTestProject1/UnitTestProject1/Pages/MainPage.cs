@@ -12,7 +12,9 @@ namespace UnitTestProject1.Pages
 {
     public class MainPage : Page
     {
+        private string handle;
         private SiterraComponent _Innerpage;
+        private TreeSelection _tree;
 
         public SiterraComponent Innerpage
         {
@@ -31,14 +33,36 @@ namespace UnitTestProject1.Pages
             }
         }
 
-        private TreeSelection tree;
-
-        public MainPage ClickNavTree(string node_path)
+        private TreeSelection tree
         {
+            get
+            {
+                if (_tree == null)
+                {
+                    _tree = this.GetComponent<TreeSelection>();
+                }
+                return _tree;
+            }
+
+            set
+            {
+                _tree = value;
+            }
+        }
+
+        public MainPage()
+        {
+            handle = Host.Instance.Application.Browser.CurrentWindowHandle;
+            PleaseWait();
+        }
+
+        public T ClickNavTree<T>(string node_path) where T : SiterraComponent, new()
+        {
+            clickBrowseLeftNav();
             tree.Click_Node(node_path);
-            Innerpage = this.GetComponent<SiterraComponent>();
+            Innerpage = this.GetComponent<T>();
             Innerpage.PleaseWait();
-            return this;
+            return Innerpage as T;
         }
 
         public void PleaseWait()
@@ -54,6 +78,15 @@ namespace UnitTestProject1.Pages
                 return !d.PageSource.Contains("indicator_gray.gif");
                 //return !d.FindElement(By.Id("NavContainer")).ToString().Contains("indicator_gray.gif");
             });
+        }
+
+        public String InnerPageFindText(By findExpression)
+        {
+            Browser.SwitchTo().Frame("MainFrame");
+            String e = Find.Element(findExpression).Text.Trim();
+            Browser.SwitchTo().DefaultContent();
+            return e;
+
         }
 
         public MainPage clickLeaseLeftNav()
@@ -92,6 +125,7 @@ namespace UnitTestProject1.Pages
             Find.Element(By.Id("BtnGlobalNavFilter")).Click();
             return this;
         }
+
         public MainPage Click_ToDoList_Link()
         {
             Browser.SwitchTo().Frame("MainFrame");
@@ -153,7 +187,7 @@ namespace UnitTestProject1.Pages
             if (s.Length == 1)
             {
                 var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
-               // Browser.SwitchTo().Frame(Find.Element(By.Id("divGlobalNavBrowse")).FindElement(By.Id("frameGlobalNavBrowse")));
+                // Browser.SwitchTo().Frame(Find.Element(By.Id("divGlobalNavBrowse")).FindElement(By.Id("frameGlobalNavBrowse")));
                 Browser.SwitchTo().Frame(Find.Element(By.Id("frameGlobalNavBrowse")));
 
                 node = Find.Element(By.PartialLinkText(" " + s[0] + " "));
@@ -168,7 +202,7 @@ namespace UnitTestProject1.Pages
                 foreach (string node_name in s)
                 {
                     node = Find.Element(By.PartialLinkText(" " + node_name + " "));
-                    var dynamicnodeid=node.GetAttribute("id");
+                    var dynamicnodeid = node.GetAttribute("id");
                     System.Threading.Thread.Sleep(3000);
                     if (s.Last().Equals(node_name))
                     {

@@ -26,6 +26,7 @@ namespace UnitTestProject1.Tests
             Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
             Helper.GotoLandingPage().InnerLoginPage.Login().PleaseWait();
             Host.InitialCookies = Host.Instance.Application.Browser.Manage().Cookies.AllCookies;
+            Host.mainWindowHandle = Host.Instance.Application.Browser.CurrentWindowHandle;
 
         }
 
@@ -116,7 +117,7 @@ namespace UnitTestProject1.Tests
         {
             MainPage m = Helper.GotoMainPage()
                 .clickBrowseLeftNav();
-                m.ClickNavTree("Amcknight;Site;New Site (SiteNumber)");
+                m.ClickNavTree<SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
             //System.Threading.Thread.Sleep(3000);
             //m.Innerpage.
         }
@@ -160,18 +161,61 @@ namespace UnitTestProject1.Tests
             unit.clickAddOrgUnit("Site");
         }
         [TestMethod]
-        public void createUser()
+        public void createUser_35()
+        {
+            MainPage m = Helper.GotoUserComp();
+            UserComp user = m.Innerpage as UserComp;
+            NewUserPage newUser =  user.addUser();
+            String userName = newUser.createUser();
+            //String userName = "Sanity";
+            System.Threading.Thread.Sleep(2000);
+            
+            user.findUser(userName);
+
+            m.InnerPageFindText(By.CssSelector("a[id$='_DISPLAY_NAME']")).Should().Be("Sanity Test User");
+        }
+        
+		[TestMethod]
+        public void updateUser_36()
         {
             UserComp user = (UserComp)Helper.GotoUserComp()
                                             .Innerpage;
-            NewUserPage newUser =  user.addUser();
-            //newUser.createUser();
+            user.findUser("Sanity");
+            user.selectFirstUser();
         }
 		[TestMethod]
         public void gotoToDoList()
         {
             Helper.GotoMainPage()
                 .Click_ToDoList_Link();
+        }
+
+        [TestMethod]
+        public void T006_Update_Site()
+        {
+            MainPage m = Helper.GotoSiteHomePage();
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            SitePopup sp =s.click_edit();
+            sp.PleaseWait();
+            sp.address = "fail yeah";
+            sp.Save();
+            m.PleaseWait();
+            m.Innerpage.PleaseWait();
+            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be("fail yeah");
+            //System.Threading.Thread.Sleep(5000);
+        }
+
+        [TestMethod]
+        public void T007_AssignVendor2Site()
+        {
+            MainPage m = Helper.GotoSiteHomePage();
+
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            s.add_vendor()
+                .select_vendor()
+                .Select_Object<SiteHomePage>(s)
+                .Save_Vendor();
+           
         }
 
     }
