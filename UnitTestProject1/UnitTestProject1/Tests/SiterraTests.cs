@@ -21,7 +21,7 @@ namespace UnitTestProject1.Tests
         {
             Host.Instance = new SelenoHost();
             Host.Instance.Run(configure => configure
-            .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://apollo-test.siterra.com/"))
+            .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://apollo-uat.siterra.com/"))
             .WithRemoteWebDriver(() => BrowserFactory.InternetExplorer()));
             Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
             Helper.GotoLandingPage().InnerLoginPage.Login().PleaseWait();
@@ -228,12 +228,22 @@ namespace UnitTestProject1.Tests
             MainPage m = Helper.GotoSiteHomePage();
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.add_vendor()
-                .Select_Button()
-                .Select_Object<SiteHomePage>("646730", s)
+            s.Assign_Vendor()
+                .Vendor_Select_Button()
+                .Select_Object<SiteHomePage>("2648188", s)
                 .Submit_Vendor();
-            s.ExistsInVendorGrid("646730").Should().BeTrue();
+            s.ExistsInVendorGrid("2648188").Should().BeTrue();
            
+        }
+
+        [TestMethod]
+        public void T008_AddAsset2Site()
+        {
+            MainPage m = Helper.GotoSiteHomePage();
+
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            s.Add_Asset().Select_Type().Save();
+            s.ExistsInAssetGrid("").Should().BeTrue();
         }
 
     }

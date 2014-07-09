@@ -74,7 +74,7 @@ namespace UnitTestProject1
         public static MainPage GotoSiteHomePage()
         {
             MainPage main = GotoMainPage();
-            main.Innerpage=main.ClickNavTree<SiteHomePage>("AD PRM Test Unit;MSTR_Test (9057);MSTR_Test (1246)");
+            main.Innerpage = main.ClickNavTree<SiteHomePage>("Denver;333 Easy Street (333)");
             return main;
         }
         

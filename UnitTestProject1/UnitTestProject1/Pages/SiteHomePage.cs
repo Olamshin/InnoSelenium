@@ -13,13 +13,28 @@ namespace UnitTestProject1.Pages
 {
     public class SiteHomePage : SiterraComponent
     {
-        private VendorGrid vendorGrid
+        private VendorGrid _vendorgrid;
+        protected VendorGrid vendorGrid
         {
             get
             {
-                return this.GetComponent<VendorGrid>();
+                if (_vendorgrid == null)
+                { _vendorgrid = this.GetComponent<VendorGrid>(); }
+                return _vendorgrid;
             }
         }
+
+        private AssetGrid _assetgrid;
+        protected AssetGrid assetGrid
+        {
+            get
+            {
+                if (_assetgrid == null)
+                { _assetgrid = this.GetComponent<AssetGrid>(); }
+                return _assetgrid;
+            }
+        }
+
         public override void PleaseWait()
         {
             var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
@@ -50,23 +65,27 @@ namespace UnitTestProject1.Pages
         {
             Host.Instance.Application.Browser.SwitchTo().DefaultContent();
         }
+
         public SitePopup click_edit()
         {
             SwitchIn();
             return Navigate.To<SitePopup>(By.PartialLinkText("Edit"));
         }
-        public SiteHomePage add_vendor()
+
+        public SiteHomePage Assign_Vendor()
         {
             SwitchIn();
             Find.Element(By.XPath("//a[contains(@onclick,'addVendorResponsibility()')]")).Click();
             SwitchOut();
             return this;
         }
-        public ObjectBrowserPage Select_Button()
+
+        public ObjectBrowserPage Vendor_Select_Button()
         {
             SwitchIn();
             return Navigate.To<ObjectBrowserPage>(By.XPath("//a[contains(@onclick,'openVendorOBB(-1)')]"));
         }
+
         public SiteHomePage Submit_Vendor()
         {
             SwitchIn();
@@ -88,44 +107,58 @@ namespace UnitTestProject1.Pages
 
         public Boolean ExistsInVendorGrid(String vendor_no)
         {
-            /*String s = null; ;
-            IWebElement grid_table;
+            return vendorGrid.ExistsInGrid("Number", vendor_no);
+        }
+
+        public AssetPopup Add_Asset()
+        {
             SwitchIn();
-            //s=Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]//tbody//tr//td//a//G_VALUE[. = 'Bescoby']")).Text;
-            grid_table = Find.Element(By.Id("GRID_DATA_727040300"));
-            ReadOnlyCollection<IWebElement> grid_table_rows = grid_table.FindElements(By.XPath("//tr[@id='GRID_ROW']"));
-            IEnumerable<IWebElement> grid_row = grid_table_rows.Where(row => row.Text.Contains(vendor_no));
-            if (grid_row.Count() > 0)
+            //Find.Element(By.XPath("//a[contains(@onclick,'addAssetFromSite(')]")).Click();
+            return Navigate.To<AssetPopup>(By.XPath("//a[contains(@onclick,'addAssetFromSite(')]"));
+
+        }
+
+        public Boolean ExistsInAssetGrid(String asset_no)
+        {
+            return assetGrid.ExistsInGrid("Number", asset_no);
+        }
+
+        protected class VendorGrid : GridComponent
+        {
+            public VendorGrid()
             {
-                SwitchOut();
-                return true;
+                grid_id = "727040300";
             }
-            else
+            protected override void SwitchIn()
             {
-                SwitchOut();
-                return false;
-            }*/
-            return vendorGrid.ExistsInGrid(vendor_no);
+                Browser.SwitchTo().Frame("MainFrame");
+            }
+
+            protected override void SwitchOut()
+            {
+                Browser.SwitchTo().DefaultContent();
+            }
+
+
+        }
+
+        protected class AssetGrid : GridComponent
+        {
+            public AssetGrid()
+            {
+                grid_id = "711040100";
+            }
+            protected override void SwitchIn()
+            {
+                Browser.SwitchTo().Frame("MainFrame");
+            }
+
+            protected override void SwitchOut()
+            {
+                Browser.SwitchTo().DefaultContent();
+            }
+
+
         }
     }
-
-    public class VendorGrid : GridComponent
-    {
-       public VendorGrid()
-        {
-            grid_id = "727040300";
-        }
-        protected override void SwitchIn()
-        {
-            Browser.SwitchTo().Frame("MainFrame");
-        }
-
-        protected override void SwitchOut()
-        {
-            Browser.SwitchTo().DefaultContent();
-        }
-
-       
-    }
-
 }

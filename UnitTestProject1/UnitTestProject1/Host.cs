@@ -75,14 +75,20 @@ namespace UnitTestProject1
 
        public void Select_Object(String columnname, String value)
        {
-           IWebElement grid_table;
+           SwitchIn();
+           IWebElement grid_table,a =null;
            grid_table = Find.Element(By.Id("GRID_DATA_"+grid_id));
            ReadOnlyCollection<IWebElement> grid_table_rows = grid_table.FindElements(By.XPath("//tr[@id='GRID_ROW']"));
            IEnumerable<IWebElement> grid_row = grid_table_rows.Where(row => row.Text.Contains(value));
+
            foreach(IWebElement r in grid_row)
            {
-               IWebElement a = r.FindElement(By.XPath("//td[@class='Cell']/a[contains(@id,'"+columnname.ToUpper()+"']"));
+               a = r.FindElement(By.XPath("//td[@class='Cell']/a[contains(@id,'"+columnname.ToUpper()+"')]"));
            }
+
+           a.Click();
+           SwitchOut();
+
        }
 
        public GridComponent Select_FirstItem()
@@ -105,15 +111,32 @@ namespace UnitTestProject1
            return this;
        }
 
-       public Boolean ExistsInGrid(String number)
+       public void PleaseWaitForSearch()
        {
-           IWebElement grid_table;
+           SwitchIn();
+           Host.Wait.Until<IWebElement>((d) =>
+           {
+               return d.FindElement(By.Id("CHK_MATCH_WHOLE_"+grid_id));
+           });
+           SwitchOut();
+       }
+
+       public Boolean ExistsInGrid(String columnname, String value)
+       {
+           IWebElement grid_table,a=null;
+           //PleaseWaitForSearch();
+           System.Threading.Thread.Sleep(2000);
            SwitchIn();
            //s=Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]//tbody//tr//td//a//G_VALUE[. = 'Bescoby']")).Text;
            grid_table = Find.Element(By.Id("GRID_DATA_"+grid_id));
            ReadOnlyCollection<IWebElement> grid_table_rows = grid_table.FindElements(By.XPath("//tr[@id='GRID_ROW']"));
-           IEnumerable<IWebElement> grid_row = grid_table_rows.Where(row => row.Text.Contains(number));
-           if (grid_row.Count() > 0)
+           IEnumerable<IWebElement> grid_row = grid_table_rows.Where(row => row.Text.Contains(value));
+           foreach (IWebElement r in grid_row)
+           {
+               a = r.FindElement(By.XPath("//td[@class='Cell']/a[contains(@id,'" + columnname.ToUpper() + "')]"));
+           }
+
+           if (a.Text.Equals(value))
            {
                SwitchOut();
                return true;
