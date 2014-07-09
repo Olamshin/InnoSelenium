@@ -177,8 +177,11 @@ namespace UnitTestProject1.Tests
 		[TestMethod]
         public void updateUser_36()
         {
-            UserComp user = (UserComp)Helper.GotoUserComp()
-                                            .Innerpage;
+            MainPage m = Helper.GotoUserComp();
+            UserComp user = m.Innerpage as UserComp;
+
+            System.Threading.Thread.Sleep(2000);
+
             user.findUser("Sanity");
             user.selectFirstUser();
         }
