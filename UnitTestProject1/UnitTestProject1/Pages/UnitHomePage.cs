@@ -13,7 +13,7 @@ namespace UnitTestProject1.Pages
     public class UnitHomePage : SiterraComponent
     {
 
-        public void PleaseWait()
+        public override void PleaseWait()
         {
             var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
             Host.Wait.Until<Boolean>((Browser) =>
