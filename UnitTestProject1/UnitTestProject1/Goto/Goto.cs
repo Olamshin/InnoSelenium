@@ -77,6 +77,13 @@ namespace UnitTestProject1
             main.Innerpage=main.ClickNavTree<SiteHomePage>("AD PRM Test Unit;MSTR_Test (9057);MSTR_Test (1246)");
             return main;
         }
+        
+        public static MainPage GotoSearchRingHomePage()
+        {
+            MainPage main = GotoMainPage();
+            main.Innerpage = main.ClickNavTree<SearchRingHomePage>("0Notify First Round;NPF Search Ring UStatus Changed (827349376)");
+            return main;
+        }
 
     }
 }

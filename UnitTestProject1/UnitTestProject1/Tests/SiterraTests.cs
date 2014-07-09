@@ -41,7 +41,7 @@ namespace UnitTestProject1.Tests
         }
 
         [TestMethod]
-        public void login()
+        public void T001_Login()
         {
                 var page = Helper.GotoLandingPage();
 
@@ -58,7 +58,7 @@ namespace UnitTestProject1.Tests
         }
 
         [TestMethod]
-        public void loginProfileURL()
+        public void T002_Login_Profile_URL()
         {
             var page = Helper.GotoLandingPage("Samsonite");
 
@@ -123,15 +123,14 @@ namespace UnitTestProject1.Tests
         }
 
 		[TestMethod]
-        public void createSearchRing()
+        public void T003_Create_Search_Ring()
         {
             MainPage m = Helper.GotoMainPage()
                 .leftNavBrowse()
                 .Click_Search_Ring_Unit();
 
             UnitHomePage u = (UnitHomePage)m.Innerpage;
-                u.Select_Search_Ring_Grid()
-                .Create_Search_Ring();
+                u.Create_Search_Ring();
         }
 
         [TestMethod]
@@ -161,7 +160,7 @@ namespace UnitTestProject1.Tests
             unit.clickAddOrgUnit("Site");
         }
         [TestMethod]
-        public void createUser_35()
+        public void T035_Create_User()
         {
             MainPage m = Helper.GotoUserComp();
             UserComp user = m.Innerpage as UserComp;
@@ -176,10 +175,13 @@ namespace UnitTestProject1.Tests
         }
         
 		[TestMethod]
-        public void updateUser_36()
+        public void T036_Update_User()
         {
-            UserComp user = (UserComp)Helper.GotoUserComp()
-                                            .Innerpage;
+            MainPage m = Helper.GotoUserComp();
+            UserComp user = m.Innerpage as UserComp;
+
+            System.Threading.Thread.Sleep(2000);
+
             user.findUser("Sanity");
             user.selectFirstUser();
         }
@@ -189,7 +191,19 @@ namespace UnitTestProject1.Tests
             Helper.GotoMainPage()
                 .Click_ToDoList_Link();
         }
-
+        [TestMethod]
+        public void T005_Create_Site()
+        {
+            MainPage m = Helper.GotoSearchRingHomePage();
+            SearchRingHomePage sr = m.Innerpage as SearchRingHomePage;
+            SitePopup sp = sr.add_site();
+            sp.PleaseWait();
+            sp.select_type();
+            sp.siteName = "Selenium Site";
+            sp.Save();
+            m.PleaseWait();
+            m.Innerpage.PleaseWait();
+        }
         [TestMethod]
         public void T006_Update_Site()
         {

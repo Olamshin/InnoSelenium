@@ -13,7 +13,7 @@ namespace UnitTestProject1.Pages
     public class UnitHomePage : SiterraComponent
     {
 
-        public override void PleaseWait()
+        public void PleaseWait()
         {
             var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
             Host.Wait.Until<Boolean>((Browser) =>
@@ -31,23 +31,27 @@ namespace UnitTestProject1.Pages
         public UnitHomePage Select_Search_Ring_Grid()
         {
             PleaseWait();
-            var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
             Browser.SwitchTo().Frame("MainFrame");
             Actions builder = new Actions(Browser);
             builder.MoveToElement(Find
                 .Element(By.XPath("//a[@id='btnContentSelector']//span/img[@src='skins/common/images/menu_arrow_down.gif']"))
                 ).Build().Perform();
-            Find.Element(By.XPath("//table[@id='tblDynamicMenu1']//tr[@onclick='closeMenu(1,2);loadContents(\'searchring\', \'list\');']"))
-                .Click();
+            //Find.Element(By.XPath("//table[@id='tblDynamicMenu1']/tbody/tr[@onclick='closeMenu(1,2);']"))
+              //  .Click();
             Browser.SwitchTo().DefaultContent();
             return this;
         }
 
-        public SearchRingPopup Create_Search_Ring()
+        public UnitHomePage Create_Search_Ring()
         {
             PleaseWait();
             Browser.SwitchTo().Frame("MainFrame");
-            return Navigate.To<SearchRingPopup>(By.LinkText("Add"));
+            Actions builder = new Actions(Browser);
+            builder.Click(
+            //System.Threading.Thread.Sleep(2000);
+            Find.Element(By.XPath("//div[@id=\"spanBtnAddChildren\"]/a[@onclick=\"addChildren();return false;\"]")));
+            Browser.SwitchTo().DefaultContent();
+            return this;
         }
     }
 }
