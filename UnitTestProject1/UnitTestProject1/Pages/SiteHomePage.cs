@@ -7,14 +7,18 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using TestStack.Seleno.PageObjects.Actions;
 using OpenQA.Selenium.Support.UI;
+using System.Collections.ObjectModel;
 
 namespace UnitTestProject1.Pages
 {
     public class SiteHomePage : SiterraComponent
     {
-        public SiteHomePage()
+        private VendorGrid vendorGrid
         {
-            PleaseWait();
+            get
+            {
+                return this.GetComponent<VendorGrid>();
+            }
         }
         public override void PleaseWait()
         {
@@ -49,7 +53,7 @@ namespace UnitTestProject1.Pages
         public SitePopup click_edit()
         {
             SwitchIn();
-           return Navigate.To<SitePopup>(By.PartialLinkText("Edit"));
+            return Navigate.To<SitePopup>(By.PartialLinkText("Edit"));
         }
         public SiteHomePage add_vendor()
         {
@@ -58,12 +62,12 @@ namespace UnitTestProject1.Pages
             SwitchOut();
             return this;
         }
-        public ObjectBrowserPage select_vendor()
+        public ObjectBrowserPage Select_Button()
         {
             SwitchIn();
             return Navigate.To<ObjectBrowserPage>(By.XPath("//a[contains(@onclick,'openVendorOBB(-1)')]"));
         }
-        public SiteHomePage Save_Vendor()
+        public SiteHomePage Submit_Vendor()
         {
             SwitchIn();
             Find.Element(By.XPath("//input[contains(@onclick,'saveResponsibility(-1)')]")).Click();
@@ -74,13 +78,54 @@ namespace UnitTestProject1.Pages
                 {
                     return !d.FindElement(By.XPath("//input[contains(@onclick,'saveResponsibility(-1)')]")).Displayed;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return true;
                 }
             });
             return this;
         }
+
+        public Boolean ExistsInVendorGrid(String vendor_no)
+        {
+            /*String s = null; ;
+            IWebElement grid_table;
+            SwitchIn();
+            //s=Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]//tbody//tr//td//a//G_VALUE[. = 'Bescoby']")).Text;
+            grid_table = Find.Element(By.Id("GRID_DATA_727040300"));
+            ReadOnlyCollection<IWebElement> grid_table_rows = grid_table.FindElements(By.XPath("//tr[@id='GRID_ROW']"));
+            IEnumerable<IWebElement> grid_row = grid_table_rows.Where(row => row.Text.Contains(vendor_no));
+            if (grid_row.Count() > 0)
+            {
+                SwitchOut();
+                return true;
+            }
+            else
+            {
+                SwitchOut();
+                return false;
+            }*/
+            return vendorGrid.ExistsInGrid(vendor_no);
+        }
+    }
+
+    public class VendorGrid : GridComponent
+    {
+       public VendorGrid()
+        {
+            grid_id = "727040300";
+        }
+        protected override void SwitchIn()
+        {
+            Browser.SwitchTo().Frame("MainFrame");
+        }
+
+        protected override void SwitchOut()
+        {
+            Browser.SwitchTo().DefaultContent();
+        }
+
+       
     }
 
 }

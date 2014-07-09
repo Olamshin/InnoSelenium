@@ -12,6 +12,9 @@ namespace UnitTestProject1.Pages
 {
     public class MyHomePage : SiterraComponent
     {
+        public override void PleaseWait()
+        {
 
+        }
     }
 }

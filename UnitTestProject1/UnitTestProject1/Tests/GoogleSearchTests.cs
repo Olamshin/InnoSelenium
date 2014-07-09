@@ -9,7 +9,7 @@ using TestStack.Seleno.Configuration;
 
 namespace UnitTestProject1
 {
-    [TestClass]
+    [TestClass,Ignore]
     public class GoogleSearchTests
     {
         [ClassInitialize]

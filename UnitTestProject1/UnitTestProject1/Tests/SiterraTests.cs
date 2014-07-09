@@ -41,7 +41,7 @@ namespace UnitTestProject1.Tests
         }
 
         [TestMethod]
-        public void login()
+        public void T001_Login()
         {
                 var page = Helper.GotoLandingPage();
 
@@ -58,7 +58,7 @@ namespace UnitTestProject1.Tests
         }
 
         [TestMethod]
-        public void loginProfileURL()
+        public void T002_Login_Profile_URL()
         {
             var page = Helper.GotoLandingPage("Samsonite");
 
@@ -123,15 +123,14 @@ namespace UnitTestProject1.Tests
         }
 
 		[TestMethod]
-        public void createSearchRing()
+        public void T003_Create_Search_Ring()
         {
             MainPage m = Helper.GotoMainPage()
                 .leftNavBrowse()
                 .Click_Search_Ring_Unit();
 
             UnitHomePage u = (UnitHomePage)m.Innerpage;
-                u.Select_Search_Ring_Grid()
-                .Create_Search_Ring();
+                u.Create_Search_Ring();
         }
 
         [TestMethod]
@@ -218,7 +217,23 @@ namespace UnitTestProject1.Tests
             Helper.GotoMainPage()
                 .Click_ToDoList_Link();
         }
-
+        
+		[TestMethod]
+        public void T005_Create_Site()
+        {
+            MainPage m = Helper.GotoSearchRingHomePage();
+            SearchRingHomePage sr = m.Innerpage as SearchRingHomePage;
+            SitePopup sp = sr.add_site();
+            sp.select_type();
+            sp.PleaseWait();
+            sp.siteName = "Selenium Site";
+            sp.siteNumber = "WatirprufAutobots";
+            sp.Save();
+            m.PleaseWait();
+            m.Innerpage.PleaseWait();
+            string actual = m.Find.Element(By.XPath("//table[@id=\"TABLE_SITES\"]/tbody/tr/td/a")).Text;
+            Assert.AreEqual(actual, "Selenium Site - WatirprufAutobots");
+        }
         [TestMethod]
         public void T006_Update_Site()
         {
@@ -226,11 +241,11 @@ namespace UnitTestProject1.Tests
             SiteHomePage s = m.Innerpage as SiteHomePage;
             SitePopup sp =s.click_edit();
             sp.PleaseWait();
-            sp.address = "fail yeah";
+            sp.address = "paul test";
             sp.Save();
             m.PleaseWait();
             m.Innerpage.PleaseWait();
-            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be("fail yeah");
+            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be("paul test");
             //System.Threading.Thread.Sleep(5000);
         }
 
@@ -241,9 +256,10 @@ namespace UnitTestProject1.Tests
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
             s.add_vendor()
-                .select_vendor()
-                .Select_Object<SiteHomePage>(s)
-                .Save_Vendor();
+                .Select_Button()
+                .Select_Object<SiteHomePage>("646730", s)
+                .Submit_Vendor();
+            s.ExistsInVendorGrid("646730").Should().BeTrue();
            
         }
 

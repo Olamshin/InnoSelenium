@@ -118,7 +118,6 @@ namespace UnitTestProject1.Pages
             return this;
         }
 
-
         public MainPage Click_Filter_Button()
         {
             PleaseWait();
