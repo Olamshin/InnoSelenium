@@ -130,8 +130,7 @@ namespace UnitTestProject1.Tests
                 .Click_Search_Ring_Unit();
 
             UnitHomePage u = (UnitHomePage)m.Innerpage;
-                u.Select_Search_Ring_Grid()
-                .Create_Search_Ring();
+                u.Create_Search_Ring();
         }
 
         [TestMethod]
