@@ -162,15 +162,16 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void createUser_35()
         {
-            UserComp user = (UserComp)Helper.GotoUserComp()
-                                            .Innerpage;
+            MainPage m = Helper.GotoUserComp();
+            UserComp user = m.Innerpage as UserComp;
             NewUserPage newUser =  user.addUser();
             String userName = newUser.createUser();
             //String userName = "Sanity";
             System.Threading.Thread.Sleep(2000);
-            //Currently cannot switch back after focus has switch to pop-up
+            
             user.findUser(userName);
 
+            m.InnerPageFindText(By.CssSelector("a[id$='_DISPLAY_NAME']")).Should().Be("Sanity Test User");
         }
         
 		[TestMethod]
@@ -178,7 +179,7 @@ namespace UnitTestProject1.Tests
         {
             UserComp user = (UserComp)Helper.GotoUserComp()
                                             .Innerpage;
-            user.findUser("test.user2");
+            user.findUser("Sanity");
             user.selectFirstUser();
         }
 		[TestMethod]
