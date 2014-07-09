@@ -33,7 +33,6 @@ namespace UnitTestProject1.Pages
                 }
             }
             Host.Instance.Application.Browser.SwitchTo().Window(handle);
-            PleaseWait();
         }
 
         public void PleaseWait()
