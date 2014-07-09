@@ -21,6 +21,13 @@ namespace UnitTestProject1.Pages
                 Execute.ActionOnLocator(By.Name("1190183"), e => { e.Clear(); e.SendKeys(value); }); 
             }
         }
+        public string siteName
+        {
+            set
+            {
+                Execute.ActionOnLocator(By.Name("1190170"), e => { e.Clear(); e.SendKeys(value); });
+            }
+        }
 
         public SitePopup()
         {
@@ -55,6 +62,12 @@ namespace UnitTestProject1.Pages
             Host.Instance.Application.Browser.SwitchTo().Window(Host.mainWindowHandle); //Implement stack for handles
             Browser.SwitchTo().DefaultContent();
             //return Navigate.To<SiteHomePage>(By.LinkText("Finish"));
+        }
+        public SitePopup select_type()
+        {
+            PleaseWait();
+            Find.Element(By.LinkText("Next")).Click();
+            return this;
         }
     }
 }
