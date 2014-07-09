@@ -26,6 +26,7 @@ namespace UnitTestProject1.Tests
             Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
             Helper.GotoLandingPage().InnerLoginPage.Login().PleaseWait();
             Host.InitialCookies = Host.Instance.Application.Browser.Manage().Cookies.AllCookies;
+            Host.mainWindowHandle = Host.Instance.Application.Browser.CurrentWindowHandle;
 
         }
 
@@ -185,6 +186,7 @@ namespace UnitTestProject1.Tests
             MainPage m = Helper.GotoSiteHomePage();
             SiteHomePage s = m.Innerpage as SiteHomePage;
             SitePopup sp =s.click_edit();
+            sp.PleaseWait();
             sp.address = "fail yeah";
             sp.Save();
             m.PleaseWait();
@@ -197,11 +199,13 @@ namespace UnitTestProject1.Tests
         public void T007_AssignVendor2Site()
         {
             MainPage m = Helper.GotoSiteHomePage();
-            m.PleaseWait();
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.PleaseWait();
-            s.add_vendor();
+            s.add_vendor()
+                .select_vendor()
+                .Select_Object<SiteHomePage>(s)
+                .Save_Vendor();
+           
         }
 
     }
