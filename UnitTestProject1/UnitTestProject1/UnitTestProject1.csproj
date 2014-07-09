@@ -134,6 +134,7 @@
     <Compile Include="Pages\UnitComp.cs" />
     <Compile Include="Pages\UserComp.cs" />
     <Compile Include="Pages\SiteHomePage.cs" />
+    <Compile Include="Pages\UserSubscriptionsPopUp.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

@@ -80,9 +80,9 @@ namespace UnitTestProject1.Pages
             {
                 return d.FindElement(By.Id("popupHeaderLinks"));
             });
-            Find.Element(By.LinkText("Next")).Click();
-            System.Threading.Thread.Sleep(6000);
-            return this;
+            return Navigate.To<SitePopup>(By.LinkText("Next"));
+            //System.Threading.Thread.Sleep(6000);
+            //return this;
         }
     }
 }

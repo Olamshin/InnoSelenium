@@ -58,6 +58,7 @@ namespace UnitTestProject1
             MainPage mainpage = GotoAdminPage();
 
             AdminComp a = (AdminComp)mainpage.Innerpage;
+            a.PleaseWait();
             a.clickLink("Users");
 
             mainpage.Innerpage = mainpage.GetComponent<UserComp>();
@@ -84,6 +85,7 @@ namespace UnitTestProject1
             main.Innerpage = main.ClickNavTree<SearchRingHomePage>("0Notify First Round;NPF Search Ring UStatus Changed (827349376)");
             return main;
         }
+
 
     }
 }
