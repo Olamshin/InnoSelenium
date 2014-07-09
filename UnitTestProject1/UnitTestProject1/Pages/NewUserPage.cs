@@ -16,9 +16,10 @@ namespace UnitTestProject1.Pages
 
         public NewUserPage()
         {
+
             foreach (string a in Host.Instance.Application.Browser.WindowHandles)
             {
-                if (!a.Equals(LandingPage.handle))
+                if (!a.Equals(Host.mainWindowHandle))
                 {
 
                     if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=754030300&ClassID=754000000&ObjectID=-1"))
@@ -26,10 +27,19 @@ namespace UnitTestProject1.Pages
                 }
             }
             Host.Instance.Application.Browser.SwitchTo().Window(handle);
+
+            /*//Constructor Specific PleaseWait
+            Host.Instance.Application.Browser.SwitchTo().DefaultContent();
+
+            Host.Wait.Until<Boolean>((d) =>
+            {
+                return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/disk.gif");
+            });*/
         }
         public void PleaseWait()
         {
-          
+            Browser.SwitchTo().DefaultContent();
+
             Host.Wait.Until<Boolean>((d) =>
             {
                 return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/disk.gif");
@@ -83,7 +93,10 @@ namespace UnitTestProject1.Pages
         }
         public NewUserPage save()
         {
-            Find.Element(By.LinkText("Save")).Click();
+            //Find.Element(By.LinkText("Save")).Click();
+            Navigate.To<MainPage>(By.LinkText("Save"));
+            Host.Instance.Application.Browser.SwitchTo().Window(Browser.WindowHandles.First()); //Implement stack for handles
+            Browser.SwitchTo().DefaultContent();
             return this;
         }
         public string createUser() {
@@ -92,6 +105,47 @@ namespace UnitTestProject1.Pages
             save();
             //System.Threading.Thread.Sleep(2000);
             return userName;
+        }
+        public string updateValues() 
+        {
+            //Browser.SwitchTo().DefaultContent();
+            String firstName = "Sanity_"+ (DateTime.Now.Ticks%100).ToString();
+            String lastName = "Test User";
+
+            Execute.ActionOnLocator(By.Id("1190254"), e => { e.Clear(); e.SendKeys(firstName); });
+            Execute.ActionOnLocator(By.Id("1190255"), e => { e.Clear(); e.SendKeys(lastName); });
+            //isAdmin
+            Find.Element(By.Id("1190264")).Click();
+
+            String userName = Find.Element(By.Id("1190257")).GetAttribute("value");
+
+            return userName;
+
+
+        }
+        public NewUserPage saveAndClose()
+        {
+            //Find.Element(By.LinkText("Save")).Click();
+            Find.Element(By.LinkText("Save & Close")).Click();
+            Host.Instance.Application.Browser.SwitchTo().Window(Host.mainWindowHandle); //Implement stack for handles
+            Browser.SwitchTo().DefaultContent();
+            return this;
+        }
+        public string updateUser() 
+        {
+            //PleaseWait();
+            System.Threading.Thread.Sleep(4000);
+            //Browser.SwitchTo().DefaultContent();
+            String userName = updateValues();
+            saveAndClose();
+            return userName;
+
+        }
+        public UserSubscriptionsPopUp addNotifications()
+        {
+            PleaseWait();
+
+            return Navigate.To<UserSubscriptionsPopUp>(By.LinkText("Add"));
         }
     }
 }

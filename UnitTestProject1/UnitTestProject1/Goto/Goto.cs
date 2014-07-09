@@ -58,6 +58,7 @@ namespace UnitTestProject1
             MainPage mainpage = GotoAdminPage();
 
             AdminComp a = (AdminComp)mainpage.Innerpage;
+            a.PleaseWait();
             a.clickLink("Users");
 
             mainpage.Innerpage = mainpage.GetComponent<UserComp>();
@@ -77,6 +78,7 @@ namespace UnitTestProject1
             main.Innerpage=main.ClickNavTree<SiteHomePage>("AD PRM Test Unit;MSTR_Test (9057);MSTR_Test (1246)");
             return main;
         }
+
 
     }
 }
