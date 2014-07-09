@@ -12,7 +12,7 @@ namespace UnitTestProject1.Pages
 {
     public class SitePopup : Page
     {
-        public static String handle;
+        private String handle;
 
         public string address
         {
@@ -26,19 +26,33 @@ namespace UnitTestProject1.Pages
         {
             foreach (string a in Host.Instance.Application.Browser.WindowHandles)
             {
-                if (!a.Equals(LandingPage.handle))
+                if (!a.Equals(Host.mainWindowHandle))
                 {
                     if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=701030300&ClassID=701000000"))
                         handle = a;
                 }
             }
             Host.Instance.Application.Browser.SwitchTo().Window(handle);
+            PleaseWait();
         }
 
+        public void PleaseWait()
+        {
+            var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
+            Host.Wait.Until<Boolean>((Browser) =>
+            {
+                return executor.ExecuteScript("return document.readyState").Equals("complete");
+            });
+
+            Host.Wait.Until<IWebElement>((d) =>
+            {
+                return d.FindElement(By.Id("editForm"));
+            });
+        }
         public void Save()
         {
             Find.Element(By.LinkText("Finish")).Click();
-            Host.Instance.Application.Browser.SwitchTo().Window(Browser.WindowHandles.First()); //Implement stack for handles
+            Host.Instance.Application.Browser.SwitchTo().Window(Host.mainWindowHandle); //Implement stack for handles
             Browser.SwitchTo().DefaultContent();
             //return Navigate.To<SiteHomePage>(By.LinkText("Finish"));
         }
