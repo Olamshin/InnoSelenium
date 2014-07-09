@@ -18,7 +18,7 @@ namespace UnitTestProject1.Pages
         {
             foreach (string a in Host.Instance.Application.Browser.WindowHandles)
             {
-                if (!a.Equals(LandingPage.handle))
+                if (!a.Equals(Host.mainWindowHandle))
                 {
 
                     if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=754030300&ClassID=754000000&ObjectID=-1"))

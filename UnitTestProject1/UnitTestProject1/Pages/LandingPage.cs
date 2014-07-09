@@ -13,7 +13,7 @@ namespace UnitTestProject1.Pages
     public class LandingPage : Page
     {
         LoginFrame _LoginPage;
-        public static String handle;
+        private String handle;
 
         public void PleaseWait()
         {
