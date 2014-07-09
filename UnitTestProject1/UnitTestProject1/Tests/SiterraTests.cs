@@ -200,12 +200,13 @@ namespace UnitTestProject1.Tests
             sp.select_type();
             sp.PleaseWait();
             sp.siteName = "Selenium Site";
-            sp.siteNumber = "WatirprufAutobots";
+            sp.siteNumber = "Watirpruf";
             sp.Save();
             m.PleaseWait();
             m.Innerpage.PleaseWait();
-            string actual = m.Find.Element(By.XPath("//table[@id=\"TABLE_SITES\"]/tbody/tr/td/a")).Text;
-            Assert.AreEqual(actual, "Selenium Site - WatirprufAutobots");
+            string actual = m.InnerPageFindText(By.XPath("//a[contains(@title, 'Selenium')]"));
+            //m.InnerPageFindText(By.CssSelector("table#TABLES_SITES a")).Should().Be("Selenium Site - WatirprufAutobots");
+            Assert.AreEqual(actual, "Selenium Site - Watirpruf");
         }
         [TestMethod]
         public void T006_Update_Site()
