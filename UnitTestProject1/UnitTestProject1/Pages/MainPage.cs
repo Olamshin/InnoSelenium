@@ -12,6 +12,7 @@ namespace UnitTestProject1.Pages
 {
     public class MainPage : Page
     {
+        private string handle;
         private SiterraComponent _Innerpage;
         private TreeSelection _tree;
 
@@ -47,6 +48,12 @@ namespace UnitTestProject1.Pages
             {
                 _tree = value;
             }
+        }
+
+        public MainPage()
+        {
+            handle = Host.Instance.Application.Browser.CurrentWindowHandle;
+            PleaseWait();
         }
 
         public T ClickNavTree<T>(string node_path) where T : SiterraComponent, new()

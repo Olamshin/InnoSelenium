@@ -18,6 +18,7 @@ namespace UnitTestProject1
         public static SelenoHost Instance;
         private static InternetExplorerOptions options = new InternetExplorerOptions();
         public static WebDriverWait Wait;
+        public static string mainWindowHandle;
         public static System.Collections.ObjectModel.ReadOnlyCollection<Cookie> InitialCookies;
     }
     public class SiterraComponent : UiComponent

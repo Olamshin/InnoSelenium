@@ -31,9 +31,15 @@ namespace UnitTestProject1.Pages
         public UnitHomePage Select_Search_Ring_Grid()
         {
             PleaseWait();
+            var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
             Browser.SwitchTo().Frame("MainFrame");
-            Find.Element(By.Id("btnContentSelector")).Click();
-            Find.Element(By.PartialLinkText("Search Ring")).Click();
+            Actions builder = new Actions(Browser);
+            builder.MoveToElement(Find
+                .Element(By.XPath("//a[@id='btnContentSelector']//span/img[@src='skins/common/images/menu_arrow_down.gif']"))
+                ).Build().Perform();
+            Find.Element(By.XPath("//table[@id='tblDynamicMenu1']//tr[@onclick='closeMenu(1,2);loadContents(\'searchring\', \'list\');']"))
+                .Click();
+            Browser.SwitchTo().DefaultContent();
             return this;
         }
 
@@ -41,7 +47,7 @@ namespace UnitTestProject1.Pages
         {
             PleaseWait();
             Browser.SwitchTo().Frame("MainFrame");
-            return Navigate.To<SearchRingPopup>(By.PartialLinkText("Add"));
+            return Navigate.To<SearchRingPopup>(By.LinkText("Add"));
         }
     }
 }
