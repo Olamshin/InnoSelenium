@@ -129,6 +129,7 @@ namespace UnitTestProject1
            int column_index = -1;
            IWebElement grid_table;
            IWebElement a=null;
+           Boolean isCheckBox;
            ReadOnlyCollection<IWebElement> grid_header, grid_table_rows, grid_row_data;
            PleaseWaitForSearch();
 
@@ -137,8 +138,16 @@ namespace UnitTestProject1
            grid_table = Find.Element(By.Id("GRID_DATA_"+grid_id));
            IWebElement grid_table_header = grid_table.FindElement(By.XPath("./thead/tr[@class='GridHeader']"));
            grid_header = grid_table_header.FindElements(By.XPath("./td[@class='HeaderCell']"));
+           try
+           {
+               isCheckBox = grid_table_header.FindElement(By.Id("CHECKBOX_HEADER")).Displayed;
+           }
+           catch
+           {
+               isCheckBox = false;
+           }
            var grid_header_enumerator = grid_header.GetEnumerator();
-           for (int i = -1; grid_header_enumerator.MoveNext();i++ )
+           for (int i = (isCheckBox?-2:-1); grid_header_enumerator.MoveNext();i++ )
            {
                if (grid_header_enumerator.Current.Text.Equals(columnname))
                {
@@ -205,4 +214,9 @@ namespace UnitTestProject1
            }
        }
    }
+
+    public abstract class PlaceHolderComp : UiComponent
+    {
+
+    }
 }
