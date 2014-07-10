@@ -32,7 +32,7 @@ namespace UnitTestProject1.Pages
         {
             PleaseWait();
             Browser.SwitchTo().Frame("MainFrame");
-            Find.Element(By.LinkText(anchorText)).Click();
+            Find.Element(By.PartialLinkText(anchorText)).Click();
             Browser.SwitchTo().DefaultContent();
             return this;
             

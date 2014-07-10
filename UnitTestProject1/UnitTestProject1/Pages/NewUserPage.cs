@@ -22,11 +22,12 @@ namespace UnitTestProject1.Pages
                 if (!a.Equals(Host.mainWindowHandle))
                 {
 
-                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=754030300&ClassID=754000000&ObjectID=-1"))
+                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=754030300&ClassID=754000000"))
                         handle = a;
                 }
             }
             Host.Instance.Application.Browser.SwitchTo().Window(handle);
+            
 
             /*//Constructor Specific PleaseWait
             Host.Instance.Application.Browser.SwitchTo().DefaultContent();
@@ -40,9 +41,10 @@ namespace UnitTestProject1.Pages
         {
             Browser.SwitchTo().DefaultContent();
 
-            Host.Wait.Until<Boolean>((d) =>
+            Host.Wait.Until<IWebElement>((d) =>
             {
-                return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/disk.gif");
+                return d.FindElement(By.XPath("//a[contains(@onclick, 'Save()')]"));
+                //return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/disk.gif");
             });
         }
         public string addValues() 
@@ -143,9 +145,9 @@ namespace UnitTestProject1.Pages
         }
         public UserSubscriptionsPopUp addNotifications()
         {
-            PleaseWait();
+            //PleaseWait();
 
-            return Navigate.To<UserSubscriptionsPopUp>(By.LinkText("Add"));
+            return Navigate.To<UserSubscriptionsPopUp>(By.PartialLinkText("Add"));
         }
     }
 }

@@ -199,6 +199,7 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T037_createUserSubscriptions() {
             MainPage m = Helper.GotoUserComp();
+            m.PleaseWait();
             UserComp user = m.Innerpage as UserComp;
             user.PleaseWait();
 
@@ -206,9 +207,11 @@ namespace UnitTestProject1.Tests
 
             user.findUser("Sanity", "User Name");
             NewUserPage n = user.selectFirstUser();
-            n.PleaseWait();
+            
             UserSubscriptionsPopUp uspu = n.addNotifications();
-            //uspu.addSubscription();
+
+            uspu.addSubscription();
+            
 
         }
 		[TestMethod]
