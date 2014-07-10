@@ -221,7 +221,7 @@ namespace UnitTestProject1.Tests
 		[TestMethod]
         public void T005_Create_Site()
         {
-            MainPage m = Helper.GotoSearchRingHomePage();
+            MainPage m = Helper.GotoSearchRingHomePage("0Notify First Round;NPF Search Ring UStatus Changed (827349376)");
             SearchRingHomePage sr = m.Innerpage as SearchRingHomePage;
             SitePopup sp = sr.add_site();
             sp.select_type();
@@ -238,7 +238,7 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T006_Update_Site()
         {
-            MainPage m = Helper.GotoSiteHomePage();
+            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
             SiteHomePage s = m.Innerpage as SiteHomePage;
             SitePopup sp =s.click_edit();
             sp.PleaseWait();
@@ -253,25 +253,38 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T007_AssignVendor2Site()
         {
-            MainPage m = Helper.GotoSiteHomePage();
+            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
             s.Assign_Vendor()
                 .Vendor_Select_Button()
                 .Select_Object<SiteHomePage>("2648188", s)
                 .Submit_Vendor();
-            s.ExistsInVendorGrid("2648188").Should().BeTrue();
+            s.ExistsInVendorSection("2648188").Should().BeTrue();
            
         }
 
         [TestMethod]
         public void T008_AddAsset2Site()
         {
-            MainPage m = Helper.GotoSiteHomePage();
+            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
             s.Add_Asset().Select_Type().Save();
-            s.ExistsInAssetGrid("").Should().BeTrue();
+            s.ExistsInAssetSection("New HVAC").Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void T009_AddIncident2Site()
+        {
+            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            IncidentPopup i = s.Add_Incident().Select_Type();
+            i.AssignedToUser = "Frederic Bottling";
+            i.Problem = "Yes it is a Problem";
+            i.Save();
+            s.ExistsInIncidentSection("Yes it is a Problem").Should().BeTrue();
         }
 
     }

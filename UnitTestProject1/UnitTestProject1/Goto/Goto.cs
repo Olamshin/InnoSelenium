@@ -72,17 +72,17 @@ namespace UnitTestProject1
             return main.ClickNavTree("AD PRM Test Unit;MSTR_Test");
         }*/
 
-        public static MainPage GotoSiteHomePage()
+        public static MainPage GotoSiteHomePage(String path)
         {
             MainPage main = GotoMainPage();
-            main.Innerpage = main.ClickNavTree<SiteHomePage>("Denver;333 Easy Street (333)");
+            main.Innerpage = main.ClickNavTree<SiteHomePage>(path);
             return main;
         }
         
-        public static MainPage GotoSearchRingHomePage()
+        public static MainPage GotoSearchRingHomePage(String path)
         {
             MainPage main = GotoMainPage();
-            main.Innerpage = main.ClickNavTree<SearchRingHomePage>("0Notify First Round;NPF Search Ring UStatus Changed (827349376)");
+            main.Innerpage = main.ClickNavTree<SearchRingHomePage>(path);
             return main;
         }
 
