@@ -69,7 +69,7 @@ namespace UnitTestProject1.Pages
             Browser.SwitchTo().DefaultContent();
             //return Navigate.To<SiteHomePage>(By.LinkText("Finish"));
         }
-        public SitePopup select_type()
+        public SitePopup select_type(string siteType)
         {
             var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
             Host.Wait.Until<Boolean>((Browser) =>
@@ -80,9 +80,14 @@ namespace UnitTestProject1.Pages
             {
                 return d.FindElement(By.Id("popupHeaderLinks"));
             });
-            Find.Element(By.LinkText("Next")).Click();
-            System.Threading.Thread.Sleep(6000);
-            return this;
+           
+            IWebElement dropDownListBox = Find.Element(By.Id("CMB_TYPE_ID"));
+            SelectElement clickThis = new SelectElement(dropDownListBox);
+            clickThis.SelectByText(siteType);
+           
+            return Navigate.To<SitePopup>(By.LinkText("Next"));
+            //System.Threading.Thread.Sleep(6000);
+            //return this;
         }
     }
 }

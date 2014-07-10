@@ -75,7 +75,7 @@ namespace UnitTestProject1
         public static MainPage GotoSiteHomePage()
         {
             MainPage main = GotoMainPage();
-            main.Innerpage=main.ClickNavTree<SiteHomePage>("AD PRM Test Unit;MSTR_Test (9057);MSTR_Test (1246)");
+            main.Innerpage = main.ClickNavTree<SiteHomePage>("Denver;333 Easy Street (333)");
             return main;
         }
         
@@ -83,6 +83,7 @@ namespace UnitTestProject1
         {
             MainPage main = GotoMainPage();
             main.Innerpage = main.ClickNavTree<SearchRingHomePage>("0Notify First Round;NPF Search Ring UStatus Changed (827349376)");
+            // UAT main.Innerpage = main.ClickNavTree<SearchRingHomePage>("GG Test Unit;GG Search Rings;GG SR 1 (1357212)");
             return main;
         }
 
