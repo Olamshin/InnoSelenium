@@ -266,6 +266,7 @@ namespace UnitTestProject1.Tests
 
             user.findUser("Sanity", "User Name");
             NewUserPage n = user.selectFirstUser();
+            n.switchFocusToUserPage();
 
             String userName = n.updateUser();
 
@@ -305,13 +306,19 @@ namespace UnitTestProject1.Tests
             NewUserPage n2 = user.selectFirstUser();
 
             //Assert!
+           /* n2.ExistsInSubscriptionSection("Created").Should().BeTrue();
+            n2.ExistsInSubscriptionSection("Documents").Should().BeTrue();*/
         }
         [TestMethod]
         public void T080_responsibilities()
         {
-            AdminComp admin = (AdminComp)Helper.GotoAdminPage()
-                .Innerpage;
-            admin.clickLink("Library Templates");
+            MainPage m = Helper.GotoResponsibilityComp();
+            m.PleaseWait();
+            ResponsibilityComp r = m.Innerpage as ResponsibilityComp;
+            r.PleaseWait();
+
+            r.searchResponsibility("Site","xSiterra", 5);
+
         }
     }
 }

@@ -119,6 +119,7 @@
     <Compile Include="Pages\AdminComp.cs" />
     <Compile Include="Pages\AssetPopup.cs" />
     <Compile Include="Pages\IncidentPopup.cs" />
+    <Compile Include="Pages\ResponsibilityComp.cs" />
     <Compile Include="Pages\SearchRingHomePage.cs" />
     <Compile Include="Pages\ObjectBrowserPage.cs" />
     <Compile Include="Pages\SearchRingPopup.cs" />
