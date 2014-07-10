@@ -13,25 +13,36 @@ namespace UnitTestProject1.Pages
 {
     public class SiteHomePage : SiterraComponent
     {
-        private VendorGrid _vendorgrid;
-        protected VendorGrid vendorGrid
+        private VendorSection _vendorsection;
+        protected VendorSection vendorSection
         {
             get
             {
-                if (_vendorgrid == null)
-                { _vendorgrid = this.GetComponent<VendorGrid>(); }
-                return _vendorgrid;
+                if (_vendorsection == null)
+                { _vendorsection = this.GetComponent<VendorSection>(); }
+                return _vendorsection;
             }
         }
 
-        private AssetGrid _assetgrid;
-        protected AssetGrid assetGrid
+        private AssetSection _assetsection;
+        protected AssetSection assetSection
         {
             get
             {
-                if (_assetgrid == null)
-                { _assetgrid = this.GetComponent<AssetGrid>(); }
-                return _assetgrid;
+                if (_assetsection == null)
+                { _assetsection = this.GetComponent<AssetSection>(); }
+                return _assetsection;
+            }
+        }
+
+        private IncidentSection _incidentsection;
+        protected IncidentSection incidentSection
+        {
+            get
+            {
+                if (_incidentsection == null)
+                { _incidentsection = this.GetComponent<IncidentSection>(); }
+                return _incidentsection;
             }
         }
 
@@ -105,9 +116,9 @@ namespace UnitTestProject1.Pages
             return this;
         }
 
-        public Boolean ExistsInVendorGrid(String vendor_no)
+        public Boolean ExistsInVendorSection(String vendor_no)
         {
-            return vendorGrid.ExistsInGrid("Number", vendor_no);
+            return vendorSection.ExistsInGrid("Number", vendor_no);
         }
 
         public AssetPopup Add_Asset()
@@ -118,15 +129,29 @@ namespace UnitTestProject1.Pages
 
         }
 
-        public Boolean ExistsInAssetGrid(String asset_no)
+        public Boolean ExistsInAssetSection(String asset_name)
         {
-            return assetGrid.ExistsInGrid("Number", asset_no);
+            return assetSection.ExistsInGrid("Name", asset_name);
         }
 
-        protected class VendorGrid : GridComponent
+        public IncidentPopup Add_Incident()
         {
-            public VendorGrid()
+            SwitchIn();
+            //Find.Element(By.XPath("//a[contains(@onclick,'addAssetFromSite(')]")).Click();
+            return Navigate.To<IncidentPopup>(By.XPath("//a[contains(@onclick,'addIncident()')]"));
+
+        }
+
+        public Boolean ExistsInIncidentSection(String incident_problem)
+        {
+            return incidentSection.ExistsInGrid("Problem", incident_problem);
+        }
+
+        protected class VendorSection : SectionComponent
+        {
+            public VendorSection()
             {
+                section_id = "114";
                 grid_id = "727040300";
             }
             protected override void SwitchIn()
@@ -142,11 +167,30 @@ namespace UnitTestProject1.Pages
 
         }
 
-        protected class AssetGrid : GridComponent
+        protected class AssetSection : SectionComponent
         {
-            public AssetGrid()
+            public AssetSection()
             {
+                section_id = "106";
                 grid_id = "711040100";
+            }
+            protected override void SwitchIn()
+            {
+                Browser.SwitchTo().Frame("MainFrame");
+            }
+
+            protected override void SwitchOut()
+            {
+                Browser.SwitchTo().DefaultContent();
+            }
+        }
+
+        protected class IncidentSection : SectionComponent
+        {
+            public IncidentSection()
+            {
+                section_id = "107";
+                grid_id = "705040100";
             }
             protected override void SwitchIn()
             {

@@ -10,43 +10,48 @@ using OpenQA.Selenium.Support.UI;
 
 namespace UnitTestProject1.Pages
 {
-    public class AssetPopup : Page
+    public class IncidentPopup: Page
     {
         private String handle;
 
-        public string name
+        public string Problem
         {
             set
             {
-                Execute.ActionOnLocator(By.Name("TXT_NAME"), e => { e.Clear(); e.SendKeys(value); });
+                Execute.ActionOnLocator(By.Name("1190161"), e => { e.Clear(); e.SendKeys(value); });
             }
         }
 
-        public AssetPopup()
+        public string AssignedToUser
+        {
+            set
+            {
+                
+                SelectElement search_option = new SelectElement(Find.Element(By.Id("1190157")));
+                search_option.SelectByText(value);
+            }
+        }
+
+        public IncidentPopup()
         {
             foreach (string a in Host.Instance.Application.Browser.WindowHandles)
             {
                 if (!a.Equals(Host.mainWindowHandle))
                 {
-                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=711030100&ClassID=711000000"))
+                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=705030100&ClassID=705000000"))
                         handle = a;
                 }
             }
             Host.Instance.Application.Browser.SwitchTo().Window(handle);
         }
 
-        public AssetPopup Select_Type()
+        public IncidentPopup Select_Type()
         {
-            var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
-            Host.Wait.Until<Boolean>((Browser) =>
-            {
-                return executor.ExecuteScript("return document.readyState").Equals("complete");
-            });
             Host.Wait.Until<IWebElement>((d) =>
             {
                 return d.FindElement(By.Id("SectionForm"));
             });
-            return Navigate.To<AssetPopup>(By.LinkText("Next"));
+            return Navigate.To<IncidentPopup>(By.LinkText("Next"));
             //Find.Element(By.LinkText("Next")).Click();
             //System.Threading.Thread.Sleep(6000);
         }
@@ -62,6 +67,5 @@ namespace UnitTestProject1.Pages
             Host.Instance.Application.Browser.SwitchTo().Window(Host.mainWindowHandle); //Implement stack for handles
             Browser.SwitchTo().DefaultContent();
         }
-
     }
 }

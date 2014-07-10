@@ -70,6 +70,7 @@ namespace UnitTestProject1
            SwitchOut();
            search_input = searchinput;
            Click_Search();
+           PleaseWaitForSearch();
            return s;
        }
 
@@ -108,11 +109,13 @@ namespace UnitTestProject1
            Find.Element(By.XPath("//a[contains(@onclick,'getGridByID(') and contains(@onclick,'.ApplySearch()')]"))
                .Click();
            SwitchOut();
+           PleaseWaitForSearch();
            return this;
        }
 
        public void PleaseWaitForSearch()
        {
+           System.Threading.Thread.Sleep(3000); //implement for the future
            SwitchIn();
            Host.Wait.Until<IWebElement>((d) =>
            {
@@ -123,17 +126,49 @@ namespace UnitTestProject1
 
        public Boolean ExistsInGrid(String columnname, String value)
        {
-           IWebElement grid_table,a=null;
-           //PleaseWaitForSearch();
-           System.Threading.Thread.Sleep(2000);
+           int column_index = -1;
+           IWebElement grid_table;
+           IWebElement a=null;
+           ReadOnlyCollection<IWebElement> grid_header, grid_table_rows, grid_row_data;
+           PleaseWaitForSearch();
+
            SwitchIn();
            //s=Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]//tbody//tr//td//a//G_VALUE[. = 'Bescoby']")).Text;
            grid_table = Find.Element(By.Id("GRID_DATA_"+grid_id));
-           ReadOnlyCollection<IWebElement> grid_table_rows = grid_table.FindElements(By.XPath("//tr[@id='GRID_ROW']"));
-           IEnumerable<IWebElement> grid_row = grid_table_rows.Where(row => row.Text.Contains(value));
-           foreach (IWebElement r in grid_row)
+           IWebElement grid_table_header = grid_table.FindElement(By.XPath("./thead/tr[@class='GridHeader']"));
+           grid_header = grid_table_header.FindElements(By.XPath("./td[@class='HeaderCell']"));
+           var grid_header_enumerator = grid_header.GetEnumerator();
+           for (int i = -1; grid_header_enumerator.MoveNext();i++ )
            {
-               a = r.FindElement(By.XPath("//td[@class='Cell']/a[contains(@id,'" + columnname.ToUpper() + "')]"));
+               if (grid_header_enumerator.Current.Text.Equals(columnname))
+               {
+                   column_index = i;
+                   break;
+               }
+           }
+
+           if (column_index==-1)
+           {
+               Console.WriteLine("Column Does Not Exists");
+               return false;
+           }
+           grid_table_rows = grid_table.FindElements(By.XPath("./tbody/tr[@id='GRID_ROW']"));
+           IEnumerable<IWebElement> grid_row = grid_table_rows.Where(row => row.Text.Contains(value));
+           var grid_row_enum = grid_row.GetEnumerator();
+           for (int i = 0; grid_row_enum.MoveNext();i++ )
+           {
+               //Get all cells from the row
+               grid_row_data=grid_row_enum.Current.FindElements(By.XPath("./td[@class='Cell']"));
+               var grid_data_enum = grid_row_data.GetEnumerator();
+
+               for (int j = 0; grid_data_enum.MoveNext(); j++)
+               {
+                   if (j == column_index)
+                   {
+                       a = grid_data_enum.Current;
+                       break;
+                   }
+               }
            }
 
            if (a.Text.Equals(value))
@@ -145,6 +180,28 @@ namespace UnitTestProject1
            {
                SwitchOut();
                return false;
+           }
+       }
+   }
+
+   public abstract class SectionComponent : GridComponent
+   {
+       private String _sectionid;
+       public string section_id
+       {
+           get
+           {
+               String idholder;
+               if (_sectionid == null) //object browser page
+               {
+                   idholder = Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]")).GetAttribute("id");
+                   _sectionid = idholder.Replace("GRID_DATA_", ""); ;
+               }
+               return _sectionid;
+           }
+           set
+           {
+               _sectionid = value;
            }
        }
    }
