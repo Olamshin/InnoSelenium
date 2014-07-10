@@ -25,7 +25,13 @@ namespace UnitTestProject1.Pages
                 }
             }
             Host.Instance.Application.Browser.SwitchTo().Window(handle);
-            PleaseWait();
+            //PleaseWait for instantiation
+            Host.Instance.Application.Browser.SwitchTo().DefaultContent();
+
+            Host.Wait.Until<Boolean>((d) =>
+            {
+                return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/disk_check.gif");
+            });
         }
          public void PleaseWait()
         {
@@ -43,6 +49,7 @@ namespace UnitTestProject1.Pages
              SelectElement clickThis = new SelectElement(dropDownListBox);
              clickThis.SelectByText(notifyFor);
 
+             System.Threading.Thread.Sleep(3000);
             //When
              IWebElement dropDownListBox2 = Find.Element(By.Id("CMB_EVENT_TYPE_ID"));
              SelectElement clickThis2 = new SelectElement(dropDownListBox2);

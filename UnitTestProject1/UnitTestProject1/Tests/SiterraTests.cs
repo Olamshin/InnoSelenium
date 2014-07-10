@@ -199,6 +199,7 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T037_createUserSubscriptions() {
             MainPage m = Helper.GotoUserComp();
+            m.PleaseWait();
             UserComp user = m.Innerpage as UserComp;
             user.PleaseWait();
 
@@ -206,9 +207,11 @@ namespace UnitTestProject1.Tests
 
             user.findUser("Sanity", "User Name");
             NewUserPage n = user.selectFirstUser();
-            n.PleaseWait();
+            
             UserSubscriptionsPopUp uspu = n.addNotifications();
-            //uspu.addSubscription();
+
+            uspu.addSubscription();
+            
 
         }
 		[TestMethod]
@@ -221,19 +224,23 @@ namespace UnitTestProject1.Tests
 		[TestMethod]
         public void T005_Create_Site()
         {
+            string name = "Watirpruf";
+            string number = "Autobot";
+            string type = "Type B";
             MainPage m = Helper.GotoSearchRingHomePage("0Notify First Round;NPF Search Ring UStatus Changed (827349376)");
             SearchRingHomePage sr = m.Innerpage as SearchRingHomePage;
             SitePopup sp = sr.add_site();
-            sp.select_type();
+            sp.select_type(type); //replace with type
             sp.PleaseWait();
-            sp.siteName = "Selenium Site";
-            sp.siteNumber = "Watirpruf";
+            sp.siteName = name; //replace with name
+            sp.siteNumber = number; //replace with number
             sp.Save();
             m.PleaseWait();
             m.Innerpage.PleaseWait();
-            string actual = m.InnerPageFindText(By.XPath("//a[contains(@title, 'Selenium')]"));
+            string actual = m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
+            string expected = name + " - " + number;
             //m.InnerPageFindText(By.CssSelector("table#TABLES_SITES a")).Should().Be("Selenium Site - WatirprufAutobots");
-            Assert.AreEqual(actual, "Selenium Site - Watirpruf");
+            Assert.AreEqual(actual, expected);
         }
         [TestMethod]
         public void T006_Update_Site()

@@ -37,13 +37,13 @@ namespace UnitTestProject1.Pages
         }
         public void PleaseWaitForSearch() 
         {
-            switchOut();
-            switchIn();
+            //switchOut();
+            //switchIn();
             Host.Wait.Until<IWebElement>((d) =>
             {
                 return d.FindElement(By.Id("CHK_MATCH_WHOLE_754040200"));
             });
-            switchOut();
+            //switchOut();
         }
         public void switchIn() 
         {
@@ -68,7 +68,7 @@ namespace UnitTestProject1.Pages
         public UserComp findUser(String userName, String searchBy)
         {
             PleaseWait();
-            switchOut();
+            //switchOut();
             switchIn();
             
             try
@@ -104,9 +104,8 @@ namespace UnitTestProject1.Pages
             /*OpenQA.Selenium.
                 Click("//a[starts-with(@id, '754040200_')]");
             Find.Element(By.Id("754040200_%")).Click();*/
+            switchIn();
             PleaseWaitForSearch();
-            Browser.SwitchTo().DefaultContent();
-            Browser.SwitchTo().Frame("MainFrame");
             System.Threading.Thread.Sleep(2000);
 
             return Navigate.To<NewUserPage>(By.CssSelector("a[id$='_DISPLAY_NAME']"));
