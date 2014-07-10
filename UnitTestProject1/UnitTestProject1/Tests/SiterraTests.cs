@@ -221,19 +221,23 @@ namespace UnitTestProject1.Tests
 		[TestMethod]
         public void T005_Create_Site()
         {
+            string name = "Watirpruf";
+            string number = "Autobot";
+            string type = "Type B";
             MainPage m = Helper.GotoSearchRingHomePage();
             SearchRingHomePage sr = m.Innerpage as SearchRingHomePage;
             SitePopup sp = sr.add_site();
-            sp.select_type();
+            sp.select_type(type); //replace with type
             sp.PleaseWait();
-            sp.siteName = "Selenium Site";
-            sp.siteNumber = "Watirpruf";
+            sp.siteName = name; //replace with name
+            sp.siteNumber = number; //replace with number
             sp.Save();
             m.PleaseWait();
             m.Innerpage.PleaseWait();
-            string actual = m.InnerPageFindText(By.XPath("//a[contains(@title, 'Selenium')]"));
+            string actual = m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
+            string expected = name + " - " + number;
             //m.InnerPageFindText(By.CssSelector("table#TABLES_SITES a")).Should().Be("Selenium Site - WatirprufAutobots");
-            Assert.AreEqual(actual, "Selenium Site - Watirpruf");
+            Assert.AreEqual(actual, expected);
         }
         [TestMethod]
         public void T006_Update_Site()
