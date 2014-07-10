@@ -26,21 +26,33 @@ namespace UnitTestProject1.Pages
             }
             Host.Instance.Application.Browser.SwitchTo().Window(handle);
             //PleaseWait for instantiation
-            Host.Instance.Application.Browser.SwitchTo().DefaultContent();
-
-            Host.Wait.Until<Boolean>((d) =>
+            //Host.Instance.Application.Browser.SwitchTo().DefaultContent();
+            try
             {
-                return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/disk_check.gif");
-            });
+                Host.Wait.Until<Boolean>((d) =>
+                {
+                    return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/disk_check.gif");
+                });
+            }
+            catch {
+                System.Threading.Thread.Sleep(1000);
+            }
         }
          public void PleaseWait()
         {
             Browser.SwitchTo().DefaultContent();
 
-            Host.Wait.Until<Boolean>((d) =>
+            try
             {
-                return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/disk_check.gif");
-            });
+                Host.Wait.Until<Boolean>((d) =>
+                {
+                    return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/disk_check.gif");
+                });
+            }
+            catch
+            {
+                System.Threading.Thread.Sleep(1000);
+            }
         }
         public void addValues(String notifyFor, String when, String scope)
          {
@@ -53,11 +65,11 @@ namespace UnitTestProject1.Pages
             //When
              IWebElement dropDownListBox2 = Find.Element(By.Id("CMB_EVENT_TYPE_ID"));
              SelectElement clickThis2 = new SelectElement(dropDownListBox2);
-             clickThis.SelectByText(when);
+             clickThis2.SelectByText(when);
 
             //scope
-            String cssScope = "option[value='"+scope+"']";
-            Find.Element(By.CssSelector(cssScope));
+            String cssScope = "option[text='"+scope+"']";
+            Find.Element(By.CssSelector(cssScope)).Click();
          }
         public UserSubscriptionsPopUp saveAndClose() {
             Find.Element(By.LinkText("Save & Close")).Click();
@@ -65,11 +77,24 @@ namespace UnitTestProject1.Pages
             Browser.SwitchTo().DefaultContent();
             return this;
         }
-        public void addSubscription()
+        public void addSubscription(String notifyFor, String when, String scope)
         {
             PleaseWait();
             Browser.SwitchTo().DefaultContent();
-            addValues("Project", "Created", "xSiterra");
+            addValues(notifyFor, when, scope);
+            saveAndClose();
+        }
+        public void switchFocus2SubscriptionsPopUp()
+        {
+            foreach (string a in Host.Instance.Application.Browser.WindowHandles)
+            {
+                if (!a.Equals(Host.mainWindowHandle))
+                {
+                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=726030100&ClassID=726000000"))
+                        handle = a;
+                }
+            }
+            Host.Instance.Application.Browser.SwitchTo().Window(handle);
         }
 
     }

@@ -149,5 +149,26 @@ namespace UnitTestProject1.Pages
 
             return Navigate.To<UserSubscriptionsPopUp>(By.PartialLinkText("Add"));
         }
+        public void switchFocusToUserPage() 
+        {
+            foreach (string a in Host.Instance.Application.Browser.WindowHandles)
+            {
+                if (!a.Equals(Host.mainWindowHandle))
+                {
+
+                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=754030300&ClassID=754000000"))
+                        handle = a;
+                }
+            }
+            Host.Instance.Application.Browser.SwitchTo().Window(handle);
+        }
+        public String InnerPageFindText(By findExpression)
+        {
+            Browser.SwitchTo().Frame("MainFrame");
+            String e = Find.Element(findExpression).Text.Trim();
+            Browser.SwitchTo().DefaultContent();
+            return e;
+
+        }
     }
 }

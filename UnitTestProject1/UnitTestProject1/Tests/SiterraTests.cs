@@ -21,7 +21,7 @@ namespace UnitTestProject1.Tests
         {
             Host.Instance = new SelenoHost();
             Host.Instance.Run(configure => configure
-            .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://apollo-uat.siterra.com/"))
+            .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://apollo-test.siterra.com/"))
             .WithRemoteWebDriver(() => BrowserFactory.InternetExplorer()));
             Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
             Helper.GotoLandingPage().InnerLoginPage.Login().PleaseWait();
@@ -159,61 +159,7 @@ namespace UnitTestProject1.Tests
                                             .Innerpage;
             unit.clickAddOrgUnit("Site");
         }
-        [TestMethod]
-        public void T035_createUser()
-        {
-            MainPage m = Helper.GotoUserComp();
-            UserComp user = m.Innerpage as UserComp;
-            NewUserPage newUser =  user.addUser();
-            String userName = newUser.createUser();
-            //String userName = "Sanity";
-            System.Threading.Thread.Sleep(2000);
 
-            user.findUser(userName, "User Name");
-
-            m.InnerPageFindText(By.CssSelector("a[id$='_DISPLAY_NAME']")).Should().Be("Sanity Test User");
-        }
-        
-		[TestMethod]
-        public void T036_updateUser()
-        {
-            //WARNING: NOT CURRENTLY WORKING 100% OF THE TIME//
-            MainPage m = Helper.GotoUserComp();
-            UserComp user = m.Innerpage as UserComp;
-            user.PleaseWait();
-
-            System.Threading.Thread.Sleep(4000);
-
-            user.findUser("Sanity", "User Name");
-            NewUserPage n= user.selectFirstUser();
-
-            String userName = n.updateUser();
-
-            System.Threading.Thread.Sleep(2000);
-
-            user.findUser(userName, "User Name");
-
-            m.InnerPageFindText(By.CssSelector("a[@id$='_DISPLAY_NAME']")).Should().NotBe("Sanity Test User");
-
-        }
-        [TestMethod]
-        public void T037_createUserSubscriptions() {
-            MainPage m = Helper.GotoUserComp();
-            m.PleaseWait();
-            UserComp user = m.Innerpage as UserComp;
-            user.PleaseWait();
-
-            System.Threading.Thread.Sleep(4000);
-
-            user.findUser("Sanity", "User Name");
-            NewUserPage n = user.selectFirstUser();
-            
-            UserSubscriptionsPopUp uspu = n.addNotifications();
-
-            uspu.addSubscription();
-            
-
-        }
 		[TestMethod]
         public void gotoToDoList()
         {
@@ -280,6 +226,79 @@ namespace UnitTestProject1.Tests
             s.Add_Asset().Select_Type().Save();
             s.ExistsInAssetGrid("").Should().BeTrue();
         }
+        [TestMethod]
+        public void T035_createUser()
+        {
+            MainPage m = Helper.GotoUserComp();
+            UserComp user = m.Innerpage as UserComp;
+            NewUserPage newUser = user.addUser();
+            String userName = newUser.createUser();
+            //String userName = "Sanity";
+            System.Threading.Thread.Sleep(2000);
 
+            user.findUser(userName, "User Name");
+
+            m.InnerPageFindText(By.CssSelector("a[id$='_DISPLAY_NAME']")).Should().Be("Sanity Test User");
+        }
+
+        [TestMethod]
+        public void T036_updateUser()
+        {
+            //WARNING: NOT CURRENTLY WORKING 100% OF THE TIME//
+            MainPage m = Helper.GotoUserComp();
+            UserComp user = m.Innerpage as UserComp;
+            user.PleaseWait();
+
+            System.Threading.Thread.Sleep(4000);
+
+            user.findUser("Sanity", "User Name");
+            NewUserPage n = user.selectFirstUser();
+
+            String userName = n.updateUser();
+
+            System.Threading.Thread.Sleep(2000);
+
+            user.findUser(userName, "User Name");
+
+            m.InnerPageFindText(By.CssSelector("a[@id$='_DISPLAY_NAME']")).Should().NotBe("Sanity Test User");
+
+        }
+        [TestMethod]
+        public void T037_createUserSubscriptions()
+        {
+            MainPage m = Helper.GotoUserComp();
+            m.PleaseWait();
+            UserComp user = m.Innerpage as UserComp;
+            user.PleaseWait();
+
+            System.Threading.Thread.Sleep(4000);
+
+            user.findUser("Sanity Test", "Display Name");
+            NewUserPage n = user.selectFirstUser();
+
+            UserSubscriptionsPopUp uspu = n.addNotifications();
+
+            uspu.addSubscription("Project", "Created", "xSiterra");
+
+            
+            n.switchFocusToUserPage();
+
+            UserSubscriptionsPopUp uspu2 = n.addNotifications();
+            uspu2.switchFocus2SubscriptionsPopUp();
+            uspu2.addSubscription("Documents", "Uploaded", "xSiterra");
+
+            n.switchFocusToUserPage();
+            n.saveAndClose();
+            NewUserPage n2 = user.selectFirstUser();
+
+            //Assert!
+        }
+        [TestMethod]
+        public void T080_responsibilities()
+        {
+            AdminComp admin = (AdminComp)Helper.GotoAdminPage()
+                .Innerpage;
+            admin.clickLink("Library Templates");
+        }
     }
 }
