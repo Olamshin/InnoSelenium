@@ -109,7 +109,7 @@ namespace UnitTestProject1.Tests
             s.PleaseWait();
             m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be(address);
         }
-
+        
 		[TestMethod]
         public void T005_Create_Site()
         {
@@ -129,18 +129,20 @@ namespace UnitTestProject1.Tests
             string expected = name + " - " + number;
             m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]")).Should().Be(expected);
         }
+
         [TestMethod]
         public void T006_Update_Site()
         {
+            string address = "paul test";
             MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
             SiteHomePage s = m.Innerpage as SiteHomePage;
             SitePopup sp =s.Click_Edit();
             sp.PleaseWait();
-            sp.address = "paul test";
+            sp.address = address;
             sp.Save();
             m.PleaseWait();
             m.Innerpage.PleaseWait();
-            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be("paul test");
+            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be(address);
             //System.Threading.Thread.Sleep(5000);
         }
 
@@ -152,7 +154,6 @@ namespace UnitTestProject1.Tests
             SiteHomePage s = m.Innerpage as SiteHomePage;
             s.Assign_Vendor("2648188")
             .ExistsInVendorSection("2648188").Should().BeTrue();
-           
         }
 
         [TestMethod]
@@ -211,7 +212,41 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T013_Update_Lease()
         {
+            string description = "sanity test";
+            MainPage m = Helper.GotoLeaseHomePage("GG Test Unit;GG Sites;Paul Property (23421424353250);Leases (1);Paul Property Leases (382395966)");
+            LeaseHomePage l = m.Innerpage as LeaseHomePage;
+            LeasePopup p = l.Click_Edit();
+            p.PleaseWait();
+            p.ctrDescription = description;
+            p.Save();
+            m.PleaseWait();
+            l.PleaseWait();
+            m.InnerPageFindText(By.Id("TXT_STATUS_DESCRIPTION")).Should().Be(description);
+        }
 
+        [TestMethod]
+        public void T014_createPayment()
+        {
+            string name = "Sanity Rent";
+            string type = "Rent";
+            string firstDate = "07/11/2014";
+            string secondDate = "08/11/2014";
+            string toDate = "06/10/2015";
+            string amount = "1000";
+            MainPage m = Helper.GotoLeaseHomePage("GG Test Unit;GG Sites;Paul Property (23421424353250);Leases (1);Paul Property Leases (382395966)");
+            LeaseHomePage l = m.Innerpage as LeaseHomePage;
+            PaymentPopup p = l.Add_Payment();
+            p.pmtName = name;
+            p.select_type(type);
+            p.pmtFromDate = firstDate;
+            p.pmtSecondDate = secondDate;
+            p.pmtToDate = toDate;
+            p.PleaseWait();
+            p.pmtAmount = amount;
+            p.Save();
+            m.PleaseWait();
+            l.PleaseWait();
+            m.InnerPageFindText(By.PartialLinkText(name)).Should().Be(name);
         }
 
 
@@ -221,6 +256,7 @@ namespace UnitTestProject1.Tests
             MainPage m = Helper.GotoUserComp();
             UserComp user = m.Innerpage as UserComp;
             NewUserPage newUser = user.addUser();
+            newUser.switchFocusToUserPage();
             String userName = newUser.createUser();
             //String userName = "Sanity";
             System.Threading.Thread.Sleep(2000);
@@ -251,8 +287,8 @@ namespace UnitTestProject1.Tests
             user.findUser(userName, "User Name");
 
             m.InnerPageFindText(By.CssSelector("a[@id$='_DISPLAY_NAME']")).Should().NotBe("Sanity Test User");
-
         }
+
         [TestMethod]
         public void T037_createUserSubscriptions()
         {
@@ -286,7 +322,6 @@ namespace UnitTestProject1.Tests
             n2.ExistsInSubscriptionSection("Documents").Should().BeTrue();*/
         }
 
-
         [TestMethod]
         public void T038_CreateProjectSchedule()
         {
@@ -294,8 +329,7 @@ namespace UnitTestProject1.Tests
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
             s.Add_Project("Sele Project3", "12/12/2015", "Active")
-            .ExistsInLeftNavProjectSection("Sele Project3").Should().BeTrue();
-            
+            .ExistsInLeftNavProjectSection("Sele Project3").Should().BeTrue();      
         }
 
         [TestMethod]
@@ -307,16 +341,63 @@ namespace UnitTestProject1.Tests
             s.Goto_Project("11200400").PleaseWait();
         }
 
-
         [TestMethod]
         public void T080_responsibilities()
         {
+            /***NOT DONE***/
             MainPage m = Helper.GotoResponsibilityComp();
             m.PleaseWait();
             ResponsibilityComp r = m.Innerpage as ResponsibilityComp;
             r.PleaseWait();
 
             r.searchResponsibility("Site","xSiterra", 5);
+        }
+
+        [TestMethod]
+        public void T081_portfolio()
+        {
+            MainPage m = Helper.GotoPortfolioComp();
+            m.PleaseWait();
+            PortfolioComp p = m.Innerpage as PortfolioComp;
+            p.PleaseWait();
+
+            p.PageLoaded().Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void T082_extendedAttributes()
+        {
+            MainPage m = Helper.GotoExtendedAttributesComp();
+            m.PleaseWait();
+            ExtendedAttributesComp ea = m.Innerpage as ExtendedAttributesComp;
+            ea.PleaseWait();
+
+            ea.PageLoaded().Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void T083_lookupTables()
+        {
+            MainPage m = Helper.GotoLookUpTablesComp();
+            m.PleaseWait();
+            LookupTablesComp l = (LookupTablesComp)m.Innerpage;
+            l.PleaseWait();
+
+            l.PageLoaded().Should().BeTrue();
+        }
+		
+        [TestMethod]
+        public void T084_deactivateUser()
+        {
+            MainPage m = Helper.GotoUserComp();
+            m.PleaseWait();
+            UserComp u = (UserComp)m.Innerpage;
+            u.PleaseWait();
+
+            u.findUser("Sanity Test", "Display Name");
+
+            u.deactivateUser();
+
         }
 
         [TestMethod]
@@ -369,38 +450,10 @@ namespace UnitTestProject1.Tests
         }
 
         [TestMethod]
-        public void testAdminPage()
-        {
-            AdminComp admin = (AdminComp)Helper.GotoAdminPage()
-                .Innerpage;
-            admin.clickLink("Library Templates");
-            /*   admin.Find.Element(By.Id("SectionHeader100")).Should().NotBeNull();*/
-
-
-        }
-        /*[TestMethod]
-        public void createUser()
-        {
-            AdminPage admin = (AdminPage)Helper.GotoAdminPage()
-                                                .Innerpage;
-            admin.clickUsers();
-            admin.clickAddUser();
-
-        }*/
-        [TestMethod]
-        public void createOrgUnit()
-        {
-            UnitComp unit = (UnitComp)Helper.GotoUnitComp()
-                                            .Innerpage;
-            unit.clickAddOrgUnit("Site");
-        }
-
-        [TestMethod]
         public void gotoToDoList()
         {
             Helper.GotoMainPage()
                 .Click_ToDoList_Link();
         }
-        
     }
 }
