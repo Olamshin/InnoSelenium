@@ -42,7 +42,7 @@ namespace UnitTestProject1.Pages
             {
                 if (!a.Equals(Host.mainWindowHandle))
                 {
-                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=701030300&ClassID=701000000"))
+                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=702030400&ClassID=702000000"))
                         handle = a;
                 }
             }

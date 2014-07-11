@@ -73,24 +73,27 @@ namespace UnitTestProject1.Tests
 
         }
 
-		[TestMethod]
-        public void T003_Create_Search_Ring()
-        {
-            string name = "Watirpruf";
-            string number = "Autobot";
-            string type = "Type A";
-            MainPage m = Helper.GotoUnitHomePage("GG Test Unit;GG Search Rings");
-            UnitHomePage u = m.Innerpage as UnitHomePage;
-            SearchRingPopup s = u.Create_Search_Ring();
-            s.select_type(type);
-            s.PleaseWait();
-            s.srName = name;
-            s.srNumber = number;
-            s.Save();
-            u.PleaseWait();
-            m.PleaseWait();
-           // m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
-        }
+        //[TestMethod]
+        //public void T003_Create_Search_Ring()
+        //{
+        //    string name = "Watirpruf";
+        //    string number = "Autobot";
+        //    string type = "Type A";
+        //    MainPage m = Helper.GotoUnitHomePage("GG Test Unit;GG Search Rings");
+        //    UnitHomePage u = m.Innerpage as UnitHomePage;
+        //    SearchRingPopup s = u.Create_Search_Ring();
+        //    s.select_type(type);
+        //    s.PleaseWait();
+        //    s.srName = name;
+        //    s.srNumber = number;
+        //    s.Save();
+        //    u.PleaseWait();
+        //    m.PleaseWait();
+            
+        //    m.AssertThatElements.Exist(By.LinkText(name));
+        //   // m.AssertThatElements.Exist(By.XPath("//table[@id='GRID_DATA_702040100']/"));
+        //   // m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
+        //}
 
         [TestMethod]
         public void T004_Update_Search_Ring()
@@ -192,6 +195,12 @@ namespace UnitTestProject1.Tests
             s.Add_Note("Sele Note","Go check your sele note")
                 .ExistsInNoteSection("Sele Note")
                 .Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void T013_Update_Lease
+        {
+
         }
 
 
