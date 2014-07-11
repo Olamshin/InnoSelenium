@@ -118,6 +118,7 @@
     <Compile Include="Host.cs" />
     <Compile Include="Pages\AdminComp.cs" />
     <Compile Include="Pages\AssetPopup.cs" />
+    <Compile Include="Pages\PaymentPopup.cs" />
     <Compile Include="Pages\LeasePopup.cs" />
     <Compile Include="Pages\LeaseHomePage.cs" />
     <Compile Include="Pages\EventPopup.cs" />

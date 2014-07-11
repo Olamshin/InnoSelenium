@@ -10,11 +10,11 @@ using OpenQA.Selenium.Support.UI;
 
 namespace UnitTestProject1.Pages
 {
-    public class LeasePopup : Page
+    public class PaymentPopup : Page
     {
         private String handle;
 
-        public string ctrName
+        public string pmtName
         {
             set
             {
@@ -22,7 +22,7 @@ namespace UnitTestProject1.Pages
             }
         }
 
-        public string ctrNumber
+        public string pmtNumber
         {
             set
             {
@@ -30,21 +30,45 @@ namespace UnitTestProject1.Pages
             }
         }
 
-        public string ctrDescription
+        public string pmtFromDate
         {
             set
             {
-                Execute.ActionOnLocator(By.Id("TXT_STATUS_DESCRIPTION"), e => { e.Clear(); e.SendKeys(value); });
+                Execute.ActionOnLocator(By.Id("TXT_FROM_DATE"), e => { e.Clear(); e.SendKeys(value); });
             }
         }
 
-        public LeasePopup()
+        public string pmtSecondDate
+        {
+            set
+            {
+                Execute.ActionOnLocator(By.Id("TXT_SECOND_PAYMENT_DATE"), e => { e.Clear(); e.SendKeys(value); });
+            }
+        }
+
+        public string pmtToDate
+        {
+            set
+            {
+                Execute.ActionOnLocator(By.Id("TXT_TO_DATE"), e => { e.Clear(); e.SendKeys(value); });
+            }
+        }
+
+        public string pmtAmount
+        {
+            set
+            {
+                Execute.ActionOnLocator(By.Id("TXT_PAYMENT_FIXED"), e => { e.Clear(); e.SendKeys(value); });
+            }
+        }
+
+        public PaymentPopup()
         {
             foreach (string a in Host.Instance.Application.Browser.WindowHandles)
             {
                 if (!a.Equals(Host.mainWindowHandle))
                 {
-                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=716030200&ClassID=716000000"))
+                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=723030600&ClassID=723000000"))
                         handle = a;
                 }
             }
@@ -75,6 +99,13 @@ namespace UnitTestProject1.Pages
             });
             Host.Instance.Application.Browser.SwitchTo().Window(Host.mainWindowHandle); //Implement stack for handles
             Browser.SwitchTo().DefaultContent();
+        }
+
+        public void select_type(String pmtType)
+        {
+            IWebElement dropDownListBox = Find.Element(By.Id("CMB_TYPE_ID"));
+            SelectElement clickThis = new SelectElement(dropDownListBox);
+            clickThis.SelectByText(pmtType);
         }
     }
 }
