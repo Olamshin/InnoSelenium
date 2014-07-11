@@ -127,17 +127,31 @@ namespace UnitTestProject1
         public Boolean ExistsInGrid(String columnname, String value)
         {
             int column_index = -1;
-            IWebElement grid_table;
+            IWebElement grid_table, grid_table_header;
             IWebElement a = null;
             Boolean isCheckBox;
+            Boolean isLeftNavGrid;
             ReadOnlyCollection<IWebElement> grid_header, grid_table_rows, grid_row_data;
             PleaseWaitForSearch();
 
             //SwitchIn();
             //s=Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]//tbody//tr//td//a//G_VALUE[. = 'Bescoby']")).Text;
             grid_table = Find.Element(By.Id("GRID_DATA_" + grid_id));
-            IWebElement grid_table_header = grid_table.FindElement(By.XPath("./thead/tr[@class='GridHeader']"));
+            try
+            {
+                grid_table_header = grid_table.FindElement(By.XPath("./thead/tr[@class='GridHeader']"));
+                isLeftNavGrid = false;
+            }
+            catch
+            {
+                //it must be a left nav grid
+                grid_table_header = grid_table.FindElement(By.XPath("./thead/tr[@id='GRID_TR_HEADER_"+grid_id+"']"));
+                isLeftNavGrid = true;
+            }
+
             grid_header = grid_table_header.FindElements(By.XPath("./td[@class='HeaderCell']"));
+
+            //if grid has checkbox
             try
             {
                 isCheckBox = grid_table_header.FindElement(By.Id("CHECKBOX_HEADER")).Displayed;
@@ -146,6 +160,7 @@ namespace UnitTestProject1
             {
                 isCheckBox = false;
             }
+
             var grid_header_enumerator = grid_header.GetEnumerator();
             for (int i = (isCheckBox ? 0 : -1); grid_header_enumerator.MoveNext(); i++)
             {
@@ -164,10 +179,12 @@ namespace UnitTestProject1
             grid_table_rows = grid_table.FindElements(By.XPath("./tbody/tr[@id='GRID_ROW']"));
             IEnumerable<IWebElement> grid_row = grid_table_rows.Where(row => row.Text.Contains(value));
             var grid_row_enum = grid_row.GetEnumerator();
+
+            string cell_path= isLeftNavGrid?"./td[contains(@class,'LeftNavGridCell')]":"./td[@class='Cell']";
             for (int i = 0; grid_row_enum.MoveNext(); i++)
             {
                 //Get all cells from the row
-                grid_row_data = grid_row_enum.Current.FindElements(By.XPath("./td[@class='Cell']"));
+                grid_row_data = grid_row_enum.Current.FindElements(By.XPath(cell_path));
                 var grid_data_enum = grid_row_data.GetEnumerator();
 
                 for (int j = 0; grid_data_enum.MoveNext(); j++)
