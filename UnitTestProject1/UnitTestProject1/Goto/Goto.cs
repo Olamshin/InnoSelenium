@@ -85,6 +85,18 @@ namespace UnitTestProject1
             main.Innerpage = main.ClickNavTree<SearchRingHomePage>(path);
             return main;
         }
+        public static MainPage GotoResponsibilityComp()
+        {
+            MainPage mainpage = GotoAdminPage();
+
+            AdminComp a = (AdminComp)mainpage.Innerpage;
+            a.PleaseWait();
+            a.clickLink("Responsibility");
+
+            mainpage.Innerpage = mainpage.GetComponent<ResponsibilityComp>();
+
+            return mainpage;
+        }
 
 
     }

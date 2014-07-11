@@ -14,6 +14,17 @@ namespace UnitTestProject1.Pages
     {
         public static String handle;
 
+        private SubscriptionSection _subscriptionSection;
+        protected SubscriptionSection subscriptionSection
+        {
+            get
+            {
+                if (_subscriptionSection == null)
+                { _subscriptionSection = this.GetComponent<SubscriptionSection>(); }
+                return _subscriptionSection;
+            }
+        }
+
         public NewUserPage()
         {
 
@@ -162,13 +173,28 @@ namespace UnitTestProject1.Pages
             }
             Host.Instance.Application.Browser.SwitchTo().Window(handle);
         }
-        public String InnerPageFindText(By findExpression)
-        {
-            Browser.SwitchTo().Frame("MainFrame");
-            String e = Find.Element(findExpression).Text.Trim();
-            Browser.SwitchTo().DefaultContent();
-            return e;
 
+        public Boolean ExistsInSubscriptionSection(String subscriptionEvent)
+        {
+            return subscriptionSection.ExistsInGrid("Event Name", subscriptionEvent);
+        }
+        
+        protected class SubscriptionSection : SectionComponent
+        {
+            public SubscriptionSection()
+            {
+                section_id = "34";
+                grid_id = "726040100";
+            }
+            protected override void SwitchIn()
+            {
+                Browser.SwitchTo().DefaultContent();
+            }
+
+            protected override void SwitchOut()
+            {
+                Browser.SwitchTo().DefaultContent();
+            }
         }
     }
 }
