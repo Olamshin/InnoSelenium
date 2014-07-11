@@ -45,6 +45,13 @@ namespace UnitTestProject1.Pages
             Host.Instance.Application.Browser.SwitchTo().Window(handle);
         }
 
+        public IncidentPopup Enter_Info(string problem, string assigned2User)
+        {
+            AssignedToUser = assigned2User;
+            Problem = problem;
+            return this;
+        }
+
         public IncidentPopup Select_Type()
         {
             Host.Wait.Until<IWebElement>((d) =>

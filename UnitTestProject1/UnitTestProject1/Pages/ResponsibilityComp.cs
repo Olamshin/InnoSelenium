@@ -14,25 +14,26 @@ namespace UnitTestProject1.Pages
     {
         public override void PleaseWait()
         {
-            //skins/common/images/icons/gif_buttons_solid/user_magnify.gif
-            Browser.SwitchTo().DefaultContent();
-            try //is browser already in mainframe?
+            try
             {
-                Browser.SwitchTo().Frame("MainFrame");
                 Host.Wait.Until<Boolean>((d) =>
-                {
-                    return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/user_magnify.gif");
-                });
+                   {
+                       return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/user_magnify.gif");
+                   });
             }
             catch
-            { //browser is already in mainframe
-                Host.Wait.Until<Boolean>((d) =>
-                {
-                    return d.PageSource.Contains("skins/common/images/icons/gif_buttons_solid/user_magnify.gif");
-                });
+            {
+                System.Threading.Thread.Sleep(1000);
             }
 
+        }
+        public void switchOut()
+        {
             Browser.SwitchTo().DefaultContent();
+        }
+        public void switchIn()
+        {
+            Browser.SwitchTo().Frame("MainFrame");
         }
         public void addValues(String display, String from, int roleNum)
         {
@@ -42,6 +43,8 @@ namespace UnitTestProject1.Pages
             clickThis.SelectByText(display);
 
             //from
+            Find.Element(By.Id("3121681"));
+
             IWebElement dropDownListBox2 = Find.Element(By.Id("AdminTreeSelection"));
             SelectElement clickThis2 = new SelectElement(dropDownListBox2);
             clickThis2.SelectByText(from);
@@ -59,9 +62,12 @@ namespace UnitTestProject1.Pages
         }
         public void searchResponsibility(String display, String from, int roleNum)
         {
+            switchOut();
+            switchIn();
             PleaseWait();
             addValues(display, from, roleNum);
             search();
+            switchOut();
         }
     }
 }

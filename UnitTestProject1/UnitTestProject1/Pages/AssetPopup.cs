@@ -59,7 +59,7 @@ namespace UnitTestProject1.Pages
             {
                 return !d.WindowHandles.Contains(temphandle);
             });
-            Host.Instance.Application.Browser.SwitchTo().Window(Host.mainWindowHandle); //Implement stack for handles
+            Browser.SwitchTo().Window(Host.mainWindowHandle); //Implement stack for handles
             Browser.SwitchTo().DefaultContent();
         }
 
