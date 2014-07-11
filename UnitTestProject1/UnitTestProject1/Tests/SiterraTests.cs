@@ -238,12 +238,14 @@ namespace UnitTestProject1.Tests
             m.InnerPageFindText(By.PartialLinkText(name)).Should().Be(name);
         }
 
+
         [TestMethod]
         public void T035_createUser()
         {
             MainPage m = Helper.GotoUserComp();
             UserComp user = m.Innerpage as UserComp;
             NewUserPage newUser = user.addUser();
+            newUser.switchFocusToUserPage();
             String userName = newUser.createUser();
             //String userName = "Sanity";
             System.Threading.Thread.Sleep(2000);
@@ -358,10 +360,24 @@ namespace UnitTestProject1.Tests
         {
             MainPage m = Helper.GotoLookUpTablesComp();
             m.PleaseWait();
-            LookupTablesComp l = m.Innerpage as LookupTablesComp;
+            LookupTablesComp l = (LookupTablesComp)m.Innerpage;
             l.PleaseWait();
 
             l.PageLoaded().Should().BeTrue();
+        }
+		
+        [TestMethod]
+        public void T084_deactivateUser()
+        {
+            MainPage m = Helper.GotoUserComp();
+            m.PleaseWait();
+            UserComp u = (UserComp)m.Innerpage;
+            u.PleaseWait();
+
+            u.findUser("Sanity Test", "Display Name");
+
+            u.deactivateUser();
+
         }
 
         [TestMethod]

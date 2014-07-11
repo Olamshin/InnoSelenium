@@ -127,6 +127,7 @@
     <Compile Include="Pages\ProjectPopup.cs" />
     <Compile Include="Pages\LookupTablesComp.cs" />
     <Compile Include="Pages\PortfolioComp.cs" />
+	<Compile Include="Pages\ProjectPopup.cs" />
     <Compile Include="Pages\ResponsibilityComp.cs" />
     <Compile Include="Pages\SearchRingHomePage.cs" />
     <Compile Include="Pages\ObjectBrowserPage.cs" />
