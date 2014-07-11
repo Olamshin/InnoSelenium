@@ -73,28 +73,91 @@ namespace UnitTestProject1.Tests
 
         }
 
-        //[TestMethod]
-        //public void T003_Create_Search_Ring()
-        //{
-        //    string name = "Watirpruf";
-        //    string number = "Autobot";
-        //    string type = "Type A";
-        //    MainPage m = Helper.GotoUnitHomePage("GG Test Unit;GG Search Rings");
-        //    UnitHomePage u = m.Innerpage as UnitHomePage;
-        //    SearchRingPopup s = u.Create_Search_Ring();
-        //    s.select_type(type);
-        //    s.PleaseWait();
-        //    s.srName = name;
-        //    s.srNumber = number;
-        //    s.Save();
-        //    u.PleaseWait();
-        //    m.PleaseWait();
-            
-        //    m.AssertThatElements.Exist(By.LinkText(name));
-        //   // m.AssertThatElements.Exist(By.XPath("//table[@id='GRID_DATA_702040100']/"));
-        //   // m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
-        //}
+        [TestMethod]
+        public void leaseLeftNav()
+        {
+            Helper.GotoMainPage()
+                .clickLeaseLeftNav()
+                .Find.Element(By.Id("tdSetGlobalNavSites"))
+                .GetCssValue("background-position-x")
+                .Equals("-10px");
+        }
 
+        [TestMethod]
+        public void siteLeftNav()
+        {
+            Helper.GotoMainPage()
+                .clickSiteLeftNav()
+                .Find.Element(By.Id("tdSetGlobalNavSites"))
+                .GetCssValue("background-position-x")
+                .Should().Equals("-10px");
+            System.Threading.Thread.Sleep(3000);
+        }
+
+        [TestMethod]
+        public async Task CheckFlashDownload()
+        {
+            var downloadlink = Helper.GotoLandingPage().Click_Downloads().CheckFileDownload();
+
+            using (var client = new HttpClient())
+            {
+
+                //client.BaseAddress = new Uri(downloadlink);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
+                HttpResponseMessage response = await client.GetAsync(new Uri(downloadlink));
+
+                response.IsSuccessStatusCode.Should().BeTrue();
+            }
+        }
+
+        [TestMethod]
+        public void gotobrowse()
+        {
+            MainPage m = Helper.GotoMainPage()
+                .clickBrowseLeftNav();
+                m.ClickNavTree<SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
+            //System.Threading.Thread.Sleep(3000);
+            //m.Innerpage.
+        }
+
+		[TestMethod]
+        public void T003_Create_Search_Ring()
+        {
+            MainPage m = Helper.GotoMainPage()
+                .leftNavBrowse()
+                .Click_Search_Ring_Unit();
+
+            UnitHomePage u = (UnitHomePage)m.Innerpage;
+                u.Create_Search_Ring();
+        }
+
+        [TestMethod]
+        public void testAdminPage() 
+        {
+            AdminComp admin = (AdminComp)Helper.GotoAdminPage()
+                .Innerpage;
+                admin.clickLink("Library Templates");
+             /*   admin.Find.Element(By.Id("SectionHeader100")).Should().NotBeNull();*/
+            
+        }
+        /*[TestMethod]
+        public void createUser()
+        {
+            AdminPage admin = (AdminPage)Helper.GotoAdminPage()
+                                                .Innerpage;
+            admin.clickUsers();
+            admin.clickAddUser();
+
+        }*/
+        [TestMethod]
+        public void createOrgUnit()
+        {
+            UnitComp unit = (UnitComp)Helper.GotoUnitComp()
+                                            .Innerpage;
+            unit.clickAddOrgUnit("Site");
+        }
         [TestMethod]
         public void T004_Update_Search_Ring()
         {
@@ -111,6 +174,13 @@ namespace UnitTestProject1.Tests
         }
 
 		[TestMethod]
+        public void gotoToDoList()
+        {
+            Helper.GotoMainPage()
+                .Click_ToDoList_Link();
+        }
+        
+		[TestMethod]
         public void T005_Create_Site()
         {
             string name = "Watirpruf";
@@ -125,9 +195,11 @@ namespace UnitTestProject1.Tests
             sp.siteNumber = number; //replace with number
             sp.Save();
             m.PleaseWait();
-            sr.PleaseWait();
+            m.Innerpage.PleaseWait();
+            string actual = m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
             string expected = name + " - " + number;
-            m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]")).Should().Be(expected);
+            //m.InnerPageFindText(By.CssSelector("table#TABLES_SITES a")).Should().Be("Selenium Site - WatirprufAutobots");
+            Assert.AreEqual(actual, expected);
         }
         [TestMethod]
         public void T006_Update_Site()
@@ -301,6 +373,7 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T080_responsibilities()
         {
+            /***NOT DONE***/
             MainPage m = Helper.GotoResponsibilityComp();
             m.PleaseWait();
             ResponsibilityComp r = m.Innerpage as ResponsibilityComp;
@@ -391,6 +464,35 @@ namespace UnitTestProject1.Tests
             Helper.GotoMainPage()
                 .Click_ToDoList_Link();
         }
-        
+        [TestMethod]
+        public void T081_portfolio()
+        {
+            MainPage m = Helper.GotoPortfolioComp();
+            m.PleaseWait();
+            PortfolioComp p = m.Innerpage as PortfolioComp;
+            p.PleaseWait();
+
+            p.PageLoaded().Should().BeTrue();
+        }
+        [TestMethod]
+        public void T082_extendedAttributes()
+        {
+            MainPage m = Helper.GotoExtendedAttributesComp();
+            m.PleaseWait();
+            ExtendedAttributesComp ea = m.Innerpage as ExtendedAttributesComp;
+            ea.PleaseWait();
+
+            ea.PageLoaded().Should().BeTrue();
+        }
+        [TestMethod]
+        public void T083_lookupTables()
+        {
+            MainPage m = Helper.GotoLookUpTablesComp();
+            m.PleaseWait();
+            LookupTablesComp l = m.Innerpage as LookupTablesComp;
+            l.PleaseWait();
+
+            l.PageLoaded().Should().BeTrue();
+        }
     }
 }

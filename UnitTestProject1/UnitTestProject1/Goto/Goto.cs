@@ -112,6 +112,39 @@ namespace UnitTestProject1
 
             return mainpage;
         }
+        public static MainPage GotoPortfolioComp()
+        {
+            MainPage m = GotoAdminPage();
+            AdminComp a = (AdminComp)m.Innerpage;
+            a.PleaseWait();
+            a.clickLink("Portfolio");
+
+            m.Innerpage = m.GetComponent<PortfolioComp>();
+
+            return m;
+        }
+        public static MainPage GotoExtendedAttributesComp()
+        {
+            MainPage m = GotoAdminPage();
+            AdminComp a = (AdminComp)m.Innerpage;
+            a.PleaseWait();
+            a.clickLink("Extended Attributes");
+
+            m.Innerpage = m.GetComponent<ExtendedAttributesComp>();
+
+            return m;
+        }
+        public static MainPage GotoLookUpTablesComp()
+        {
+            MainPage m = GotoAdminPage();
+            AdminComp a = (AdminComp)m.Innerpage;
+            a.PleaseWait();
+            a.clickLink("Lookup Tables");
+
+            m.Innerpage = m.GetComponent<LookupTablesComp>();
+
+            return m;
+        }
 
 
     }

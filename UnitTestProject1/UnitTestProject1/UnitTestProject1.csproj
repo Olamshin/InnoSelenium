@@ -121,8 +121,11 @@
     <Compile Include="Pages\LeasePopup.cs" />
     <Compile Include="Pages\LeaseHomePage.cs" />
     <Compile Include="Pages\EventPopup.cs" />
+    <Compile Include="Pages\ExtendedAttributesComp.cs" />
     <Compile Include="Pages\IncidentPopup.cs" />
     <Compile Include="Pages\ProjectPopup.cs" />
+    <Compile Include="Pages\LookupTablesComp.cs" />
+    <Compile Include="Pages\PortfolioComp.cs" />
     <Compile Include="Pages\ResponsibilityComp.cs" />
     <Compile Include="Pages\SearchRingHomePage.cs" />
     <Compile Include="Pages\ObjectBrowserPage.cs" />
