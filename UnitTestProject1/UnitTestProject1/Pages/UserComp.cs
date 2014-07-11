@@ -35,7 +35,7 @@ namespace UnitTestProject1.Pages
             
             Browser.SwitchTo().DefaultContent();
         }
-        public void PleaseWaitForSearch() 
+        private void PleaseWaitForSearch() 
         {
             //switchOut();
             //switchIn();
@@ -45,11 +45,11 @@ namespace UnitTestProject1.Pages
             });
             //switchOut();
         }
-        public void switchIn() 
+        private void switchIn() 
         {
             Browser.SwitchTo().Frame("MainFrame");
         }
-        public void switchOut()
+        private void switchOut()
         {
             Browser.SwitchTo().DefaultContent();
         }
@@ -100,7 +100,8 @@ namespace UnitTestProject1.Pages
 
             return this;
         }
-        public NewUserPage selectFirstUser() {
+        public NewUserPage selectFirstUser() 
+        {
             /*OpenQA.Selenium.
                 Click("//a[starts-with(@id, '754040200_')]");
             Find.Element(By.Id("754040200_%")).Click();*/
@@ -110,6 +111,12 @@ namespace UnitTestProject1.Pages
 
             return Navigate.To<NewUserPage>(By.CssSelector("a[id$='_DISPLAY_NAME']"));
                 
+        }
+        public void deactivateUser()
+        {
+            switchIn();
+            Find.Element(By.CssSelector("td.CellNoAlign>img")).Click();
+            Find.Element(By.PartialLinkText("Deactivate")).Click();
         }
 
         

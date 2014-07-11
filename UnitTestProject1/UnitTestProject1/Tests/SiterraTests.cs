@@ -72,56 +72,7 @@ namespace UnitTestProject1.Tests
             page.Title.Should().Contain("Samsonite");
 
         }
-
-        [TestMethod]
-        public void leaseLeftNav()
-        {
-            Helper.GotoMainPage()
-                .clickLeaseLeftNav()
-                .Find.Element(By.Id("tdSetGlobalNavSites"))
-                .GetCssValue("background-position-x")
-                .Equals("-10px");
-        }
-
-        [TestMethod]
-        public void siteLeftNav()
-        {
-            Helper.GotoMainPage()
-                .clickSiteLeftNav()
-                .Find.Element(By.Id("tdSetGlobalNavSites"))
-                .GetCssValue("background-position-x")
-                .Should().Equals("-10px");
-            System.Threading.Thread.Sleep(3000);
-        }
-
-        [TestMethod]
-        public async Task CheckFlashDownload()
-        {
-            var downloadlink = Helper.GotoLandingPage().Click_Downloads().CheckFileDownload();
-
-            using (var client = new HttpClient())
-            {
-
-                //client.BaseAddress = new Uri(downloadlink);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/octet-stream"));
-
-                HttpResponseMessage response = await client.GetAsync(new Uri(downloadlink));
-
-                response.IsSuccessStatusCode.Should().BeTrue();
-            }
-        }
-
-        [TestMethod]
-        public void gotobrowse()
-        {
-            MainPage m = Helper.GotoMainPage()
-                .clickBrowseLeftNav();
-                m.ClickNavTree<SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
-            //System.Threading.Thread.Sleep(3000);
-            //m.Innerpage.
-        }
-
+        
 		[TestMethod]
         public void T003_Create_Search_Ring()
         {
@@ -133,15 +84,6 @@ namespace UnitTestProject1.Tests
                 u.Create_Search_Ring();
         }
 
-        [TestMethod]
-        public void testAdminPage() 
-        {
-            AdminComp admin = (AdminComp)Helper.GotoAdminPage()
-                .Innerpage;
-                admin.clickLink("Library Templates");
-             /*   admin.Find.Element(By.Id("SectionHeader100")).Should().NotBeNull();*/
-            
-        }
         /*[TestMethod]
         public void createUser()
         {
@@ -151,13 +93,7 @@ namespace UnitTestProject1.Tests
             admin.clickAddUser();
 
         }*/
-        [TestMethod]
-        public void createOrgUnit()
-        {
-            UnitComp unit = (UnitComp)Helper.GotoUnitComp()
-                                            .Innerpage;
-            unit.clickAddOrgUnit("Site");
-        }
+        
         [TestMethod]
         public void T004_Update_Search_Ring()
         {
@@ -173,13 +109,6 @@ namespace UnitTestProject1.Tests
             m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be(address);
         }
 
-		[TestMethod]
-        public void gotoToDoList()
-        {
-            Helper.GotoMainPage()
-                .Click_ToDoList_Link();
-        }
-        
 		[TestMethod]
         public void T005_Create_Site()
         {
@@ -269,11 +198,11 @@ namespace UnitTestProject1.Tests
                 .Should().BeTrue();
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void T013_Update_Lease
         {
 
-        }
+        }*/
 
 
         [TestMethod]
@@ -282,6 +211,7 @@ namespace UnitTestProject1.Tests
             MainPage m = Helper.GotoUserComp();
             UserComp user = m.Innerpage as UserComp;
             NewUserPage newUser = user.addUser();
+            newUser.switchFocusToUserPage();
             String userName = newUser.createUser();
             //String userName = "Sanity";
             System.Threading.Thread.Sleep(2000);
@@ -371,6 +301,49 @@ namespace UnitTestProject1.Tests
 
             r.searchResponsibility("Site","xSiterra", 5);
         }
+        [TestMethod]
+        public void T081_portfolio()
+        {
+            MainPage m = Helper.GotoPortfolioComp();
+            m.PleaseWait();
+            PortfolioComp p = m.Innerpage as PortfolioComp;
+            p.PleaseWait();
+
+            p.PageLoaded().Should().BeTrue();
+        }
+        [TestMethod]
+        public void T082_extendedAttributes()
+        {
+            MainPage m = Helper.GotoExtendedAttributesComp();
+            m.PleaseWait();
+            ExtendedAttributesComp ea = m.Innerpage as ExtendedAttributesComp;
+            ea.PleaseWait();
+
+            ea.PageLoaded().Should().BeTrue();
+        }
+        [TestMethod]
+        public void T083_lookupTables()
+        {
+            MainPage m = Helper.GotoLookUpTablesComp();
+            m.PleaseWait();
+            LookupTablesComp l = (LookupTablesComp)m.Innerpage;
+            l.PleaseWait();
+
+            l.PageLoaded().Should().BeTrue();
+        }
+        [TestMethod]
+        public void T084_deactivateUser()
+        {
+            MainPage m = Helper.GotoUserComp();
+            m.PleaseWait();
+            UserComp u = (UserComp)m.Innerpage;
+            u.PleaseWait();
+
+            u.findUser("Sanity Test", "Display Name");
+
+            u.deactivateUser();
+
+        }
 
         [TestMethod]
         public void leaseLeftNav()
@@ -454,35 +427,6 @@ namespace UnitTestProject1.Tests
             Helper.GotoMainPage()
                 .Click_ToDoList_Link();
         }
-        [TestMethod]
-        public void T081_portfolio()
-        {
-            MainPage m = Helper.GotoPortfolioComp();
-            m.PleaseWait();
-            PortfolioComp p = m.Innerpage as PortfolioComp;
-            p.PleaseWait();
-
-            p.PageLoaded().Should().BeTrue();
-        }
-        [TestMethod]
-        public void T082_extendedAttributes()
-        {
-            MainPage m = Helper.GotoExtendedAttributesComp();
-            m.PleaseWait();
-            ExtendedAttributesComp ea = m.Innerpage as ExtendedAttributesComp;
-            ea.PleaseWait();
-
-            ea.PageLoaded().Should().BeTrue();
-        }
-        [TestMethod]
-        public void T083_lookupTables()
-        {
-            MainPage m = Helper.GotoLookUpTablesComp();
-            m.PleaseWait();
-            LookupTablesComp l = m.Innerpage as LookupTablesComp;
-            l.PleaseWait();
-
-            l.PageLoaded().Should().BeTrue();
-        }
+        
     }
 }

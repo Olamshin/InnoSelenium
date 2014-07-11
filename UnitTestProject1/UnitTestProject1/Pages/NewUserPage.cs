@@ -85,8 +85,8 @@ namespace UnitTestProject1.Pages
             //isSSOUser -- Don't click
             //isAdmin
             Find.Element(By.Id("1190264")).Click();
-            //*don't* showInContactsList
-            //Find.Element(By.Id("1190259")).Click();
+            //showInContactsList
+            Find.Element(By.Id("1190259")).Click();
 
             Execute.ActionOnLocator(By.Id("1190263"), e => { e.Clear(); e.SendKeys(notes); });
             Execute.ActionOnLocator(By.Id("1190252"), e => { e.Clear(); e.SendKeys(title); });
