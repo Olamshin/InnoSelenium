@@ -193,7 +193,7 @@ namespace UnitTestProject1.Tests
         {
             MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            SitePopup sp =s.click_edit();
+            SitePopup sp =s.Click_Edit();
             sp.PleaseWait();
             sp.address = "paul test";
             sp.Save();
@@ -209,11 +209,8 @@ namespace UnitTestProject1.Tests
             MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Assign_Vendor()
-                .Vendor_Select_Button()
-                .Select_Object<SiteHomePage>("2648188", s)
-                .Submit_Vendor();
-            s.ExistsInVendorSection("2648188").Should().BeTrue();
+            s.Assign_Vendor("2648188")
+            .ExistsInVendorSection("2648188").Should().BeTrue();
            
         }
 
@@ -223,8 +220,8 @@ namespace UnitTestProject1.Tests
             MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Add_Asset().Select_Type().Save();
-            s.ExistsInAssetSection("New HVAC").Should().BeTrue();
+            s.Add_Asset()
+            .ExistsInAssetSection("New HVAC").Should().BeTrue();
         }
 
         [TestMethod]
@@ -233,12 +230,33 @@ namespace UnitTestProject1.Tests
             MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            IncidentPopup i = s.Add_Incident().Select_Type();
-            i.AssignedToUser = "Frederic Bottling";
-            i.Problem = "Yes it is a Problem";
-            i.Save();
-            s.ExistsInIncidentSection("Yes it is a Problem").Should().BeTrue();
+            s.Add_Incident("Yes it is a Problem", "Frederic Bottling")
+            .ExistsInIncidentSection("Yes it is a Problem").Should().BeTrue();
         }
+
+        [TestMethod]
+        public void T010_AddEvent2Site()
+        {
+            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            s.Add_Event("Selenium Test", "12/12/2015", "12/12/2015", "GROUP C", "Selenium0")
+                .ExistsInEventSection("Selenium Test").Should().BeTrue();
+            
+        }
+
+        [TestMethod]
+        public void T011_AddNote2Site()
+        {
+            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            s.Add_Note("Sele Note","Go check your sele note")
+                .ExistsInNoteSection("Sele Note")
+                .Should().BeTrue();
+        }
+
+
         [TestMethod]
         public void T035_createUser()
         {
