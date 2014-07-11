@@ -73,100 +73,40 @@ namespace UnitTestProject1.Tests
 
         }
 
-        [TestMethod]
-        public void leaseLeftNav()
-        {
-            Helper.GotoMainPage()
-                .clickLeaseLeftNav()
-                .Find.Element(By.Id("tdSetGlobalNavSites"))
-                .GetCssValue("background-position-x")
-                .Equals("-10px");
-        }
-
-        [TestMethod]
-        public void siteLeftNav()
-        {
-            Helper.GotoMainPage()
-                .clickSiteLeftNav()
-                .Find.Element(By.Id("tdSetGlobalNavSites"))
-                .GetCssValue("background-position-x")
-                .Should().Equals("-10px");
-            System.Threading.Thread.Sleep(3000);
-        }
-
-        [TestMethod]
-        public async Task CheckFlashDownload()
-        {
-            var downloadlink = Helper.GotoLandingPage().Click_Downloads().CheckFileDownload();
-
-            using (var client = new HttpClient())
-            {
-
-                //client.BaseAddress = new Uri(downloadlink);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/octet-stream"));
-
-                HttpResponseMessage response = await client.GetAsync(new Uri(downloadlink));
-
-                response.IsSuccessStatusCode.Should().BeTrue();
-            }
-        }
-
-        [TestMethod]
-        public void gotobrowse()
-        {
-            MainPage m = Helper.GotoMainPage()
-                .clickBrowseLeftNav();
-                m.ClickNavTree<SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
-            //System.Threading.Thread.Sleep(3000);
-            //m.Innerpage.
-        }
-
 		[TestMethod]
         public void T003_Create_Search_Ring()
         {
-            MainPage m = Helper.GotoMainPage()
-                .leftNavBrowse()
-                .Click_Search_Ring_Unit();
-
-            UnitHomePage u = (UnitHomePage)m.Innerpage;
-                u.Create_Search_Ring();
+            string name = "Watirpruf";
+            string number = "Autobot";
+            string type = "Type A";
+            MainPage m = Helper.GotoUnitHomePage("GG Test Unit;GG Search Rings");
+            UnitHomePage u = m.Innerpage as UnitHomePage;
+            SearchRingPopup s = u.Create_Search_Ring();
+            s.select_type(type);
+            s.PleaseWait();
+            s.srName = name;
+            s.srNumber = number;
+            s.Save();
+            u.PleaseWait();
+            m.PleaseWait();
+           // m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
         }
 
         [TestMethod]
-        public void testAdminPage() 
+        public void T004_Update_Search_Ring()
         {
-            AdminComp admin = (AdminComp)Helper.GotoAdminPage()
-                .Innerpage;
-                admin.clickLink("Library Templates");
-             /*   admin.Find.Element(By.Id("SectionHeader100")).Should().NotBeNull();*/
-            
-
-        }
-        /*[TestMethod]
-        public void createUser()
-        {
-            AdminPage admin = (AdminPage)Helper.GotoAdminPage()
-                                                .Innerpage;
-            admin.clickUsers();
-            admin.clickAddUser();
-
-        }*/
-        [TestMethod]
-        public void createOrgUnit()
-        {
-            UnitComp unit = (UnitComp)Helper.GotoUnitComp()
-                                            .Innerpage;
-            unit.clickAddOrgUnit("Site");
+            string address = "paul test";
+            MainPage m = Helper.GotoSearchRingHomePage("GG Test Unit;GG Search Rings;Test Ring (1357213)");
+            SearchRingHomePage s = m.Innerpage as SearchRingHomePage;
+            SearchRingPopup p = s.edit_sr();
+            p.PleaseWait();
+            p.srAddress = address;
+            p.Save();
+            m.PleaseWait();
+            s.PleaseWait();
+            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be(address);
         }
 
-		[TestMethod]
-        public void gotoToDoList()
-        {
-            Helper.GotoMainPage()
-                .Click_ToDoList_Link();
-        }
-        
 		[TestMethod]
         public void T005_Create_Site()
         {
@@ -182,11 +122,9 @@ namespace UnitTestProject1.Tests
             sp.siteNumber = number; //replace with number
             sp.Save();
             m.PleaseWait();
-            m.Innerpage.PleaseWait();
-            string actual = m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
+            sr.PleaseWait();
             string expected = name + " - " + number;
-            //m.InnerPageFindText(By.CssSelector("table#TABLES_SITES a")).Should().Be("Selenium Site - WatirprufAutobots");
-            Assert.AreEqual(actual, expected);
+            m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]")).Should().Be(expected);
         }
         [TestMethod]
         public void T006_Update_Site()
@@ -318,7 +256,90 @@ namespace UnitTestProject1.Tests
             r.PleaseWait();
 
             r.searchResponsibility("Site","xSiterra", 5);
+        }
+
+        [TestMethod]
+        public void leaseLeftNav()
+        {
+            Helper.GotoMainPage()
+                .clickLeaseLeftNav()
+                .Find.Element(By.Id("tdSetGlobalNavSites"))
+                .GetCssValue("background-position-x")
+                .Equals("-10px");
+        }
+
+        [TestMethod]
+        public void siteLeftNav()
+        {
+            Helper.GotoMainPage()
+                .clickSiteLeftNav()
+                .Find.Element(By.Id("tdSetGlobalNavSites"))
+                .GetCssValue("background-position-x")
+                .Should().Equals("-10px");
+            System.Threading.Thread.Sleep(3000);
+        }
+
+        [TestMethod]
+        public async Task CheckFlashDownload()
+        {
+            var downloadlink = Helper.GotoLandingPage().Click_Downloads().CheckFileDownload();
+
+            using (var client = new HttpClient())
+            {
+
+                //client.BaseAddress = new Uri(downloadlink);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
+                HttpResponseMessage response = await client.GetAsync(new Uri(downloadlink));
+
+                response.IsSuccessStatusCode.Should().BeTrue();
+            }
+        }
+
+        [TestMethod]
+        public void gotobrowse()
+        {
+            MainPage m = Helper.GotoMainPage()
+                .clickBrowseLeftNav();
+            m.ClickNavTree<SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
+            //System.Threading.Thread.Sleep(3000);
+            //m.Innerpage.
+        }
+
+        [TestMethod]
+        public void testAdminPage()
+        {
+            AdminComp admin = (AdminComp)Helper.GotoAdminPage()
+                .Innerpage;
+            admin.clickLink("Library Templates");
+            /*   admin.Find.Element(By.Id("SectionHeader100")).Should().NotBeNull();*/
+
 
         }
+        /*[TestMethod]
+        public void createUser()
+        {
+            AdminPage admin = (AdminPage)Helper.GotoAdminPage()
+                                                .Innerpage;
+            admin.clickUsers();
+            admin.clickAddUser();
+
+        }*/
+        [TestMethod]
+        public void createOrgUnit()
+        {
+            UnitComp unit = (UnitComp)Helper.GotoUnitComp()
+                                            .Innerpage;
+            unit.clickAddOrgUnit("Site");
+        }
+
+        [TestMethod]
+        public void gotoToDoList()
+        {
+            Helper.GotoMainPage()
+                .Click_ToDoList_Link();
+        }
+        
     }
 }

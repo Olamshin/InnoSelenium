@@ -52,5 +52,10 @@ namespace UnitTestProject1.Pages
             //return Navigate.To<SitePopup>(By.XPath("//a[@onclick=\"addSite();\"]"));
             return Navigate.To<SitePopup>(By.LinkText("Add"));
         }
+        public SearchRingPopup edit_sr()
+        {
+            SwitchIn();
+            return Navigate.To<SearchRingPopup>(By.XPath("//a[contains(@onclick, 'editSearchRingData()')]"));
+        }
     }
 }
