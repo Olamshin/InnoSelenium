@@ -64,10 +64,14 @@ namespace UnitTestProject1.Pages
         }
         public void Save()
         {
+            string temphandle = Browser.CurrentWindowHandle;
             Find.Element(By.LinkText("Finish")).Click();
+            Host.Wait.Until<Boolean>((d) =>
+            {
+                return !d.WindowHandles.Contains(temphandle);
+            });
             Host.Instance.Application.Browser.SwitchTo().Window(Host.mainWindowHandle); //Implement stack for handles
             Browser.SwitchTo().DefaultContent();
-            //return Navigate.To<SiteHomePage>(By.LinkText("Finish"));
         }
         public SitePopup select_type(string siteType)
         {
