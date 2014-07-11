@@ -330,6 +330,7 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T080_responsibilities()
         {
+            /***NOT DONE***/
             MainPage m = Helper.GotoResponsibilityComp();
             m.PleaseWait();
             ResponsibilityComp r = m.Innerpage as ResponsibilityComp;
@@ -337,6 +338,36 @@ namespace UnitTestProject1.Tests
 
             r.searchResponsibility("Site","xSiterra", 5);
 
+        }
+        [TestMethod]
+        public void T081_portfolio()
+        {
+            MainPage m = Helper.GotoPortfolioComp();
+            m.PleaseWait();
+            PortfolioComp p = m.Innerpage as PortfolioComp;
+            p.PleaseWait();
+
+            p.PageLoaded().Should().BeTrue();
+        }
+        [TestMethod]
+        public void T082_extendedAttributes()
+        {
+            MainPage m = Helper.GotoExtendedAttributesComp();
+            m.PleaseWait();
+            ExtendedAttributesComp ea = m.Innerpage as ExtendedAttributesComp;
+            ea.PleaseWait();
+
+            ea.PageLoaded().Should().BeTrue();
+        }
+        [TestMethod]
+        public void T083_lookupTables()
+        {
+            MainPage m = Helper.GotoLookUpTablesComp();
+            m.PleaseWait();
+            LookupTablesComp l = m.Innerpage as LookupTablesComp;
+            l.PleaseWait();
+
+            l.PageLoaded().Should().BeTrue();
         }
     }
 }
