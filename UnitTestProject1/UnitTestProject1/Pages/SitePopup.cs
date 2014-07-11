@@ -59,7 +59,7 @@ namespace UnitTestProject1.Pages
             
             Host.Wait.Until<IWebElement>((d) =>
             {
-                return d.FindElement(By.Id("editForm"));
+                return d.FindElement(By.XPath("//div[contains(@id, 'DataDivContainer')]"));
             });
         }
         public void Save()
