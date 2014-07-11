@@ -132,15 +132,16 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T006_Update_Site()
         {
+            string address = "paul test";
             MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
             SiteHomePage s = m.Innerpage as SiteHomePage;
             SitePopup sp =s.Click_Edit();
             sp.PleaseWait();
-            sp.address = "paul test";
+            sp.address = address;
             sp.Save();
             m.PleaseWait();
             m.Innerpage.PleaseWait();
-            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be("paul test");
+            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be(address);
             //System.Threading.Thread.Sleep(5000);
         }
 
@@ -198,9 +199,18 @@ namespace UnitTestProject1.Tests
         }
 
         [TestMethod]
-        public void T013_Update_Lease
+        public void T013_Update_Lease()
         {
-
+            string description = "sanity test";
+            MainPage m = Helper.GotoLeaseHomePage("GG Test Unit;GG Sites;Paul Property (23421424353250);Leases (1);Paul Property Leases (382395966)");
+            LeaseHomePage l = m.Innerpage as LeaseHomePage;
+            LeasePopup p = l.Click_Edit();
+            p.PleaseWait();
+            p.ctrDescription = description;
+            p.Save();
+            m.PleaseWait();
+            l.PleaseWait();
+            m.InnerPageFindText(By.Id("TXT_STATUS_DESCRIPTION")).Should().Be(description);
         }
 
 

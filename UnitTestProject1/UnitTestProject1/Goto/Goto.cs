@@ -93,6 +93,13 @@ namespace UnitTestProject1
             return main;
         }
 
+        public static MainPage GotoLeaseHomePage(String path)
+        {
+            MainPage main = GotoMainPage();
+            main.Innerpage = main.ClickNavTree<LeaseHomePage>(path);
+            return main;
+        }
+
         public static MainPage GotoResponsibilityComp()
         {
             MainPage mainpage = GotoAdminPage();
