@@ -141,7 +141,6 @@ namespace UnitTestProject1.Tests
                 admin.clickLink("Library Templates");
              /*   admin.Find.Element(By.Id("SectionHeader100")).Should().NotBeNull();*/
             
-
         }
         /*[TestMethod]
         public void createUser()
@@ -158,6 +157,20 @@ namespace UnitTestProject1.Tests
             UnitComp unit = (UnitComp)Helper.GotoUnitComp()
                                             .Innerpage;
             unit.clickAddOrgUnit("Site");
+        }
+        [TestMethod]
+        public void T004_Update_Search_Ring()
+        {
+            string address = "paul test";
+            MainPage m = Helper.GotoSearchRingHomePage("GG Test Unit;GG Search Rings;Test Ring (1357213)");
+            SearchRingHomePage s = m.Innerpage as SearchRingHomePage;
+            SearchRingPopup p = s.edit_sr();
+            p.PleaseWait();
+            p.srAddress = address;
+            p.Save();
+            m.PleaseWait();
+            s.PleaseWait();
+            m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be(address);
         }
 
 		[TestMethod]
@@ -256,6 +269,12 @@ namespace UnitTestProject1.Tests
                 .Should().BeTrue();
         }
 
+        [TestMethod]
+        public void T013_Update_Lease
+        {
+
+        }
+
 
         [TestMethod]
         public void T035_createUser()
@@ -327,6 +346,20 @@ namespace UnitTestProject1.Tests
            /* n2.ExistsInSubscriptionSection("Created").Should().BeTrue();
             n2.ExistsInSubscriptionSection("Documents").Should().BeTrue();*/
         }
+
+
+        [TestMethod]
+        public void T038_CreateProjectSchedule()
+        {
+            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            s.Add_Project("Sele Project3", "12/12/2015", "Active")
+            .ExistsInLeftNavProjectSection("Sele Project3").Should().BeTrue();
+            
+        }
+
+
         [TestMethod]
         public void T080_responsibilities()
         {
@@ -337,7 +370,89 @@ namespace UnitTestProject1.Tests
             r.PleaseWait();
 
             r.searchResponsibility("Site","xSiterra", 5);
+        }
 
+        [TestMethod]
+        public void leaseLeftNav()
+        {
+            Helper.GotoMainPage()
+                .clickLeaseLeftNav()
+                .Find.Element(By.Id("tdSetGlobalNavSites"))
+                .GetCssValue("background-position-x")
+                .Equals("-10px");
+        }
+
+        [TestMethod]
+        public void siteLeftNav()
+        {
+            Helper.GotoMainPage()
+                .clickSiteLeftNav()
+                .Find.Element(By.Id("tdSetGlobalNavSites"))
+                .GetCssValue("background-position-x")
+                .Should().Equals("-10px");
+            System.Threading.Thread.Sleep(3000);
+        }
+
+        [TestMethod]
+        public async Task CheckFlashDownload()
+        {
+            var downloadlink = Helper.GotoLandingPage().Click_Downloads().CheckFileDownload();
+
+            using (var client = new HttpClient())
+            {
+
+                //client.BaseAddress = new Uri(downloadlink);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
+                HttpResponseMessage response = await client.GetAsync(new Uri(downloadlink));
+
+                response.IsSuccessStatusCode.Should().BeTrue();
+            }
+        }
+
+        [TestMethod]
+        public void gotobrowse()
+        {
+            MainPage m = Helper.GotoMainPage()
+                .clickBrowseLeftNav();
+            m.ClickNavTree<SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
+            //System.Threading.Thread.Sleep(3000);
+            //m.Innerpage.
+        }
+
+        [TestMethod]
+        public void testAdminPage()
+        {
+            AdminComp admin = (AdminComp)Helper.GotoAdminPage()
+                .Innerpage;
+            admin.clickLink("Library Templates");
+            /*   admin.Find.Element(By.Id("SectionHeader100")).Should().NotBeNull();*/
+
+
+        }
+        /*[TestMethod]
+        public void createUser()
+        {
+            AdminPage admin = (AdminPage)Helper.GotoAdminPage()
+                                                .Innerpage;
+            admin.clickUsers();
+            admin.clickAddUser();
+
+        }*/
+        [TestMethod]
+        public void createOrgUnit()
+        {
+            UnitComp unit = (UnitComp)Helper.GotoUnitComp()
+                                            .Innerpage;
+            unit.clickAddOrgUnit("Site");
+        }
+
+        [TestMethod]
+        public void gotoToDoList()
+        {
+            Helper.GotoMainPage()
+                .Click_ToDoList_Link();
         }
         [TestMethod]
         public void T081_portfolio()

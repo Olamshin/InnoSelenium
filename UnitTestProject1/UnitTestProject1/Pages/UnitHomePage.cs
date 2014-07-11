@@ -34,24 +34,17 @@ namespace UnitTestProject1.Pages
             Browser.SwitchTo().Frame("MainFrame");
             Actions builder = new Actions(Browser);
             builder.MoveToElement(Find
-                .Element(By.XPath("//a[@id='btnContentSelector']//span/img[@src='skins/common/images/menu_arrow_down.gif']"))
-                ).Build().Perform();
-            //Find.Element(By.XPath("//table[@id='tblDynamicMenu1']/tbody/tr[@onclick='closeMenu(1,2);']"))
-              //  .Click();
+                .Element(By.XPath("//a[contains(@id, 'btnContentSelector')]//img[contains(@src,'menu_arrow_down.gif')]"))
+                ).MoveToElement(Find.Element(By.XPath("//tr[contains(@onclick, 'closeMenu(1,2)']"))).Click().Build().Perform();
             Browser.SwitchTo().DefaultContent();
             return this;
         }
 
-        public UnitHomePage Create_Search_Ring()
+        public SearchRingPopup Create_Search_Ring()
         {
             PleaseWait();
             Browser.SwitchTo().Frame("MainFrame");
-            Actions builder = new Actions(Browser);
-            builder.Click(
-            //System.Threading.Thread.Sleep(2000);
-            Find.Element(By.XPath("//div[@id=\"spanBtnAddChildren\"]/a[@onclick=\"addChildren();return false;\"]")));
-            Browser.SwitchTo().DefaultContent();
-            return this;
+            return Navigate.To<SearchRingPopup>(By.XPath("//a[contains(@onclick, 'addChildren()')]"));
         }
     }
 }

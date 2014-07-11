@@ -8,41 +8,44 @@ using OpenQA.Selenium.Interactions;
 using TestStack.Seleno.PageObjects.Actions;
 using OpenQA.Selenium.Support.UI;
 
+
 namespace UnitTestProject1.Pages
 {
-    public class SearchRingPopup : Page
+    public class LeasePopup : Page
     {
         private String handle;
 
-        public string srAddress
+        public string ctrName
         {
             set
             {
-                Execute.ActionOnLocator(By.Id("1190194"), e => { e.Clear(); e.SendKeys(value); });
-            }
-        }
-        public string srName
-        {
-            set
-            {
-                Execute.ActionOnLocator(By.Id("1190206"), e => { e.Clear(); e.SendKeys(value); });
-            }
-        }
-        public string srNumber
-        {
-            set
-            {
-                Execute.ActionOnLocator(By.Id("1190203"), e => { e.Clear(); e.SendKeys(value); });
+                Execute.ActionOnLocator(By.Id("TXT_NAME"), e => { e.Clear(); e.SendKeys(value); });
             }
         }
 
-        public SearchRingPopup()
+        public string ctrNumber
+        {
+            set
+            {
+                Execute.ActionOnLocator(By.Id("TXT_NO"), e => { e.Clear(); e.SendKeys(value); });
+            }
+        }
+
+        public string ctrDescription
+        {
+            set
+            {
+                Execute.ActionOnLocator(By.Id("TXT_STATUS_DESCRIPTION"), e => { e.Clear(); e.SendKeys(value); });
+            }
+        }
+
+        public LeasePopup()
         {
             foreach (string a in Host.Instance.Application.Browser.WindowHandles)
             {
                 if (!a.Equals(Host.mainWindowHandle))
                 {
-                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=702030400&ClassID=702000000"))
+                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("PageID=716030200&ClassID=716000000"))
                         handle = a;
                 }
             }
@@ -56,16 +59,17 @@ namespace UnitTestProject1.Pages
             {
                 return executor.ExecuteScript("return document.readyState").Equals("complete");
             });
-
+            
             Host.Wait.Until<IWebElement>((d) =>
             {
                 return d.FindElement(By.XPath("//div[contains(@id, 'DataDivContainer')]"));
             });
         }
+
         public void Save()
         {
             string temphandle = Browser.CurrentWindowHandle;
-            Find.Element(By.LinkText("Finish")).Click();
+            Find.Element(By.LinkText("Save")).Click();
             Host.Wait.Until<Boolean>((d) =>
             {
                 return !d.WindowHandles.Contains(temphandle);
@@ -74,15 +78,5 @@ namespace UnitTestProject1.Pages
             Browser.SwitchTo().DefaultContent();
         }
 
-        public SearchRingPopup select_type(string srType)
-        {
-            PleaseWait();
-
-            IWebElement dropDownListBox = Find.Element(By.Id("CMB_TYPE_ID"));
-            SelectElement clickThis = new SelectElement(dropDownListBox);
-            clickThis.SelectByText(srType);
-
-            return Navigate.To<SearchRingPopup>(By.LinkText("Next"));
-        }
     }
 }
