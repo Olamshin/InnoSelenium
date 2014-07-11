@@ -15,7 +15,7 @@ namespace UnitTestProject1.Pages
     {
         private String handle;
 
-        public string ctrName
+        private string ctrName
         {
             set
             {
@@ -23,7 +23,7 @@ namespace UnitTestProject1.Pages
             }
         }
 
-        public string ctrNumber
+        private string ctrNumber
         {
             set
             {
@@ -31,7 +31,7 @@ namespace UnitTestProject1.Pages
             }
         }
 
-        public string ctrDescription
+        private string ctrDescription
         {
             set
             {
@@ -64,6 +64,14 @@ namespace UnitTestProject1.Pages
             {
                 return d.FindElement(By.XPath("//div[contains(@id, 'DataDivContainer')]"));
             });
+        }
+
+        public LeasePopup Enter_Info(String name, String number, String description)
+        {
+            ctrName = name;
+            ctrNumber = number;
+            ctrDescription = description;
+            return this;
         }
 
         public void Save()

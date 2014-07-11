@@ -121,6 +121,7 @@
     <Compile Include="Pages\LeasePopup.cs" />
     <Compile Include="Pages\EventPopup.cs" />
     <Compile Include="Pages\IncidentPopup.cs" />
+    <Compile Include="Pages\ProjectHomePage.cs" />
     <Compile Include="Pages\ProjectPopup.cs" />
     <Compile Include="Pages\ResponsibilityComp.cs" />
     <Compile Include="Pages\SearchRingHomePage.cs" />

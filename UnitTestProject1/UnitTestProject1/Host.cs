@@ -124,7 +124,24 @@ namespace UnitTestProject1
             //SwitchOut();
         }
 
+        public T ClickObjInGrid<T>(String columnname, String value) where T : SiterraComponent, new()
+        {
+            T holder;
+            IWebElement elem = null;
+            ExistsInGrid(columnname, value, ref elem);
+            elem.Click();
+            holder = this.GetComponent<T>();
+            SwitchOut();
+            return holder;
+        }
+
         public Boolean ExistsInGrid(String columnname, String value)
+        {
+            IWebElement elem=null;
+            return ExistsInGrid(columnname, value, ref elem);
+        }
+
+        public Boolean ExistsInGrid(String columnname, String value, ref IWebElement elem)
         {
             int column_index = -1;
             IWebElement grid_table, grid_table_header;
@@ -207,6 +224,7 @@ namespace UnitTestProject1
             if (a.Text.Equals(value))
             {
                 //SwitchOut();
+                elem = a.FindElement(By.XPath("./a")); //get Parent element
                 return true;
             }
             else

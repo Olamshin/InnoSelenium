@@ -198,7 +198,18 @@ namespace UnitTestProject1.Tests
         }
 
         [TestMethod]
-        public void T013_Update_Lease
+        public void T012_AddLease2Site()
+        {
+            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            s.Add_Lease("sele", "", "This is a Selenium test")
+                .ExistsInLeaseSection("sele").Should().BeTrue();
+               
+        }
+
+        [TestMethod]
+        public void T013_Update_Lease()
         {
 
         }
@@ -285,6 +296,15 @@ namespace UnitTestProject1.Tests
             s.Add_Project("Sele Project3", "12/12/2015", "Active")
             .ExistsInLeftNavProjectSection("Sele Project3").Should().BeTrue();
             
+        }
+
+        [TestMethod]
+        public void T039_ChangeProjectDates()
+        {
+            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            s.Goto_Project("11200400").PleaseWait();
         }
 
 

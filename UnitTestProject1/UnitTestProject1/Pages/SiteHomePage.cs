@@ -97,6 +97,18 @@ namespace UnitTestProject1.Pages
             }
         }
 
+        private LeaseSection _leasesection;
+        private LeaseSection leaseSection
+        {
+            get
+            {
+                if (_leasesection == null)
+                { _leasesection = this.GetComponent<LeaseSection>(); }
+                _leasesection.Show();
+                return _leasesection;
+            }
+        }
+
 
         public override void PleaseWait()
         {
@@ -253,6 +265,13 @@ namespace UnitTestProject1.Pages
             return this;
         }
 
+        public ProjectHomePage Goto_Project(String project_no)
+        {
+            SwitchIn();
+            return projsummarySection.Click_Project(project_no);
+           
+        }
+
         public Boolean ExistsInProjectSummarySection(String name)
         {
             Boolean flag;
@@ -270,6 +289,25 @@ namespace UnitTestProject1.Pages
             SwitchOut();
             return flag;
         }
+
+        public SiteHomePage Add_Lease(String name, String number, String description)
+        {
+            SwitchIn();
+            leaseSection.Add_Lease().Enter_Info(name, number, description).Save();
+            SwitchOut();
+            return this;
+        }
+
+        public Boolean ExistsInLeaseSection(String name)
+        {
+            Boolean flag;
+            SwitchIn();
+            flag = leaseSection.ExistsInGrid("Name", name);
+            SwitchOut();
+            return flag;
+        }
+
+        //public 
 
         private class VendorSection : SectionComponent
         {
@@ -510,6 +548,13 @@ namespace UnitTestProject1.Pages
             {
                 Browser.SwitchTo().DefaultContent();
             }
+
+            public ProjectHomePage Click_Project( String value)
+            {
+               return ClickObjInGrid<ProjectHomePage>("Number", value);
+                
+            }
+            
         }
 
         private class LeftNavProjectSection : SectionComponent
@@ -538,6 +583,29 @@ namespace UnitTestProject1.Pages
             public ProjectPopup Add_Project()
             {
                 return Navigate.To<ProjectPopup>(By.XPath("//a[contains(@onclick,'addProject()')]"));
+            }
+        }
+
+        private class LeaseSection : SectionComponent
+        {
+            public LeaseSection()
+            {
+                section_id = "105";
+                grid_id = "716040100";
+            }
+            protected override void SwitchIn()
+            {
+                Browser.SwitchTo().Frame("MainFrame");
+            }
+
+            protected override void SwitchOut()
+            {
+                Browser.SwitchTo().DefaultContent();
+            }
+
+            public LeasePopup Add_Lease()
+            {
+                return Navigate.To<LeasePopup>(By.XPath("//a[contains(@onclick,'addLease()')]"));
             }
         }
     }
