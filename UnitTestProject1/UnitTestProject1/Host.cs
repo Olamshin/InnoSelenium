@@ -145,7 +145,7 @@ namespace UnitTestProject1
             catch
             {
                 //it must be a left nav grid
-                grid_table_header = grid_table.FindElement(By.XPath("./thead/tr[@id='GRID_TR_HEADER_"+grid_id+"']"));
+                grid_table_header = grid_table.FindElement(By.XPath("./thead/tr[@id='GRID_TR_HEADER_" + grid_id + "']"));
                 isLeftNavGrid = true;
             }
 
@@ -162,9 +162,15 @@ namespace UnitTestProject1
             }
 
             var grid_header_enumerator = grid_header.GetEnumerator();
-            for (int i = (isCheckBox ? 0 : -1); grid_header_enumerator.MoveNext(); i++)
+            for (int i = ((isCheckBox || isLeftNavGrid) ? 0 : -1); grid_header_enumerator.MoveNext(); i++)
             {
-                if (grid_header_enumerator.Current.Text.Equals(columnname))
+
+                if (!isLeftNavGrid && grid_header_enumerator.Current.Text.Equals(columnname))
+                {
+                    column_index = i;
+                    break;
+                }
+                else if (isLeftNavGrid && grid_header_enumerator.Current.GetAttribute("title").Equals(columnname))
                 {
                     column_index = i;
                     break;
@@ -176,11 +182,12 @@ namespace UnitTestProject1
                 Console.WriteLine("Column Does Not Exists");
                 return false;
             }
+
             grid_table_rows = grid_table.FindElements(By.XPath("./tbody/tr[@id='GRID_ROW']"));
             IEnumerable<IWebElement> grid_row = grid_table_rows.Where(row => row.Text.Contains(value));
             var grid_row_enum = grid_row.GetEnumerator();
 
-            string cell_path= isLeftNavGrid?"./td[contains(@class,'LeftNavGridCell')]":"./td[@class='Cell']";
+            string cell_path = isLeftNavGrid ? "./td[contains(@class,'LeftNavGridCell')]" : "./td[@class='Cell']";
             for (int i = 0; grid_row_enum.MoveNext(); i++)
             {
                 //Get all cells from the row
@@ -246,7 +253,7 @@ namespace UnitTestProject1
 
             if (elem != null)
             {
-                if(!elem.Displayed)
+                if (!elem.Displayed)
                 {
                     try
                     {

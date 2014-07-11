@@ -327,6 +327,20 @@ namespace UnitTestProject1.Tests
            /* n2.ExistsInSubscriptionSection("Created").Should().BeTrue();
             n2.ExistsInSubscriptionSection("Documents").Should().BeTrue();*/
         }
+
+
+        [TestMethod]
+        public void T038_CreateProjectSchedule()
+        {
+            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+
+            SiteHomePage s = m.Innerpage as SiteHomePage;
+            s.Add_Project("Sele Project3", "12/12/2015", "Active")
+            .ExistsInLeftNavProjectSection("Sele Project3").Should().BeTrue();
+            
+        }
+
+
         [TestMethod]
         public void T080_responsibilities()
         {

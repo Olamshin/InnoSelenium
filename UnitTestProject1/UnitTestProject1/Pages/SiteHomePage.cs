@@ -73,6 +73,31 @@ namespace UnitTestProject1.Pages
             }
         }
 
+        private ProjectSummarySection _projsummarysection;
+        private ProjectSummarySection projsummarySection
+        {
+            get
+            {
+                if (_projsummarysection == null)
+                { _projsummarysection = this.GetComponent<ProjectSummarySection>(); }
+                _projsummarysection.Show();
+                return _projsummarysection;
+            }
+        }
+
+        private LeftNavProjectSection _leftnavprojectsection;
+        private LeftNavProjectSection leftnavprojectSection
+        {
+            get
+            {
+                if (_leftnavprojectsection == null)
+                { _leftnavprojectsection = this.GetComponent<LeftNavProjectSection>(); }
+                _leftnavprojectsection.Show();
+                return _leftnavprojectsection;
+            }
+        }
+
+
         public override void PleaseWait()
         {
             var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
