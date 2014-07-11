@@ -73,6 +73,28 @@ namespace UnitTestProject1.Tests
 
         }
 
+        //[TestMethod]
+        //public void T003_Create_Search_Ring()
+        //{
+        //    string name = "Watirpruf";
+        //    string number = "Autobot";
+        //    string type = "Type A";
+        //    MainPage m = Helper.GotoUnitHomePage("GG Test Unit;GG Search Rings");
+        //    UnitHomePage u = m.Innerpage as UnitHomePage;
+        //    SearchRingPopup s = u.Create_Search_Ring();
+        //    s.select_type(type);
+        //    s.PleaseWait();
+        //    s.srName = name;
+        //    s.srNumber = number;
+        //    s.Save();
+        //    u.PleaseWait();
+        //    m.PleaseWait();
+            
+        //    m.AssertThatElements.Exist(By.LinkText(name));
+        //   // m.AssertThatElements.Exist(By.XPath("//table[@id='GRID_DATA_702040100']/"));
+        //   // m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
+        //}
+
         [TestMethod]
         public void leaseLeftNav()
         {
@@ -195,11 +217,9 @@ namespace UnitTestProject1.Tests
             sp.siteNumber = number; //replace with number
             sp.Save();
             m.PleaseWait();
-            m.Innerpage.PleaseWait();
-            string actual = m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
+            sr.PleaseWait();
             string expected = name + " - " + number;
-            //m.InnerPageFindText(By.CssSelector("table#TABLES_SITES a")).Should().Be("Selenium Site - WatirprufAutobots");
-            Assert.AreEqual(actual, expected);
+            m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]")).Should().Be(expected);
         }
         [TestMethod]
         public void T006_Update_Site()
