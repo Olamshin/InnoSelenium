@@ -73,6 +73,31 @@ namespace UnitTestProject1.Pages
             }
         }
 
+        private ProjectSummarySection _projsummarysection;
+        private ProjectSummarySection projsummarySection
+        {
+            get
+            {
+                if (_projsummarysection == null)
+                { _projsummarysection = this.GetComponent<ProjectSummarySection>(); }
+                _projsummarysection.Show();
+                return _projsummarysection;
+            }
+        }
+
+        private LeftNavProjectSection _leftnavprojectsection;
+        private LeftNavProjectSection leftnavprojectSection
+        {
+            get
+            {
+                if (_leftnavprojectsection == null)
+                { _leftnavprojectsection = this.GetComponent<LeftNavProjectSection>(); }
+                _leftnavprojectsection.Show();
+                return _leftnavprojectsection;
+            }
+        }
+
+
         public override void PleaseWait()
         {
             var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
@@ -206,7 +231,45 @@ namespace UnitTestProject1.Pages
             return flag;
         }
 
+        public SiteHomePage Add_Project(String name, String start_date, String status)
+        {
+            SwitchIn();
+            leftnavprojectSection
+                .Add_Project()
+                .Select_Template()
+                .Enter_Info(name, start_date, status)
+                .Save();
+            return this;
+        }
 
+        public SiteHomePage Add_Project(String template_name, String name, String start_date, String status)
+        {
+            SwitchIn();
+            leftnavprojectSection
+                .Add_Project()
+                .Select_Template(template_name)
+                .Enter_Info(name,start_date,status)
+                .Save();
+            return this;
+        }
+
+        public Boolean ExistsInProjectSummarySection(String name)
+        {
+            Boolean flag;
+            SwitchIn();
+            flag = projsummarySection.ExistsInGrid("Name", name);
+            SwitchOut();
+            return flag;
+        }
+
+        public Boolean ExistsInLeftNavProjectSection(String name)
+        {
+            Boolean flag;
+            SwitchIn();
+            flag = leftnavprojectSection.ExistsInGrid("Name", name);
+            SwitchOut();
+            return flag;
+        }
 
         private class VendorSection : SectionComponent
         {
@@ -423,6 +486,59 @@ namespace UnitTestProject1.Pages
                 }
             }
 
+        }
+
+        private class ProjectSummarySection : SectionComponent
+        {
+            public ProjectSummarySection()
+            {
+                section_id = "116";
+                grid_id = "703041300";
+            }
+            protected override void SwitchIn()
+            {
+                Browser.SwitchTo().Frame("MainFrame");
+            }
+
+            public ProjectSummarySection SwitchFromPopup()
+            {
+                SwitchIn();
+                return this;
+            }
+
+            protected override void SwitchOut()
+            {
+                Browser.SwitchTo().DefaultContent();
+            }
+        }
+
+        private class LeftNavProjectSection : SectionComponent
+        {
+            public LeftNavProjectSection()
+            {
+                section_id = "703000000";
+                grid_id = "703040400";
+            }
+            protected override void SwitchIn()
+            {
+                Browser.SwitchTo().Frame("MainFrame");
+            }
+
+            public LeftNavProjectSection SwitchFromPopup()
+            {
+                SwitchIn();
+                return this;
+            }
+
+            protected override void SwitchOut()
+            {
+                Browser.SwitchTo().DefaultContent();
+            }
+
+            public ProjectPopup Add_Project()
+            {
+                return Navigate.To<ProjectPopup>(By.XPath("//a[contains(@onclick,'addProject()')]"));
+            }
         }
     }
 }
