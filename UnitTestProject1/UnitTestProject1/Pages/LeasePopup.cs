@@ -18,6 +18,7 @@ namespace UnitTestProject1.Pages
         {
             set
             {
+                if(!value.Equals(""));
                 Execute.ActionOnLocator(By.Id("TXT_NAME"), e => { e.Clear(); e.SendKeys(value); });
             }
         }
@@ -26,6 +27,7 @@ namespace UnitTestProject1.Pages
         {
             set
             {
+                if (!value.Equals(""));
                 Execute.ActionOnLocator(By.Id("TXT_NO"), e => { e.Clear(); e.SendKeys(value); });
             }
         }
@@ -34,6 +36,7 @@ namespace UnitTestProject1.Pages
         {
             set
             {
+                if(!value.Equals(""));
                 Execute.ActionOnLocator(By.Id("TXT_STATUS_DESCRIPTION"), e => { e.Clear(); e.SendKeys(value); });
             }
         }

@@ -217,8 +217,7 @@ namespace UnitTestProject1.Tests
             LeaseHomePage l = m.Innerpage as LeaseHomePage;
             LeasePopup p = l.Click_Edit();
             p.PleaseWait();
-            p.ctrDescription = description;
-            p.Save();
+            p.Enter_Info("","",description).Save();
             m.PleaseWait();
             l.PleaseWait();
             m.InnerPageFindText(By.Id("TXT_STATUS_DESCRIPTION")).Should().Be(description);
