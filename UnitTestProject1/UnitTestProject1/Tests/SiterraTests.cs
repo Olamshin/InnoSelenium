@@ -235,17 +235,18 @@ namespace UnitTestProject1.Tests
             MainPage m = Helper.GotoLeaseHomePage("GG Test Unit;GG Sites;Paul Property (23421424353250);Leases (1);Paul Property Leases (382395966)");
             LeaseHomePage l = m.Innerpage as LeaseHomePage;
             PaymentPopup p = l.Add_Payment();
-            p.pmtName = name;
-            p.select_type(type);
-            p.pmtFromDate = firstDate;
-            p.pmtSecondDate = secondDate;
-            p.pmtToDate = toDate;
-            p.PleaseWait();
-            p.pmtAmount = amount;
+            p.Enter_Info(name, type, firstDate, secondDate, toDate, amount);
             p.Save();
             m.PleaseWait();
             l.PleaseWait();
             m.InnerPageFindText(By.PartialLinkText(name)).Should().Be(name);
+        }
+
+        [TestMethod]
+        public void T015_addAllocation2Lease()
+        {
+            MainPage m = Helper.GotoLeaseHomePage("GG Test Unit;GG Sites;Paul Property (23421424353250);Leases (1);Paul Property Leases (382395966)");
+            LeaseHomePage l = m.Innerpage as LeaseHomePage;
         }
 
 

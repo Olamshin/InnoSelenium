@@ -14,7 +14,7 @@ namespace UnitTestProject1.Pages
     {
         private String handle;
 
-        public string pmtName
+        private string pmtName
         {
             set
             {
@@ -22,7 +22,7 @@ namespace UnitTestProject1.Pages
             }
         }
 
-        public string pmtNumber
+        private string pmtNumber
         {
             set
             {
@@ -30,7 +30,7 @@ namespace UnitTestProject1.Pages
             }
         }
 
-        public string pmtFromDate
+        private string pmtFromDate
         {
             set
             {
@@ -38,7 +38,7 @@ namespace UnitTestProject1.Pages
             }
         }
 
-        public string pmtSecondDate
+        private string pmtSecondDate
         {
             set
             {
@@ -46,7 +46,7 @@ namespace UnitTestProject1.Pages
             }
         }
 
-        public string pmtToDate
+        private string pmtToDate
         {
             set
             {
@@ -54,7 +54,7 @@ namespace UnitTestProject1.Pages
             }
         }
 
-        public string pmtAmount
+        private string pmtAmount
         {
             set
             {
@@ -87,6 +87,19 @@ namespace UnitTestProject1.Pages
             {
                 return d.FindElement(By.XPath("//div[contains(@id, 'DataDivContainer')]"));
             });
+        }
+
+        public PaymentPopup Enter_Info(string name, string type, string firstDate, string secondDate, string toDate, string amount)
+        {
+            pmtName = name;
+            select_type(type);
+            pmtFromDate = firstDate;
+            pmtSecondDate = secondDate;
+            pmtToDate = toDate;
+            PleaseWait();
+            pmtAmount = amount;
+
+            return this;
         }
 
         public void Save()

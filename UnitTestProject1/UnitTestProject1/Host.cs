@@ -238,6 +238,7 @@ namespace UnitTestProject1
     public abstract class SectionComponent : GridComponent
     {
         private String _sectionid;
+        private IWebElement sectionElement;
         public string section_id
         {
             get
@@ -245,7 +246,10 @@ namespace UnitTestProject1
                 String idholder;
                 if (_sectionid == null) //object browser page
                 {
-                    idholder = Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]")).GetAttribute("id");
+                    if (sectionElement == null)
+                        sectionElement = Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]"));
+
+                    idholder = sectionElement.GetAttribute("id");
                     _sectionid = idholder.Replace("GRID_DATA_", ""); ;
                 }
                 return _sectionid;
@@ -253,6 +257,7 @@ namespace UnitTestProject1
             set
             {
                 _sectionid = value;
+                sectionElement = Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]"));
             }
         }
 
@@ -289,6 +294,11 @@ namespace UnitTestProject1
                 catch { }
             }
 
+        }
+
+        public IWebElement SectionSearchByXPath(string path)
+        {
+            return sectionElement.FindElement(By.XPath(path));
         }
     }
 
