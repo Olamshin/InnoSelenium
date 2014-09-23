@@ -14,7 +14,7 @@ namespace UnitTestProject1.Pages
     {
         private String handle;
 
-        public string address
+        public string Address
         {
             set
             {   
@@ -92,6 +92,22 @@ namespace UnitTestProject1.Pages
             return Navigate.To<SitePopup>(By.LinkText("Next"));
             //System.Threading.Thread.Sleep(6000);
             //return this;
+        }
+        public void Enter_Info(string type, string name, string number, string address)
+        {
+            select_type(type);
+            if (name != null) siteName = name;
+            if (number!= null) siteNumber = number;
+            if (address != null) Address = address;
+            Save();
+        }
+
+        public void Update_Info(string name, string number, string address)
+        {
+            if (name != null) siteName = name;
+            if (number != null) siteNumber = number;
+            if (address != null) Address = address;
+            Save();
         }
     }
 }

@@ -48,9 +48,11 @@ namespace UnitTestProject1.Pages
         }
         public SitePopup add_site()
         {
+            Actions builder = new Actions(Browser);
+            builder.MoveToElement(Find.Element(By.Id("MainMenuContainer"))).Build().Perform();
             SwitchIn();
-            //return Navigate.To<SitePopup>(By.XPath("//a[@onclick=\"addSite();\"]"));
-            return Navigate.To<SitePopup>(By.LinkText("Add"));
+            return Navigate.To<SitePopup>(By.XPath("//a[contains(@onclick, \"addSite();\")]"));
+            //return Navigate.To<SitePopup>(By.LinkText("Add"));
         }
         public SearchRingPopup edit_sr()
         {

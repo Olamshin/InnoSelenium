@@ -19,7 +19,10 @@ namespace UnitTestProject1.Pages
             get
             {
                 if (_vendorsection == null)
-                { _vendorsection = this.GetComponent<VendorSection>(); }
+                {
+                    _vendorsection = this.GetComponent<VendorSection>();
+                    _vendorsection.init();
+                }
                 _vendorsection.Show();
                 return _vendorsection;
             }
@@ -31,7 +34,10 @@ namespace UnitTestProject1.Pages
             get
             {
                 if (_assetsection == null)
-                { _assetsection = this.GetComponent<AssetSection>(); }
+                {
+                    _assetsection = this.GetComponent<AssetSection>();
+                    _assetsection.init();
+                }
                 _assetsection.Show();
                 return _assetsection;
             }
@@ -43,7 +49,10 @@ namespace UnitTestProject1.Pages
             get
             {
                 if (_incidentsection == null)
-                { _incidentsection = this.GetComponent<IncidentSection>(); }
+                {
+                    _incidentsection = this.GetComponent<IncidentSection>();
+                    _incidentsection.init();
+                }
                 _incidentsection.Show();
                 return _incidentsection;
             }
@@ -55,7 +64,10 @@ namespace UnitTestProject1.Pages
             get
             {
                 if (_eventsection == null)
-                { _eventsection = this.GetComponent<EventSection>(); }
+                {
+                    _eventsection = this.GetComponent<EventSection>();
+                    _eventsection.init();
+                }
                 _eventsection.Show();
                 return _eventsection;
             }
@@ -67,7 +79,10 @@ namespace UnitTestProject1.Pages
             get
             {
                 if (_notesection == null)
-                { _notesection = this.GetComponent<NoteSection>(); }
+                {
+                    _notesection = this.GetComponent<NoteSection>();
+                    _notesection.init();
+                }
                 _notesection.Show();
                 return _notesection;
             }
@@ -79,7 +94,10 @@ namespace UnitTestProject1.Pages
             get
             {
                 if (_projsummarysection == null)
-                { _projsummarysection = this.GetComponent<ProjectSummarySection>(); }
+                {
+                    _projsummarysection = this.GetComponent<ProjectSummarySection>();
+                    _projsummarysection.init();
+                }
                 _projsummarysection.Show();
                 return _projsummarysection;
             }
@@ -91,7 +109,10 @@ namespace UnitTestProject1.Pages
             get
             {
                 if (_leftnavprojectsection == null)
-                { _leftnavprojectsection = this.GetComponent<LeftNavProjectSection>(); }
+                {
+                    _leftnavprojectsection = this.GetComponent<LeftNavProjectSection>();
+                    _leftnavprojectsection.init();
+                }
                 _leftnavprojectsection.Show();
                 return _leftnavprojectsection;
             }
@@ -103,7 +124,10 @@ namespace UnitTestProject1.Pages
             get
             {
                 if (_leasesection == null)
-                { _leasesection = this.GetComponent<LeaseSection>(); }
+                {
+                    _leasesection = this.GetComponent<LeaseSection>();
+                    _leasesection.init();
+                }
                 _leasesection.Show();
                 return _leasesection;
             }
@@ -133,12 +157,13 @@ namespace UnitTestProject1.Pages
 
         private void SwitchIn()
         {
-            Host.Instance.Application.Browser.SwitchTo().Frame("MainFrame");
+            Browser.SwitchTo().DefaultContent();
+            Browser.SwitchTo().Frame("MainFrame");
         }
 
         private void SwitchOut()
         {
-            Host.Instance.Application.Browser.SwitchTo().DefaultContent();
+            Browser.SwitchTo().DefaultContent();
         }
 
         public SitePopup Click_Edit()
@@ -149,31 +174,25 @@ namespace UnitTestProject1.Pages
 
         public SiteHomePage Assign_Vendor(string vendor_no)
         {
-            SwitchIn();
-            vendorSection.Assign_Vendor()
-                .Vendor_Select_Button()
-                .Select_Object<VendorSection>(vendor_no, vendorSection)
-                .SwitchFromPopup()
-                .Submit_Vendor()
-                .PleaseWait();
-            SwitchOut();
+            VendorSection v = vendorSection;
+            v.Assign_Vendor().Vendor_Select_Button()
+            .Select_Object<VendorSection>(vendor_no, v)
+            .SwitchFromPopup()
+            .Submit_Vendor()
+            .PleaseWait();
             return this;
         }
 
         public Boolean ExistsInVendorSection(String vendor_no)
         {
             Boolean flag;
-            SwitchIn();
             flag = vendorSection.ExistsInGrid("Number", vendor_no);
-            SwitchOut();
             return flag;
         }
 
-        public SiteHomePage Add_Asset()
+        public SiteHomePage Add_Asset(string name)
         {
-            SwitchIn();
-            assetSection.Add_Asset().Select_Type().Save();
-            SwitchOut();
+            assetSection.Add_Asset().Select_Type().Enter_Name(name).Save();
             return this;
 
         }
@@ -181,48 +200,38 @@ namespace UnitTestProject1.Pages
         public Boolean ExistsInAssetSection(String asset_name)
         {
             Boolean flag;
-            SwitchIn();
             flag = assetSection.ExistsInGrid("Name", asset_name);
-            SwitchOut();
             return flag;
         }
 
         public SiteHomePage Add_Incident(string problem, string assigned2User)
         {
-            SwitchIn();
             incidentSection.Add_Incident()
                .Select_Type()
                .Enter_Info(problem, assigned2User)
                .Save();
-            SwitchOut();
             return this;
         }
 
         public Boolean ExistsInIncidentSection(String incident_problem)
         {
             Boolean flag;
-            SwitchIn();
             flag = incidentSection.ExistsInGrid("Problem", incident_problem);
-            SwitchOut();
             return flag;
         }
 
         public SiteHomePage Add_Event(string name, string due_date, string action_start_date, string responsible_group, string description)
         {
-            SwitchIn();
             eventSection.Add_Event()
-                .Enter_Info(name,due_date,action_start_date,responsible_group,description)
+                .Enter_Info(name, due_date, action_start_date, responsible_group, description)
                 .Save();
-            SwitchOut();
             return this;
         }
 
         public Boolean ExistsInEventSection(String event_label)
         {
             Boolean flag;
-            SwitchIn();
             flag = eventSection.ExistsInGrid("Event Label", event_label);
-            SwitchOut();
             return flag;
         }
 
@@ -238,7 +247,7 @@ namespace UnitTestProject1.Pages
         {
             Boolean flag;
             SwitchIn();
-            flag =  noteSection.ExistsInGrid("Subject", subject);
+            flag = noteSection.ExistsInGrid("Subject", subject);
             SwitchOut();
             return flag;
         }
@@ -260,7 +269,7 @@ namespace UnitTestProject1.Pages
             leftnavprojectSection
                 .Add_Project()
                 .Select_Template(template_name)
-                .Enter_Info(name,start_date,status)
+                .Enter_Info(name, start_date, status)
                 .Save();
             return this;
         }
@@ -269,7 +278,7 @@ namespace UnitTestProject1.Pages
         {
             SwitchIn();
             return projsummarySection.Click_Project(project_no);
-           
+
         }
 
         public Boolean ExistsInProjectSummarySection(String name)
@@ -313,11 +322,16 @@ namespace UnitTestProject1.Pages
         {
             public VendorSection()
             {
+
+            }
+            public void init()
+            {
                 section_id = "114";
                 grid_id = "727040300";
             }
             protected override void SwitchIn()
             {
+                Browser.SwitchTo().DefaultContent();
                 Browser.SwitchTo().Frame("MainFrame");
             }
 
@@ -334,28 +348,61 @@ namespace UnitTestProject1.Pages
 
             public VendorSection Assign_Vendor()
             {
+                int switched = 0;
+                try
+                {
+                    //if it cant find the element, look into yourself
+                    Find.Element(By.Id("PLACEHOLDER_" + grid_id));
+                }
+                catch
+                {
+                    SwitchIn();
+                    switched = 1;
+                }
                 Find.Element(By.XPath("//a[contains(@onclick,'addVendorResponsibility()')]")).Click();
+                if (switched == 1) SwitchOut();
                 return this;
             }
 
             public ObjectBrowserPage Vendor_Select_Button()
             {
+                SwitchIn();
                 return Navigate.To<ObjectBrowserPage>(By.XPath("//a[contains(@onclick,'openVendorOBB(-1)')]"));
             }
 
             public VendorSection Submit_Vendor()
             {
+                //IWebElement e = Find.Element(By.Id("DataDivContainer" + section_id))
+                //    .FindElement(By.XPath(".//input[contains(@onclick,'saveResponsibility(-1)')]"));
+                //System.Drawing.Point m = ((ILocatable)e).LocationOnScreenOnceScrolledIntoView;
+
+                //var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
+                //executor.ExecuteScript("window.scrollBy(0," + (m.Y + 100) + ");");
+                //e.Click();
+
                 Find.Element(By.XPath("//input[contains(@onclick,'saveResponsibility(-1)')]")).Click();
                 return this;
             }
 
             public VendorSection PleaseWait()
             {
+                int switched = 0;
+                try
+                {
+                    //if it cant find the element, look into yourself
+                    Find.Element(By.Id("PLACEHOLDER_" + grid_id));
+                }
+                catch
+                {
+                    SwitchIn();
+                    switched = 1;
+                }
                 Host.Wait.Until<Boolean>((d) =>
                 {
                     return !d.FindElement(By.Id("PLACEHOLDER_" + grid_id)).Displayed;
                     //return !d.FindElement(By.XPath("//input[contains(@onclick,'saveResponsibility(-1)')]")).Displayed;
                 });
+                if (switched == 1) SwitchOut();
                 return this;
             }
 
@@ -363,7 +410,7 @@ namespace UnitTestProject1.Pages
 
         private class AssetSection : SectionComponent
         {
-            public AssetSection()
+            public void init()
             {
                 section_id = "106";
                 grid_id = "711040100";
@@ -380,6 +427,7 @@ namespace UnitTestProject1.Pages
 
             public AssetPopup Add_Asset()
             {
+                SwitchIn();
                 return Navigate.To<AssetPopup>(By.XPath("//a[contains(@onclick,'addAssetFromSite(')]"));
 
             }
@@ -387,7 +435,7 @@ namespace UnitTestProject1.Pages
 
         private class IncidentSection : SectionComponent
         {
-            public IncidentSection()
+            public void init()
             {
                 section_id = "107";
                 grid_id = "705040100";
@@ -405,6 +453,7 @@ namespace UnitTestProject1.Pages
             public IncidentPopup Add_Incident()
             {
                 //Find.Element(By.XPath("//a[contains(@onclick,'addAssetFromSite(')]")).Click();
+                SwitchIn();
                 return Navigate.To<IncidentPopup>(By.XPath("//a[contains(@onclick,'addIncident()')]"));
 
             }
@@ -413,7 +462,7 @@ namespace UnitTestProject1.Pages
 
         private class EventSection : SectionComponent
         {
-            public EventSection()
+            public void init()
             {
                 section_id = "108";
                 grid_id = "706040100";
@@ -430,6 +479,7 @@ namespace UnitTestProject1.Pages
 
             public EventPopup Add_Event()
             {
+                SwitchIn();
                 return Navigate.To<EventPopup>(By.XPath("//a[contains(@onclick,'addEvent()')]"));
             }
 
@@ -449,7 +499,7 @@ namespace UnitTestProject1.Pages
                     return _notedialog;
                 }
             }
-            public NoteSection()
+            public void init()
             {
                 section_id = "103";
                 grid_id = "166040200";
@@ -528,7 +578,7 @@ namespace UnitTestProject1.Pages
 
         private class ProjectSummarySection : SectionComponent
         {
-            public ProjectSummarySection()
+            public void init()
             {
                 section_id = "116";
                 grid_id = "703041300";
@@ -549,17 +599,17 @@ namespace UnitTestProject1.Pages
                 Browser.SwitchTo().DefaultContent();
             }
 
-            public ProjectHomePage Click_Project( String value)
+            public ProjectHomePage Click_Project(String value)
             {
-               return ClickObjInGrid<ProjectHomePage>("Number", value);
-                
+                return ClickObjInGrid<ProjectHomePage>("Number", value);
+
             }
-            
+
         }
 
         private class LeftNavProjectSection : SectionComponent
         {
-            public LeftNavProjectSection()
+            public void init()
             {
                 section_id = "703000000";
                 grid_id = "703040400";
@@ -588,7 +638,7 @@ namespace UnitTestProject1.Pages
 
         private class LeaseSection : SectionComponent
         {
-            public LeaseSection()
+            public void init()
             {
                 section_id = "105";
                 grid_id = "716040100";

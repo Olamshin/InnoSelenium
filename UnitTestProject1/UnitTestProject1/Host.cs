@@ -37,9 +37,9 @@ namespace UnitTestProject1
             {
                 String idholder;
                 if (_gridid == null) //object browser page
-                {
+                {   
                     idholder = Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]")).GetAttribute("id");
-                    _gridid = idholder.Replace("GRID_DATA_", ""); ;
+                    _gridid = idholder.Replace("GRID_DATA_", "");
                 }
                 return _gridid;
             }
@@ -99,7 +99,7 @@ namespace UnitTestProject1
                 .Click();
             Host.Instance.Application.Browser.SwitchTo().Window(Host.mainWindowHandle); //Implement stack for handles
             SwitchOut();
-            System.Threading.Thread.Sleep(3000);
+            System.Threading.Thread.Sleep(1000);
             return this;
         }
 
@@ -109,19 +109,19 @@ namespace UnitTestProject1
             Find.Element(By.XPath("//a[contains(@onclick,'getGridByID(') and contains(@onclick,'.ApplySearch()')]"))
                 .Click();
             SwitchOut();
-            PleaseWaitForSearch();
+            //PleaseWaitForSearch();
             return this;
         }
 
         public void PleaseWaitForSearch()
         {
             System.Threading.Thread.Sleep(1500); //implement for the future
-            //SwitchIn();
+            SwitchIn();
             Host.Wait.Until<IWebElement>((d) =>
             {
                 return d.FindElement(By.Id("CHK_MATCH_WHOLE_" + grid_id));
             });
-            //SwitchOut();
+            SwitchOut();
         }
 
         public T ClickObjInGrid<T>(String columnname, String value) where T : SiterraComponent, new()
@@ -151,7 +151,7 @@ namespace UnitTestProject1
             ReadOnlyCollection<IWebElement> grid_header, grid_table_rows, grid_row_data;
             PleaseWaitForSearch();
 
-            //SwitchIn();
+            SwitchIn();
             //s=Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]//tbody//tr//td//a//G_VALUE[. = 'Bescoby']")).Text;
             grid_table = Find.Element(By.Id("GRID_DATA_" + grid_id));
             try
@@ -221,15 +221,16 @@ namespace UnitTestProject1
                 }
             }
 
+            if (a == null) { SwitchOut(); return false; }
             if (a.Text.Equals(value))
             {
-                //SwitchOut();
-                elem = a.FindElement(By.XPath("./a")); //get Parent element
+                SwitchOut();
+                //elem = a.FindElement(By.XPath("./a")); //get Parent element
                 return true;
             }
             else
             {
-                //SwitchOut();
+                SwitchOut();
                 return false;
             }
         }
@@ -267,22 +268,28 @@ namespace UnitTestProject1
             IWebElement elem = null;
             try
             {
+                SwitchIn();
                 elem = Find.Element(By.Id("DataDivContainer" + _sectionid));
             }
             catch
             {
-
+                SwitchOut();
+                elem = Find.Element(By.Id("DataDivContainer" + _sectionid));
             }
 
             if (elem != null)
             {
                 if (!elem.Displayed)
                 {
-                    try
-                    {
+                    //Delete Please!
+                    //try
+                    //{
                         Find.Element(By.Id("SectionHeader" + _sectionid)).Click();
-                    }
-                    catch { }
+                    //}
+                    //catch {
+                    //    SwitchIn();
+                    //    Find.Element(By.Id("SectionHeader" + _sectionid)).Click();
+                    //}
                 }
             }
             else
@@ -293,7 +300,7 @@ namespace UnitTestProject1
                 }
                 catch { }
             }
-
+            SwitchOut();
         }
 
         public IWebElement SectionSearchByXPath(string path)

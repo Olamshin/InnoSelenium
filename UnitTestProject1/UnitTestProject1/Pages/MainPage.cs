@@ -62,6 +62,10 @@ namespace UnitTestProject1.Pages
             tree.Click_Node(node_path);
             Innerpage = this.GetComponent<T>();
             Innerpage.PleaseWait();
+
+            Actions builder = new Actions(Browser);
+            builder.MoveToElement(Find.Element(By.Id("MainMenuContainer"))).Build().Perform();
+
             return Innerpage as T;
         }
 

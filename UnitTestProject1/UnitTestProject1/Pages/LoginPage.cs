@@ -64,7 +64,7 @@ namespace UnitTestProject1.Pages
 
             username = "admin_user";
             password = "Potato3$";
-            domain = "SMS";
+            domain = "Orbitel";
 
             return Click_Login();
             

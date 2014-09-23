@@ -14,11 +14,11 @@ namespace UnitTestProject1.Pages
     {
         private String handle;
 
-        public string name
+        public string Name
         {
             set
             {
-                Execute.ActionOnLocator(By.Name("TXT_NAME"), e => { e.Clear(); e.SendKeys(value); });
+                Execute.ActionOnLocator(By.Id("TXT_NAME"), e => { e.Clear(); e.SendKeys(value); });
             }
         }
 
@@ -49,6 +49,11 @@ namespace UnitTestProject1.Pages
             return Navigate.To<AssetPopup>(By.LinkText("Next"));
             //Find.Element(By.LinkText("Next")).Click();
             //System.Threading.Thread.Sleep(6000);
+        }
+        public AssetPopup Enter_Name(string name)
+        {
+            Name = name;
+            return this;
         }
 
         public void Save()

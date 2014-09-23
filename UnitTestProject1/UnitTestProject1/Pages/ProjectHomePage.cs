@@ -38,5 +38,10 @@ namespace UnitTestProject1.Pages
         {
             Host.Instance.Application.Browser.SwitchTo().DefaultContent();
         }
+
+        public ProjectHomePage Edit_Task()
+        {
+            return this;
+        }
     }
 }

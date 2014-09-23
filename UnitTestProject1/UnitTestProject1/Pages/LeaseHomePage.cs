@@ -106,8 +106,8 @@ namespace UnitTestProject1.Pages
 
             //public VendorSection Submit_Vendor()
             //{
-           //     Find.Element(By.XPath("//input[contains(@onclick,'saveResponsibility(-1)')]")).Click();
-           //     return this;
+            //     Find.Element(By.XPath("//input[contains(@onclick,'saveResponsibility(-1)')]")).Click();
+            //     return this;
             //}
 
             public PaymentSection PleaseWait()
@@ -157,10 +157,10 @@ namespace UnitTestProject1.Pages
                 Browser.SwitchTo().DefaultContent();
             }
 
-            public AllocationSection Add_Allocation(string type, string costcenter)
+
+            public AllocationSection Submit_Allocation(string type, string costcenter)
             {
                 SectionSearchByXPath("//a[contains(@onclick, 'addAllocation()')]").Click();
-                //Find.Element(By.XPath("//a[contains(@onclick,'addPayment()')]")).Click();
                 SwitchIn();
                 AllocDialog.Type = type;
                 AllocDialog.CostCenter = costcenter;
@@ -179,91 +179,45 @@ namespace UnitTestProject1.Pages
                 return this;
             }
 
-        }
 
-        private class AllocationPlaceHolder : PlaceHolderComp
-        {
-            public string Type
+            internal class AllocationPlaceHolder : PlaceHolderComp
             {
-                set
+                public string Type
                 {
-                    IWebElement dropDownListBox = Find.Element(By.Id("ALLOC_TYPE"));
-                    SelectElement clickThis = new SelectElement(dropDownListBox);
-                    clickThis.SelectByText(value);
-                }
-            }
-
-            public string CostCenter
-            {
-                set
-                {
-                    IWebElement dropDownListBox = Find.Element(By.Id("ALLOC_COST_CENTER_ID"));
-                    SelectElement clickThis = new SelectElement(dropDownListBox);
-                    clickThis.SelectByText(value);
-                }
-            }
-
-            public string CalculateBy
-            {
-                set
-                {
-                    IWebElement dropDownListBox = Find.Element(By.Id("ALLOC_CALC_TYPE"));
-                    SelectElement clickThis = new SelectElement(dropDownListBox);
-                    clickThis.SelectByText(value);
-                }
-            }
-
-            public string Percent
-            {
-                set
-                {
-                    Execute.ActionOnLocator(By.Name("ALLOC_SHARE"), e => { e.Clear(); e.SendKeys(value); });
-                }
-            }
-
-            public string Headcount
-            {
-                set
-                {
-                    Execute.ActionOnLocator(By.Name("ALLOC_HEADCOUNT"), e => { e.Clear(); e.SendKeys(value); });
-                }
-            }
-
-            public string AllocUtilization
-            {
-                set
-                {
-                    IWebElement dropDownListBox = Find.Element(By.Id("ALLOC_UTILIZATION"));
-                    SelectElement clickThis = new SelectElement(dropDownListBox);
-                    clickThis.SelectByText(value);
-                }
-            }
-
-            public string Description
-            {
-                set
-                {
-                    Execute.ActionOnLocator(By.Name("ALLOC_DESCRIPTION"), e => { e.Clear(); e.SendKeys(value); });
-                }
-            }
-
-            internal AllocationPlaceHolder Click_Save()
-            {
-                IWebElement elem = Find.Element(By.XPath("//a[contains(@onclick,'saveAllocation(')]"));
-                elem.Click();
-                Host.Wait.Until<Boolean>((d) =>
-                {
-                    try
+                    set
                     {
-                        return !elem.Displayed;
+                        SelectElement search_option = new SelectElement(Find.Element(By.Id("ALLOC_TYPE")));
+                        search_option.SelectByText(value);
                     }
-                    catch (OpenQA.Selenium.StaleElementReferenceException e)
+                }
+                public string CostCenter
+                {
+                    set
                     {
-                        return true;
+                        SelectElement search_option = new SelectElement(Find.Element(By.Id("ALLOC_COST_CENTER_ID")));
+                        search_option.SelectByText(value);
                     }
-                });
-                return this;
+                }
+                internal AllocationPlaceHolder Click_Save()
+                {
+                    IWebElement elem = Find.Element(By.XPath("//a[contains(@onclick,'saveAllocation(')]"));
+                    elem.Click();
+                    Host.Wait.Until<Boolean>((d) =>
+                    {
+                        try
+                        {
+                            return !elem.Displayed;
+                        }
+                        catch (OpenQA.Selenium.StaleElementReferenceException e)
+                        {
+                            return true;
+                        }
+                    });
+                    return this;
+                }
+
             }
+
         }
     }
 }

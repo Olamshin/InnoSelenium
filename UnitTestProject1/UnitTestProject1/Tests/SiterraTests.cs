@@ -16,16 +16,18 @@ namespace UnitTestProject1.Tests
     [TestClass]
     public class SiterraTests
     {
+        public const string Default_SearchRing="rberger_Unit_001;rberger_SR_001 (001001000)";
+        public const string Default_Site = "xSiterra;Public;Test Site Creation (12345678915)";
+
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
             Host.Instance = new SelenoHost();
             Host.Instance.Run(configure => configure
-            .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://apollo-test.siterra.com/"))
+            .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
             .WithRemoteWebDriver(() => BrowserFactory.InternetExplorer()));
             Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
-            Helper.GotoLandingPage().InnerLoginPage.Login().PleaseWait();
-            Host.InitialCookies = Host.Instance.Application.Browser.Manage().Cookies.AllCookies;
+            
             Host.mainWindowHandle = Host.Instance.Application.Browser.CurrentWindowHandle;
 
         }
@@ -33,11 +35,20 @@ namespace UnitTestProject1.Tests
         [TestInitialize]
         public void testInitialize()
         {
-            Host.Instance.Application.Browser.Manage().Cookies.DeleteAllCookies();
-            foreach (OpenQA.Selenium.Cookie cookie in Host.InitialCookies)
-            {
-                Host.Instance.Application.Browser.Manage().Cookies.AddCookie(cookie);
-            }
+            Helper.GotoLandingPage().InnerLoginPage.Login().PleaseWait();
+            //Host.Instance.Application.Browser.Manage().Cookies.DeleteAllCookies();
+            //foreach (OpenQA.Selenium.Cookie cookie in Host.InitialCookies)
+            //{
+            //    Host.Instance.Application.Browser.Manage().Cookies.AddCookie(cookie);
+            //}
+        }
+
+        [TestCleanup]
+        public void testCleanup()
+        {
+            Host.Instance.Application.Browser.SwitchTo().DefaultContent();
+            Host.Instance.Application.Browser.FindElement(By.LinkText("Log Off")).Click();
+            System.Threading.Thread.Sleep(1000);
         }
 
         [TestMethod]
@@ -49,18 +60,18 @@ namespace UnitTestProject1.Tests
 
                 page.InnerLoginPage.username = "admin_user";
                 page.InnerLoginPage.password = "Potato3$";
-                page.InnerLoginPage.domain = "SMS";
+                page.InnerLoginPage.domain = "Orbitel";
 
                 page.InnerLoginPage.Click_Login();
 
-                page.Title.Should().Contain("SMS");
+                page.Title.Should().Contain("Orbitel");
 
         }
 
         [TestMethod]
         public void T002_Login_Profile_URL()
         {
-            var page = Helper.GotoLandingPage("Samsonite");
+            var page = Helper.GotoLandingPage("Orbitel");
 
             page.PleaseWait();
 
@@ -69,7 +80,7 @@ namespace UnitTestProject1.Tests
 
             page.InnerLoginPage.Click_Login();
 
-            page.Title.Should().Contain("Samsonite");
+            page.Title.Should().Contain("Orbitel");
 
         }
 
@@ -98,8 +109,8 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T004_Update_Search_Ring()
         {
-            string address = "paul test";
-            MainPage m = Helper.GotoSearchRingHomePage("GG Test Unit;GG Search Rings;Test Ring (1357213)");
+            string address = "Update Search Ring " + DateTime.Now.ToString("s");
+            MainPage m = Helper.GotoSearchRingHomePage(Default_SearchRing);
             SearchRingHomePage s = m.Innerpage as SearchRingHomePage;
             SearchRingPopup p = s.edit_sr();
             p.PleaseWait();
@@ -113,33 +124,27 @@ namespace UnitTestProject1.Tests
 		[TestMethod]
         public void T005_Create_Site()
         {
-            string name = "Watirpruf";
-            string number = "Autobot";
+            string name = "Sanity";
+            string number = DateTime.Now.ToString("s");
             string type = "Type B";
-            MainPage m = Helper.GotoSearchRingHomePage("0Notify First Round;NPF Search Ring UStatus Changed (827349376)");
+            MainPage m = Helper.GotoSearchRingHomePage(Default_SearchRing);
             SearchRingHomePage sr = m.Innerpage as SearchRingHomePage;
             SitePopup sp = sr.add_site();
-            sp.select_type(type); //replace with type
-            sp.PleaseWait();
-            sp.siteName = name; //replace with name
-            sp.siteNumber = number; //replace with number
-            sp.Save();
+            sp.Enter_Info(type, name, number,null);
             m.PleaseWait();
             sr.PleaseWait();
             string expected = name + " - " + number;
-            m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]")).Should().Be(expected);
+            m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + " - " + number + "')]")).Should().Be(expected);
         }
 
         [TestMethod]
         public void T006_Update_Site()
         {
-            string address = "paul test";
-            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+            string address = "Sanity " + DateTime.Now.ToString("s");
+            MainPage m = Helper.GotoSiteHomePage(Default_Site);
             SiteHomePage s = m.Innerpage as SiteHomePage;
             SitePopup sp =s.Click_Edit();
-            sp.PleaseWait();
-            sp.address = address;
-            sp.Save();
+            sp.Update_Info(null, null, address);
             m.PleaseWait();
             m.Innerpage.PleaseWait();
             m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be(address);
@@ -149,41 +154,45 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T007_AssignVendor2Site()
         {
-            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+            string testVendor = "2569317";
+            MainPage m = Helper.GotoSiteHomePage(Default_Site);
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Assign_Vendor("2648188")
-            .ExistsInVendorSection("2648188").Should().BeTrue();
+            s.Assign_Vendor(testVendor)
+            .ExistsInVendorSection(testVendor).Should().BeTrue();
         }
 
         [TestMethod]
         public void T008_AddAsset2Site()
         {
-            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+            string testAsset = "Sanity" + DateTime.Now.ToString("s");
+            MainPage m = Helper.GotoSiteHomePage(Default_Site);
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Add_Asset()
-            .ExistsInAssetSection("New HVAC").Should().BeTrue();
+            s.Add_Asset(testAsset)
+            .ExistsInAssetSection(testAsset).Should().BeTrue();
         }
 
         [TestMethod]
         public void T009_AddIncident2Site()
         {
-            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+            string testProblem = "Sanity" + DateTime.Now.ToString("s"); ;
+            MainPage m = Helper.GotoSiteHomePage(Default_Site);
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Add_Incident("Yes it is a Problem", "Frederic Bottling")
-            .ExistsInIncidentSection("Yes it is a Problem").Should().BeTrue();
+            s.Add_Incident(testProblem, "Laith dahiyat")
+            .ExistsInIncidentSection(testProblem).Should().BeTrue();
         }
 
         [TestMethod]
         public void T010_AddEvent2Site()
         {
-            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+            string testName = "Sanity"+DateTime.Now.ToString("s");
+            MainPage m = Helper.GotoSiteHomePage(Default_Site);
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Add_Event("Selenium Test", "12/12/2015", "12/12/2015", "GROUP C", "Selenium0")
-                .ExistsInEventSection("Selenium Test").Should().BeTrue();
+            s.Add_Event(testName, "12/12/2015", "12/12/2015", "BM Group", "Selenium0")
+                .ExistsInEventSection(testName).Should().BeTrue();
             
         }
 
@@ -247,6 +256,24 @@ namespace UnitTestProject1.Tests
         {
             MainPage m = Helper.GotoLeaseHomePage("GG Test Unit;GG Sites;Paul Property (23421424353250);Leases (1);Paul Property Leases (382395966)");
             LeaseHomePage l = m.Innerpage as LeaseHomePage;
+        }
+
+        [TestMethod]
+        public void T015_createAllocation()
+        {
+            MainPage m = Helper.GotoLeaseHomePage("Denver;333 Easy Street (333);Leases (2);333 Easy Street Leases (333)");
+
+            LeaseHomePage s = m.Innerpage as LeaseHomePage;
+        }
+
+        [TestMethod]
+        public void T016_createOffset()
+        {
+            MainPage m = Helper.GotoLeaseHomePage("Denver;333 Easy Street (333);Leases (2);333 Easy Street Leases (333)");
+
+            LeaseHomePage s = m.Innerpage as LeaseHomePage;
+
+
         }
 
 
