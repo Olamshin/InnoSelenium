@@ -237,18 +237,14 @@ namespace UnitTestProject1.Pages
 
         public SiteHomePage Add_Note(string subject, string message)
         {
-            SwitchIn();
             noteSection.Add_Note(subject, message);
-            SwitchOut();
             return this;
         }
 
         public Boolean ExistsInNoteSection(String subject)
         {
             Boolean flag;
-            SwitchIn();
             flag = noteSection.ExistsInGrid("Subject", subject);
-            SwitchOut();
             return flag;
         }
 
@@ -372,13 +368,13 @@ namespace UnitTestProject1.Pages
 
             public VendorSection Submit_Vendor()
             {
-                //IWebElement e = Find.Element(By.Id("DataDivContainer" + section_id))
-                //    .FindElement(By.XPath(".//input[contains(@onclick,'saveResponsibility(-1)')]"));
+                IWebElement e = Find.Element(By.Id("DataDivContainer" + section_id))
+                    .FindElement(By.XPath(".//input[contains(@onclick,'saveResponsibility(-1)')]"));
                 //System.Drawing.Point m = ((ILocatable)e).LocationOnScreenOnceScrolledIntoView;
 
                 //var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
-                //executor.ExecuteScript("window.scrollBy(0," + (m.Y + 100) + ");");
-                //e.Click();
+                //executor.ExecuteScript("window.scrollBy(0," + -1*(m.Y + 100) + ");");
+                e.SendKeys(Keys.ArrowDown); // scrolling down becuase the SUbmit button hides behind the scoll bar
 
                 Find.Element(By.XPath("//input[contains(@onclick,'saveResponsibility(-1)')]")).Click();
                 return this;
@@ -512,10 +508,12 @@ namespace UnitTestProject1.Pages
 
             public NoteSection Add_Note(string subject, string message)
             {
+                SwitchIn();
                 Click_Note();
                 NoteDialog.subject = subject;
                 NoteDialog.message = message;
                 NoteDialog.Click_Save();
+                SwitchOut();
                 return this;
             }
 
@@ -565,7 +563,7 @@ namespace UnitTestProject1.Pages
                         {
                             return !elem.Displayed;
                         }
-                        catch (OpenQA.Selenium.StaleElementReferenceException e)
+                        catch
                         {
                             return true;
                         }

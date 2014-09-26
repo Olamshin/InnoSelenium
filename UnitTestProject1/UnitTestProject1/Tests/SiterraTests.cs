@@ -9,6 +9,7 @@ using OpenQA.Selenium.Interactions;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UnitTestProject1.Pages;
+using OpenQA.Selenium.Remote;
 
 
 namespace UnitTestProject1.Tests
@@ -16,25 +17,46 @@ namespace UnitTestProject1.Tests
     [TestClass]
     public class SiterraTests
     {
-        public const string Default_SearchRing="rberger_Unit_001;rberger_SR_001 (001001000)";
+        public const string Default_SearchRing = "xSiterra;Search Rings;Test SEARCH RING (1144307)";
         public const string Default_Site = "xSiterra;Public;Test Site Creation (12345678915)";
 
-        [ClassInitialize]
-        public static void ClassInit(TestContext context)
-        {
-            Host.Instance = new SelenoHost();
-            Host.Instance.Run(configure => configure
-            .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
-            .WithRemoteWebDriver(() => BrowserFactory.InternetExplorer()));
-            Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
-            
-            Host.mainWindowHandle = Host.Instance.Application.Browser.CurrentWindowHandle;
+        //[ClassInitialize]
+        //public static void ClassInit(TestContext context)
+        //{
+        //    Host.Instance = new SelenoHost();
+        //    Host.Instance.Run(configure => configure
+        //    .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
+        //    .WithRemoteWebDriver(() => BrowserFactory.InternetExplorer()));
+        //    Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
 
-        }
+        //    Host.mainWindowHandle = Host.Instance.Application.Browser.CurrentWindowHandle;
+
+        //}
 
         [TestInitialize]
         public void testInitialize()
         {
+            if (Host.Instance == null)
+            {
+                lock (Host.sync)
+                {
+                    DesiredCapabilities capability = DesiredCapabilities.InternetExplorer();
+                    Host.Instance = new SelenoHost();
+                    //Host.Instance.Run(configure => configure
+                    //.WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
+                    //.WithRemoteWebDriver(() => new RemoteWebDriver(new Uri("http://10.6.90.5:4444/wd/hub"),capability)));
+                    //Host.Instance.Run(configure => configure
+                    //    .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
+                    //    .WithRemoteWebDriver(() => BrowserFactory.InternetExplorer()));
+                    Host.Instance.Run(configure => configure.WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
+                        .WithRemoteWebDriver(() => new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), capability)));
+
+                    Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
+
+                    Host.mainWindowHandle = Host.Instance.Application.Browser.CurrentWindowHandle;
+                    Host.Instance.Application.Browser.Manage().Cookies.DeleteAllCookies();
+                }
+            }
             Helper.GotoLandingPage().InnerLoginPage.Login().PleaseWait();
             //Host.Instance.Application.Browser.Manage().Cookies.DeleteAllCookies();
             //foreach (OpenQA.Selenium.Cookie cookie in Host.InitialCookies)
@@ -46,25 +68,30 @@ namespace UnitTestProject1.Tests
         [TestCleanup]
         public void testCleanup()
         {
-            Host.Instance.Application.Browser.SwitchTo().DefaultContent();
-            Host.Instance.Application.Browser.FindElement(By.LinkText("Log Off")).Click();
-            System.Threading.Thread.Sleep(1000);
+            //try
+            //{
+            //    Host.Instance.Application.Browser.SwitchTo().DefaultContent();
+            //    Host.Instance.Application.Browser.FindElement(By.LinkText("Log Off")).Click();
+            //    //System.Threading.Thread.Sleep(1000);
+            //}
+            //catch { }
+            Host.Instance.Application.Browser.Quit();
         }
 
         [TestMethod]
         public void T001_Login()
         {
-                var page = Helper.GotoLandingPage();
+            var page = Helper.GotoLandingPage();
 
-                page.PleaseWait();
+            page.PleaseWait();
 
-                page.InnerLoginPage.username = "admin_user";
-                page.InnerLoginPage.password = "Potato3$";
-                page.InnerLoginPage.domain = "Orbitel";
+            page.InnerLoginPage.username = "admin_user";
+            page.InnerLoginPage.password = "Potato3$";
+            page.InnerLoginPage.domain = "Orbitel";
 
-                page.InnerLoginPage.Click_Login();
+            page.InnerLoginPage.Click_Login();
 
-                page.Title.Should().Contain("Orbitel");
+            page.Title.Should().Contain("Orbitel");
 
         }
 
@@ -100,7 +127,7 @@ namespace UnitTestProject1.Tests
         //    s.Save();
         //    u.PleaseWait();
         //    m.PleaseWait();
-            
+
         //    m.AssertThatElements.Exist(By.LinkText(name));
         //   // m.AssertThatElements.Exist(By.XPath("//table[@id='GRID_DATA_702040100']/"));
         //   // m.InnerPageFindText(By.XPath("//a[contains(@title, '" + name + "')]"));
@@ -120,8 +147,8 @@ namespace UnitTestProject1.Tests
             s.PleaseWait();
             m.InnerPageFindText(By.Id("TXT_STREET")).Should().Be(address);
         }
-        
-		[TestMethod]
+
+        [TestMethod]
         public void T005_Create_Site()
         {
             string name = "Sanity";
@@ -130,7 +157,7 @@ namespace UnitTestProject1.Tests
             MainPage m = Helper.GotoSearchRingHomePage(Default_SearchRing);
             SearchRingHomePage sr = m.Innerpage as SearchRingHomePage;
             SitePopup sp = sr.add_site();
-            sp.Enter_Info(type, name, number,null);
+            sp.Enter_Info(type, name, number, null);
             m.PleaseWait();
             sr.PleaseWait();
             string expected = name + " - " + number;
@@ -143,7 +170,7 @@ namespace UnitTestProject1.Tests
             string address = "Sanity " + DateTime.Now.ToString("s");
             MainPage m = Helper.GotoSiteHomePage(Default_Site);
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            SitePopup sp =s.Click_Edit();
+            SitePopup sp = s.Click_Edit();
             sp.Update_Info(null, null, address);
             m.PleaseWait();
             m.Innerpage.PleaseWait();
@@ -187,22 +214,22 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T010_AddEvent2Site()
         {
-            string testName = "Sanity"+DateTime.Now.ToString("s");
+            string testName = "Sanity" + DateTime.Now.ToString("s");
             MainPage m = Helper.GotoSiteHomePage(Default_Site);
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
             s.Add_Event(testName, "12/12/2015", "12/12/2015", "BM Group", "Selenium0")
                 .ExistsInEventSection(testName).Should().BeTrue();
-            
+
         }
 
         [TestMethod]
         public void T011_AddNote2Site()
         {
-            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+            MainPage m = Helper.GotoSiteHomePage(Default_Site);
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Add_Note("Sele Note","Go check your sele note")
+            s.Add_Note("Sele Note", "Go check your sele note")
                 .ExistsInNoteSection("Sele Note")
                 .Should().BeTrue();
         }
@@ -210,12 +237,12 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T012_AddLease2Site()
         {
-            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+            MainPage m = Helper.GotoSiteHomePage(Default_Site);
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
             s.Add_Lease("sele", "", "This is a Selenium test")
                 .ExistsInLeaseSection("sele").Should().BeTrue();
-               
+
         }
 
         [TestMethod]
@@ -226,7 +253,7 @@ namespace UnitTestProject1.Tests
             LeaseHomePage l = m.Innerpage as LeaseHomePage;
             LeasePopup p = l.Click_Edit();
             p.PleaseWait();
-            p.Enter_Info("","",description).Save();
+            p.Enter_Info("", "", description).Save();
             m.PleaseWait();
             l.PleaseWait();
             m.InnerPageFindText(By.Id("TXT_STATUS_DESCRIPTION")).Should().Be(description);
@@ -333,7 +360,7 @@ namespace UnitTestProject1.Tests
 
             uspu.addSubscription("Project", "Created", "xSiterra");
 
-            
+
             n.switchFocusToUserPage();
 
             UserSubscriptionsPopUp uspu2 = n.addNotifications();
@@ -345,8 +372,8 @@ namespace UnitTestProject1.Tests
             NewUserPage n2 = user.selectFirstUser();
 
             //Assert!
-           /* n2.ExistsInSubscriptionSection("Created").Should().BeTrue();
-            n2.ExistsInSubscriptionSection("Documents").Should().BeTrue();*/
+            /* n2.ExistsInSubscriptionSection("Created").Should().BeTrue();
+             n2.ExistsInSubscriptionSection("Documents").Should().BeTrue();*/
         }
 
         [TestMethod]
@@ -356,7 +383,7 @@ namespace UnitTestProject1.Tests
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
             s.Add_Project("Sele Project3", "12/12/2015", "Active")
-            .ExistsInLeftNavProjectSection("Sele Project3").Should().BeTrue();      
+            .ExistsInLeftNavProjectSection("Sele Project3").Should().BeTrue();
         }
 
         [TestMethod]
@@ -377,7 +404,7 @@ namespace UnitTestProject1.Tests
             ResponsibilityComp r = m.Innerpage as ResponsibilityComp;
             r.PleaseWait();
 
-            r.searchResponsibility("Site","xSiterra", 5);
+            r.searchResponsibility("Site", "xSiterra", 5);
         }
 
         [TestMethod]
@@ -412,7 +439,7 @@ namespace UnitTestProject1.Tests
 
             l.PageLoaded().Should().BeTrue();
         }
-		
+
         [TestMethod]
         public void T084_deactivateUser()
         {
@@ -427,26 +454,6 @@ namespace UnitTestProject1.Tests
 
         }
 
-        [TestMethod]
-        public void leaseLeftNav()
-        {
-            Helper.GotoMainPage()
-                .clickLeaseLeftNav()
-                .Find.Element(By.Id("tdSetGlobalNavSites"))
-                .GetCssValue("background-position-x")
-                .Equals("-10px");
-        }
-
-        [TestMethod]
-        public void siteLeftNav()
-        {
-            Helper.GotoMainPage()
-                .clickSiteLeftNav()
-                .Find.Element(By.Id("tdSetGlobalNavSites"))
-                .GetCssValue("background-position-x")
-                .Should().Equals("-10px");
-            System.Threading.Thread.Sleep(3000);
-        }
 
         [TestMethod]
         public async Task CheckFlashDownload()

@@ -154,7 +154,6 @@
     </Compile>
     <Compile Include="Pages\ResultsPage.cs" />
     <Compile Include="Pages\SearchPage.cs" />
-    <Compile Include="Tests\GoogleSearchTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\SiterraTests.cs" />
   </ItemGroup>
@@ -176,6 +175,9 @@
     <Content Include="chromedriver-license.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="IEDriverServer.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

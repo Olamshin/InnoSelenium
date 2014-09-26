@@ -103,8 +103,17 @@ namespace UnitTestProject1.Pages
         public MainPage clickBrowseLeftNav()
         {
             PleaseWait();
-            Find.Element(By.Id("tdSetGlobalNavBrowse")).Click();
+
+            Host.mouseMoveNClick(By.Id("tdSetGlobalNavBrowse"));//move mouse to left nav then click
+
+            System.Threading.Thread.Sleep(1000);
             this.tree = GetComponent<TreeSelection>();
+
+            if (Find.Element(By.Id("BtnGlobalNavPin")).GetAttribute("icon").Equals("skins/common/images/pin_out.gif"))
+            {
+                Find.Element(By.Id("BtnGlobalNavPin")).Click();// hold the left nav
+            }
+
             return this;
         }
 

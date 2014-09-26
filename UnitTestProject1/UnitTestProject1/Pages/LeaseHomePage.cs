@@ -208,7 +208,7 @@ namespace UnitTestProject1.Pages
                         {
                             return !elem.Displayed;
                         }
-                        catch (OpenQA.Selenium.StaleElementReferenceException e)
+                        catch
                         {
                             return true;
                         }
