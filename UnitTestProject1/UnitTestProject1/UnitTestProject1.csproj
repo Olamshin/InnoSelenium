@@ -125,6 +125,7 @@
     <Compile Include="Pages\EventPopup.cs" />
     <Compile Include="Pages\ExtendedAttributesComp.cs" />
     <Compile Include="Pages\IncidentPopup.cs" />
+    <Compile Include="Pages\ProjectEditSchedulePage.cs" />
     <Compile Include="Pages\ProjectHomePage.cs" />
     <Compile Include="Pages\ProjectPopup.cs" />
     <Compile Include="Pages\LookupTablesComp.cs" />
