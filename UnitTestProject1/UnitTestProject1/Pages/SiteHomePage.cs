@@ -250,7 +250,6 @@ namespace UnitTestProject1.Pages
 
         public SiteHomePage Add_Project(String name, String start_date, String status)
         {
-            SwitchIn();
             leftnavprojectSection
                 .Add_Project()
                 .Select_Template()
@@ -272,9 +271,7 @@ namespace UnitTestProject1.Pages
 
         public ProjectHomePage Goto_Project(String project_no)
         {
-            SwitchIn();
             return projsummarySection.Click_Project(project_no);
-
         }
 
         public Boolean ExistsInProjectSummarySection(String name)
@@ -289,26 +286,20 @@ namespace UnitTestProject1.Pages
         public Boolean ExistsInLeftNavProjectSection(String name)
         {
             Boolean flag;
-            SwitchIn();
             flag = leftnavprojectSection.ExistsInGrid("Name", name);
-            SwitchOut();
             return flag;
         }
 
         public SiteHomePage Add_Lease(String name, String number, String description)
         {
-            SwitchIn();
             leaseSection.Add_Lease().Enter_Info(name, number, description).Save();
-            SwitchOut();
             return this;
         }
 
         public Boolean ExistsInLeaseSection(String name)
         {
             Boolean flag;
-            SwitchIn();
             flag = leaseSection.ExistsInGrid("Name", name);
-            SwitchOut();
             return flag;
         }
 
@@ -374,7 +365,7 @@ namespace UnitTestProject1.Pages
 
                 //var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
                 //executor.ExecuteScript("window.scrollBy(0," + -1*(m.Y + 100) + ");");
-                e.SendKeys(Keys.ArrowDown); // scrolling down becuase the SUbmit button hides behind the scoll bar
+                e.SendKeys(Keys.ArrowDown); // scrolling down becuase the Submit button hides behind the scoll bar
 
                 Find.Element(By.XPath("//input[contains(@onclick,'saveResponsibility(-1)')]")).Click();
                 return this;
@@ -600,7 +591,6 @@ namespace UnitTestProject1.Pages
             public ProjectHomePage Click_Project(String value)
             {
                 return ClickObjInGrid<ProjectHomePage>("Number", value);
-
             }
 
         }
@@ -630,6 +620,7 @@ namespace UnitTestProject1.Pages
 
             public ProjectPopup Add_Project()
             {
+                SwitchIn();
                 return Navigate.To<ProjectPopup>(By.XPath("//a[contains(@onclick,'addProject()')]"));
             }
         }
@@ -653,6 +644,7 @@ namespace UnitTestProject1.Pages
 
             public LeasePopup Add_Lease()
             {
+                SwitchIn();
                 return Navigate.To<LeasePopup>(By.XPath("//a[contains(@onclick,'addLease()')]"));
             }
         }

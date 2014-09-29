@@ -10,7 +10,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace UnitTestProject1.Pages
 {
-    public class ProjectPopup :Page
+    public class ProjectPopup : Page
     {
         private String handle;
 
@@ -59,7 +59,7 @@ namespace UnitTestProject1.Pages
             SelectElement template_option = new SelectElement(Find.Element(By.Id("CMB_TEMPLATE_ID")));
             foreach (IWebElement elem in template_option.Options)
             {
-                if(!elem.GetAttribute("value").Equals("-1"))
+                if (!elem.GetAttribute("value").Equals("-1"))
                 {
                     template_option.SelectByValue(elem.GetAttribute("value"));
                     break;
@@ -78,9 +78,9 @@ namespace UnitTestProject1.Pages
 
         public ProjectPopup Enter_Info(String name, String start_date, String status)
         {
-            Name = name;
-            Start_date = start_date;
-            Status = status;
+            if (name != null) Name = name;
+            if (start_date != null) Start_date = start_date;
+            if (status != null) Status = status;
             return this;
         }
 
