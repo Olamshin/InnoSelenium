@@ -83,6 +83,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="TestStack.BDDfy">
@@ -118,6 +119,8 @@
     <Compile Include="Host.cs" />
     <Compile Include="Pages\AdminComp.cs" />
     <Compile Include="Pages\AssetPopup.cs" />
+    <Compile Include="Pages\ImportPage.cs" />
+    <Compile Include="Pages\ImportPopup.cs" />
     <Compile Include="Pages\OffsetPopup.cs" />
     <Compile Include="Pages\PaymentPopup.cs" />
     <Compile Include="Pages\LeasePopup.cs" />

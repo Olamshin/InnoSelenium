@@ -41,10 +41,10 @@ namespace UnitTestProject1
         {
             return Host.Instance.NavigateToInitialPage<MainPage>("/gisapi.dll?do=output&pageid=1032000&classid=1000000&objectid=1");
         }
-		
-		public static MainPage GotoUnitComp()
+
+        public static MainPage GotoUnitComp()
         {
-            MainPage mainpage = GotoAdminPage(); 
+            MainPage mainpage = GotoAdminPage();
 
             AdminComp a = (AdminComp)mainpage.Innerpage;
             a.clickUnit();
@@ -66,11 +66,32 @@ namespace UnitTestProject1
             return mainpage;
         }
 
-       /* public static MainPage GotoSearchHomePage()
+        public static MainPage GotoImportPage()
         {
             MainPage main = GotoMainPage();
-            return main.ClickNavTree("AD PRM Test Unit;MSTR_Test");
-        }*/
+
+            OpenQA.Selenium.Interactions.Actions builder =
+                new OpenQA.Selenium.Interactions.Actions(Host.Instance.Application.Browser);
+            builder.MoveToElement(Host.Instance.Application.Browser.FindElement(By.LinkText("Tools")))
+                .Click().MoveByOffset(0,10).Build().Perform();
+
+            builder.MoveToElement(Host.Instance.Application.Browser.FindElement(By.XPath("//table[contains(@id,'tblDynamicMenu')]/tbody/tr/td[text()='Import / Export']")))
+                .Click().MoveByOffset(10,0).Build().Perform();
+
+            builder.MoveToElement(Host.Instance.Application.Browser.FindElement(By.XPath("//table[contains(@id,'tblDynamicMenu')]/tbody/tr/td[text()='Import']")))
+            .Click()
+            .Build().Perform();
+
+            main.Innerpage = main.GetComponent<ImportPage>();
+            main.Innerpage.PleaseWait();
+            return main;
+        }
+
+        /* public static MainPage GotoSearchHomePage()
+         {
+             MainPage main = GotoMainPage();
+             return main.ClickNavTree("AD PRM Test Unit;MSTR_Test");
+         }*/
 
         public static MainPage GotoSiteHomePage(String path)
         {
@@ -78,7 +99,14 @@ namespace UnitTestProject1
             main.Innerpage = main.ClickNavTree<SiteHomePage>(path);
             return main;
         }
-        
+
+        public static MainPage GotoProjectHomePage(String path)
+        {
+            MainPage main = GotoMainPage();
+            main.Innerpage = main.ClickNavTree<ProjectHomePage>(path);
+            return main;
+        }
+
         public static MainPage GotoSearchRingHomePage(String path)
         {
             MainPage main = GotoMainPage();

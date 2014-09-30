@@ -19,7 +19,8 @@ namespace UnitTestProject1.Tests
     {
         public const string Default_SearchRing = "xSiterra;Search Rings;Test SEARCH RING (1144307)";
         public const string Default_Site = "xSiterra;Public;Test Site Creation (12345678915)";
-
+        public const string Default_Lease = "xSiterra;Search Rings;Test SEARCH RING (1144307);Test Site (1251608);Leases;New Lease (1071114)";
+        public const string Default_Project = "xSiterra;Search Rings;Test SEARCH RING (1144307);Projects;Search Ring Evaluation (10098810)";
         //[ClassInitialize]
         //public static void ClassInit(TestContext context)
         //{
@@ -45,11 +46,11 @@ namespace UnitTestProject1.Tests
                     //Host.Instance.Run(configure => configure
                     //.WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
                     //.WithRemoteWebDriver(() => new RemoteWebDriver(new Uri("http://10.6.90.5:4444/wd/hub"),capability)));
-                    //Host.Instance.Run(configure => configure
-                    //    .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
-                    //    .WithRemoteWebDriver(() => BrowserFactory.InternetExplorer()));
-                    Host.Instance.Run(configure => configure.WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
-                        .WithRemoteWebDriver(() => new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), capability)));
+                    Host.Instance.Run(configure => configure
+                        .WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
+                        .WithRemoteWebDriver(() => BrowserFactory.InternetExplorer()));
+                    //Host.Instance.Run(configure => configure.WithWebServer(new TestStack.Seleno.Configuration.WebServers.InternetWebServer("https://develop-ci.siterra.com/"))
+                    //    .WithRemoteWebDriver(() => new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), capability)));
 
                     Host.Wait = new OpenQA.Selenium.Support.UI.WebDriverWait(Host.Instance.Application.Browser, TimeSpan.FromSeconds(15));
 
@@ -226,34 +227,36 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T011_AddNote2Site()
         {
+            string testNote = "Sanity Note" + DateTime.Now.ToString("s");
             MainPage m = Helper.GotoSiteHomePage(Default_Site);
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Add_Note("Sele Note", "Go check your sele note")
-                .ExistsInNoteSection("Sele Note")
+            s.Add_Note(testNote, "Go check your sele note")
+                .ExistsInNoteSection(testNote)
                 .Should().BeTrue();
         }
 
         [TestMethod]
         public void T012_AddLease2Site()
         {
+            string testLease = "Sanity Lease" + DateTime.Now.ToString("s");
             MainPage m = Helper.GotoSiteHomePage(Default_Site);
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Add_Lease("sele", "", "This is a Selenium test")
-                .ExistsInLeaseSection("sele").Should().BeTrue();
+            s.Add_Lease(testLease, null, "This is a Selenium test")
+                .ExistsInLeaseSection(testLease).Should().BeTrue();
 
         }
 
         [TestMethod]
         public void T013_Update_Lease()
         {
-            string description = "sanity test";
-            MainPage m = Helper.GotoLeaseHomePage("GG Test Unit;GG Sites;Paul Property (23421424353250);Leases (1);Paul Property Leases (382395966)");
+            string description = "Sanity Desc."+ DateTime.Now.ToString("s");
+            MainPage m = Helper.GotoLeaseHomePage(Default_Lease);
             LeaseHomePage l = m.Innerpage as LeaseHomePage;
             LeasePopup p = l.Click_Edit();
             p.PleaseWait();
-            p.Enter_Info("", "", description).Save();
+            p.Enter_Info(null, null, description).Save();
             m.PleaseWait();
             l.PleaseWait();
             m.InnerPageFindText(By.Id("TXT_STATUS_DESCRIPTION")).Should().Be(description);
@@ -262,13 +265,13 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T014_createPayment()
         {
-            string name = "Sanity Rent";
+            string name = "Sanity Rent" + DateTime.Now.ToString("s");
             string type = "Rent";
             string firstDate = "07/11/2014";
             string secondDate = "08/11/2014";
             string toDate = "06/10/2015";
             string amount = "1000";
-            MainPage m = Helper.GotoLeaseHomePage("GG Test Unit;GG Sites;Paul Property (23421424353250);Leases (1);Paul Property Leases (382395966)");
+            MainPage m = Helper.GotoLeaseHomePage(Default_Lease);
             LeaseHomePage l = m.Innerpage as LeaseHomePage;
             PaymentPopup p = l.Add_Payment();
             p.Enter_Info(name, type, firstDate, secondDate, toDate, amount);
@@ -281,7 +284,7 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T015_addAllocation2Lease()
         {
-            MainPage m = Helper.GotoLeaseHomePage("GG Test Unit;GG Sites;Paul Property (23421424353250);Leases (1);Paul Property Leases (382395966)");
+            MainPage m = Helper.GotoLeaseHomePage(Default_Lease);
             LeaseHomePage l = m.Innerpage as LeaseHomePage;
         }
 
@@ -379,20 +382,41 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T038_CreateProjectSchedule()
         {
-            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+            string testProject = "Sanity" + DateTime.Now.ToString("s");
+            MainPage m = Helper.GotoSiteHomePage(Default_Site);
 
             SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Add_Project("Sele Project3", "12/12/2015", "Active")
-            .ExistsInLeftNavProjectSection("Sele Project3").Should().BeTrue();
+            s.Add_Project(testProject, "12/12/2015", "Active")
+            .ExistsInLeftNavProjectSection(testProject).Should().BeTrue();
         }
 
         [TestMethod]
         public void T039_ChangeProjectDates()
         {
-            MainPage m = Helper.GotoSiteHomePage("Denver;333 Easy Street (333)");
+            string testDate = DateTime.Now.ToString("d");
+            MainPage m = Helper.GotoProjectHomePage(Default_Project);
 
-            SiteHomePage s = m.Innerpage as SiteHomePage;
-            s.Goto_Project("11200400").PleaseWait();
+            ProjectHomePage p = m.Innerpage as ProjectHomePage;
+            p.Goto_Edit_Schedule().Edit_Task("1.0",ProjectEditSchedulePage.TaskColumns.Baseline, "12/05/2015")
+                .Edit_Task("1.0", ProjectEditSchedulePage.TaskColumns.Duration, "2")
+                .Edit_Task("1.0",ProjectEditSchedulePage.TaskColumns.Manual, testDate)
+                .Commit_Changes()
+                .Compare_Date("1.0", ProjectEditSchedulePage.TaskColumns.Completion, testDate).Should().BeTrue();
+
+        }
+
+        [TestMethod]
+        public void T079_Import()
+        {
+            MainPage m = Helper.GotoImportPage();
+            ImportPage i = m.Innerpage as ImportPage;
+            i.Add_Import()
+                .Enter_Info("Sanity" + DateTime.Now.ToString("s"), "Unit", "CSV", "Insert", @"C:\Automation\automation\siterra_plus\2.5.1\data\import\Unit Import.csv")
+                .Save()
+                .Select_Process("import")
+                .Execute_Import();
+            System.Threading.Thread.Sleep(3000);
+            
         }
 
         [TestMethod]
@@ -471,23 +495,6 @@ namespace UnitTestProject1.Tests
 
                 response.IsSuccessStatusCode.Should().BeTrue();
             }
-        }
-
-        [TestMethod]
-        public void gotobrowse()
-        {
-            MainPage m = Helper.GotoMainPage()
-                .clickBrowseLeftNav();
-            m.ClickNavTree<SiteHomePage>("Amcknight;Site;New Site (SiteNumber)");
-            //System.Threading.Thread.Sleep(3000);
-            //m.Innerpage.
-        }
-
-        [TestMethod]
-        public void gotoToDoList()
-        {
-            Helper.GotoMainPage()
-                .Click_ToDoList_Link();
         }
     }
 }
