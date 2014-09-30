@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{564AA2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{598D75FA-E0C4-4992-B485-973D61A84795}"
 	ProjectSection(SolutionItems) = preProject
-		TestSettings1.testsettings = TestSettings1.testsettings
+		mine.testsettings = mine.testsettings
 	EndProjectSection
 EndProject
 Global
