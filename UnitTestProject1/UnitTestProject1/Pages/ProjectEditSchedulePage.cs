@@ -24,23 +24,23 @@ namespace UnitTestProject1.Pages
 
         public enum TaskColumns
         {
-            Milestone=1,
-            Lock=2,
-            Forecast=3,
-            Baseline=4,
-            Manual=5,
-            Completion=6,
-            Duration=7,
-            Predecessor=8
+            Milestone = 1,
+            Lock = 2,
+            Forecast = 3,
+            Baseline = 4,
+            Manual = 5,
+            Completion = 6,
+            Duration = 7,
+            Predecessor = 8
         }
         Dictionary<int, string> dict =
         new Dictionary<int, string>() { 
-            {2,"CHK_IS_LOCKED_"},
-            {3,"TXT_PLANNED_DATE_"},
+            {2, "CHK_IS_LOCKED_"},
+            {3, "TXT_PLANNED_DATE_"},
             {4, "TXT_REVISED_DATE_"},
             {5, "TXT_EXTERNAL_DATE_"},
-            {6,"LBL_DISPLAY_DATE_"},
-            {7,"TXT_DURATION_"}
+            {6, "LBL_DISPLAY_DATE_"},
+            {7, "TXT_DURATION_"}
         };
 
         public override void PleaseWait()
@@ -91,7 +91,7 @@ namespace UnitTestProject1.Pages
         }
 
 
-        public ProjectEditSchedulePage Edit_Task(string tasknumber, TaskColumns t,string date)
+        public ProjectEditSchedulePage Edit_Task(string tasknumber, TaskColumns t, string date)
         {
             string task_id = null;
             task_id = getTaskID(tasknumber);
@@ -112,14 +112,14 @@ namespace UnitTestProject1.Pages
             return this;
         }
 
-        public Boolean Compare_Completion_Date(string tasknumber, string assertdate)
+        public Boolean Compare_Date(string tasknumber, TaskColumns t, string assertdate)
         {
             string task_id = null;
             task_id = getTaskID(tasknumber);
             Boolean flag;
 
             SwitchIn();
-            string temp = Find.Element(By.Id("LBL_DISPLAY_DATE_" + task_id)).Text.Trim();
+            string temp = Find.Element(By.Id(dict[(int)t] + task_id)).Text.Trim();
             DateTime d = Convert.ToDateTime(temp);
             DateTime a = Convert.ToDateTime(assertdate);
             if (d == a)
