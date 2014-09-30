@@ -18,8 +18,8 @@ namespace UnitTestProject1.Pages
         {
             set
             {
-                if(!value.Equals(""))
-                Execute.ActionOnLocator(By.Id("TXT_NAME"), e => { e.Clear(); e.SendKeys(value); });
+                if (!value.Equals(""))
+                    Execute.ActionOnLocator(By.Id("TXT_NAME"), e => { e.Clear(); e.SendKeys(value); });
             }
         }
 
@@ -28,7 +28,7 @@ namespace UnitTestProject1.Pages
             set
             {
                 if (!value.Equals(""))
-                Execute.ActionOnLocator(By.Id("TXT_NO"), e => { e.Clear(); e.SendKeys(value); });
+                    Execute.ActionOnLocator(By.Id("TXT_NO"), e => { e.Clear(); e.SendKeys(value); });
             }
         }
 
@@ -36,8 +36,8 @@ namespace UnitTestProject1.Pages
         {
             set
             {
-                if(!value.Equals(""))
-                Execute.ActionOnLocator(By.Id("TXT_STATUS_DESCRIPTION"), e => { e.Clear(); e.SendKeys(value); });
+                if (!value.Equals(""))
+                    Execute.ActionOnLocator(By.Id("TXT_STATUS_DESCRIPTION"), e => { e.Clear(); e.SendKeys(value); });
             }
         }
 
@@ -61,7 +61,7 @@ namespace UnitTestProject1.Pages
             {
                 return executor.ExecuteScript("return document.readyState").Equals("complete");
             });
-            
+
             Host.Wait.Until<IWebElement>((d) =>
             {
                 return d.FindElement(By.XPath("//div[contains(@id, 'DataDivContainer')]"));
@@ -70,9 +70,9 @@ namespace UnitTestProject1.Pages
 
         public LeasePopup Enter_Info(String name, String number, String description)
         {
-            ctrName = name;
-            ctrNumber = number;
-            ctrDescription = description;
+            if (name != null) ctrName = name;
+            if (number != null) ctrNumber = number;
+            if (description != null) ctrDescription = description;
             return this;
         }
 
