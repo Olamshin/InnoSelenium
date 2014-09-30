@@ -19,7 +19,10 @@ namespace UnitTestProject1.Pages
             get
             {
                 if (_paymentsection == null)
-                { _paymentsection = this.GetComponent<PaymentSection>(); }
+                {
+                    _paymentsection = this.GetComponent<PaymentSection>();
+                    _paymentsection.init();
+                }
                 _paymentsection.Show();
                 return _paymentsection;
             }
@@ -63,16 +66,15 @@ namespace UnitTestProject1.Pages
 
         public PaymentPopup Add_Payment()
         {
-            SwitchIn();
             //return Navigate.To<PaymentPopup>(By.XPath("//a[contains(@onclick, 'addPayment')]"));
             return paymentSection.Add_Payment();
         }
 
         private class PaymentSection : SectionComponent
         {
-            public PaymentSection()
+            public void init()
             {
-                section_id = "114";
+                section_id = "723000001";
                 grid_id = "723040100";
             }
             protected override void SwitchIn()
