@@ -7,12 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TestStack.Seleno.PageObjects;
 using System.Windows.Forms;
+using System.IO;
 
 namespace UnitTestProject1.Pages
 {
     public class ImportPopup : Page
     {
-        private String handle;
+        private string handle;
 
         private string Name
         {
@@ -90,7 +91,9 @@ namespace UnitTestProject1.Pages
             Find.Element(By.Id("uploadSelectBtn")).Click();
             System.Threading.Thread.Sleep(1000);
             SendKeys.SendWait(filepath);
+            System.Threading.Thread.Sleep(1000);
             SendKeys.SendWait("{ENTER}"); //ENter Key
+            System.Threading.Thread.Sleep(1000);
             Browser.SwitchTo().DefaultContent();
             return this;
         }
@@ -103,6 +106,7 @@ namespace UnitTestProject1.Pages
 
         public ImportPopup Enter_Info(string name, string type, string format, string action, string filepath)
         {
+            System.Threading.Thread.Sleep(1000);
             if (name != null) Name = name;
             if (type != null) Select_Type(type);
             if (format != null) Select_Format(format);
@@ -114,6 +118,7 @@ namespace UnitTestProject1.Pages
         public ImportPopup Save()
         {
             Find.Element(By.Id("btnSave")).Click();
+
             Host.Wait.Until<Boolean>((d) =>
             {
                 try
@@ -122,7 +127,7 @@ namespace UnitTestProject1.Pages
                 }
                 catch { return true; }
             });
-
+            System.Threading.Thread.Sleep(1000);
             Host.Wait.Until<Boolean>((d) =>
             {
                 return d.FindElement(By.Id("FILE_INFO")).Displayed;
@@ -130,22 +135,54 @@ namespace UnitTestProject1.Pages
 
             return this;
         }
+
         public ImportPopup Execute_Import()
         {
-            Find.Element(By.Id("btnExecute")).Click();
-            System.Threading.Thread.Sleep(1000);
-            Browser.SwitchTo().DefaultContent();
-            Find.Element(By.LinkText("OK")).Click();
-            System.Threading.Thread.Sleep(1000);
+            Navigate.To<ModalDialog>(By.Id("btnExecute"));
+
+            Find.Element(By.Id("OK")).Click();
+            Host.Instance.Application.Browser.SwitchTo().Window(handle);
+            return this;   
+        }
+
+        public void Close()
+        {
+            System.Threading.Thread.Sleep(3000);
+
+            string temphandle = Browser.CurrentWindowHandle;
+            Find.Element(By.Id("btnCancel")).Click();
             Host.Wait.Until<Boolean>((d) =>
             {
-                try
-                {
-                    return !d.FindElement(By.Id("IMPORT_PROGRESS")).Displayed;
-                }
-                catch { return true; }
+                return !d.WindowHandles.Contains(temphandle);
             });
-            return this;
+            Host.Instance.Application.Browser.SwitchTo().Window(Host.mainWindowHandle); //Implement stack for handles
+            Browser.SwitchTo().DefaultContent();
         }
+
+        public static string generateUnitImportCSV()
+        {
+            string systemPath = System.Environment.
+                             GetFolderPath(
+                                 Environment.SpecialFolder.CommonApplicationData
+                             );
+            string filePath = Path.Combine(systemPath, "Sanity\\UnitImport.csv");
+
+            (new FileInfo(filePath)).Directory.Create();
+            File.Create(filePath).Close();
+
+            string delimiter = ",";
+            string[][] output = new string[][]{
+            new string[]{"*Name - VARCHAR2(60)","**Number - VARCHAR2(30)","Description - VARCHAR2(255)","Parent Unit - Object number","Container Type - NUMBER(2)","Program - Object number","Unit Attribute - TRUE / FALSE","Program Budget Code - Text(60)"},
+            new string[] { "UNIt1",null,null,null,null,null,null,null }
+            };
+            //output[1] = new string[] { "UNIt1",null,null,null,null,null,null,null };
+            int length = output.GetLength(0);
+            StringBuilder sb = new StringBuilder();
+            for (int index = 0; index < length; index++)
+                sb.AppendLine(string.Join(delimiter, output[index]));
+            File.AppendAllText(filePath, sb.ToString());
+            return filePath;
+        }
+
     }
 }

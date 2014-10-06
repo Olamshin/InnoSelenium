@@ -61,6 +61,13 @@ namespace UnitTestProject1.Pages
             return importSection.Add_Import();
         }
 
+        public Boolean ExistsInImportSection(string importname)
+        {
+            Boolean flag;
+            flag = importSection.ExistsInGrid("Name", importname);
+            return flag;
+        }
+
         private class ImportSection : SectionComponent
         {
             public ImportSection()

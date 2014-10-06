@@ -17,11 +17,38 @@ namespace UnitTestProject1
 
     public static class Host
     {
+        public static object sync = new object();
+
+        [ThreadStatic]
         public static SelenoHost Instance;
-        private static InternetExplorerOptions options = new InternetExplorerOptions();
+
+        [ThreadStatic]
         public static WebDriverWait Wait;
+        [ThreadStatic]
         public static string mainWindowHandle;
-        public static System.Collections.ObjectModel.ReadOnlyCollection<Cookie> InitialCookies;
+
+        public static void mouseMoveNClick(By ByObject)
+        {
+            OpenQA.Selenium.Interactions.Actions builder =
+                new OpenQA.Selenium.Interactions.Actions(Host.Instance.Application.Browser);
+            builder.MoveToElement(Host.Instance.Application.Browser.FindElement(ByObject)).Build().Perform();
+            Host.Instance.Application.Browser.FindElement(ByObject).Click();
+        }
+
+        public static void mouseMoveNClick(IWebElement e)
+        {
+            OpenQA.Selenium.Interactions.Actions builder =
+                new OpenQA.Selenium.Interactions.Actions(Host.Instance.Application.Browser);
+            builder.MoveToElement(e).Build().Perform();
+            e.Click();
+        }
+
+        public static void executeJavaScript(string script)
+        {
+            var executor = Host.Instance.Application.Browser as IJavaScriptExecutor;
+            executor.ExecuteScript(script);
+        }
+
     }
     public abstract class SiterraComponent : UiComponent
     {
@@ -37,7 +64,7 @@ namespace UnitTestProject1
             {
                 String idholder;
                 if (_gridid == null) //object browser page
-                {   
+                {
                     idholder = Find.Element(By.XPath("//table[contains(@id, 'GRID_DATA_')]")).GetAttribute("id");
                     _gridid = idholder.Replace("GRID_DATA_", "");
                 }
@@ -137,7 +164,7 @@ namespace UnitTestProject1
 
         public Boolean ExistsInGrid(String columnname, String value)
         {
-            IWebElement elem=null;
+            IWebElement elem = null;
             return ExistsInGrid(columnname, value, ref elem);
         }
 
@@ -284,7 +311,7 @@ namespace UnitTestProject1
                     //Delete Please!
                     //try
                     //{
-                        Find.Element(By.Id("SectionHeader" + _sectionid)).Click();
+                    Find.Element(By.Id("SectionHeader" + _sectionid)).Click();
                     //}
                     //catch {
                     //    SwitchIn();
@@ -312,5 +339,33 @@ namespace UnitTestProject1
     public abstract class PlaceHolderComp : UiComponent
     {
 
+    }
+
+    public class ModalDialog : UiComponent
+    {
+        private string handle;
+        public ModalDialog()
+        {
+            /*for some reason, the windowHandles procedure doesnt 
+             * update the number of handles to include the modal dialog. Setting the 
+             * focus to the active element allows selenium to recognize the modal dialog window.
+             * */
+            
+            //Host.Instance.Application.Browser.WindowHandles;
+            System.Threading.Thread.Sleep(3000);
+            Host.Instance.Application.Browser.SwitchTo().ActiveElement();
+            string han = Host.Instance.Application.Browser.Manage().Window.ToString() ;
+            System.Collections.ObjectModel.ReadOnlyCollection<string> handles = Host.Instance.Application.Browser.WindowHandles;
+            foreach (string a in handles)
+            {
+                if (!a.Equals(Host.mainWindowHandle))
+                {
+                    if (Host.Instance.Application.Browser.SwitchTo().Window(a).Url.Contains("CustomMessage.htm"))
+                        handle = a;
+                }
+            }
+            Host.Instance.Application.Browser.SwitchTo().ActiveElement();
+            //Host.Instance.Application.Browser.SwitchTo().Window(handle);
+        }
     }
 }

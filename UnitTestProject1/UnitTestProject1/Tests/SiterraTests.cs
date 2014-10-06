@@ -408,15 +408,18 @@ namespace UnitTestProject1.Tests
         [TestMethod]
         public void T079_Import()
         {
+            string testPath=ImportPopup.generateUnitImportCSV();
+            string testimport="Sanity" + DateTime.Now.ToString("s");
             MainPage m = Helper.GotoImportPage();
             ImportPage i = m.Innerpage as ImportPage;
             i.Add_Import()
-                .Enter_Info("Sanity" + DateTime.Now.ToString("s"), "Unit", "CSV", "Insert", @"C:\Automation\automation\siterra_plus\2.5.1\data\import\Unit Import.csv")
+                .Enter_Info(testimport, "Unit", "CSV", "Insert", @testPath)
                 .Save()
                 .Select_Process("import")
-                .Execute_Import();
-            System.Threading.Thread.Sleep(3000);
-            
+                .Execute_Import()
+                .Close();
+            System.Threading.Thread.Sleep(1000);
+            i.ExistsInImportSection(testimport).Should().BeTrue();
         }
 
         [TestMethod]
