@@ -206,7 +206,7 @@ namespace UnitTestProject1
             }
 
             var grid_header_enumerator = grid_header.GetEnumerator();
-            for (int i = ((isCheckBox || isLeftNavGrid) ? 0 : -1); grid_header_enumerator.MoveNext(); i++)
+            for (int i = 0; grid_header_enumerator.MoveNext(); i++)
             {
 
                 if (!isLeftNavGrid && grid_header_enumerator.Current.Text.Equals(columnname))
@@ -231,7 +231,7 @@ namespace UnitTestProject1
             IEnumerable<IWebElement> grid_row = grid_table_rows.Where(row => row.Text.Contains(value));
             var grid_row_enum = grid_row.GetEnumerator();
 
-            string cell_path = isLeftNavGrid ? "./td[contains(@class,'LeftNavGridCell')]" : "./td[@class='Cell']";
+            string cell_path = isLeftNavGrid ? "./td[contains(@class,'LeftNavGridCell')]" : "./td[@class!='HIDDEN']";
             for (int i = 0; grid_row_enum.MoveNext(); i++)
             {
                 //Get all cells from the row
